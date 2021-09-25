@@ -1,0 +1,380 @@
+# Testing
+
+```{r, echo = FALSE}
+library(reticulate)
+reticulate::use_condaenv(condaenv = "r-reticulate", required = TRUE)
+```
+
+**Overview**
+
+1. Hypothesis Tests
+    * 1-sample
+    * 2-sample
+2. Permutation Tests
+
+
+## WarmUp/Review Exercises {.unlisted .unnumbered}
+
+Load the *Auto.csv* data (into a dataframe *cars*) for the following tasks and create a scatter plot `mpg ~ weight`.
+Take a look at row with index $25$ (i.e. row 26); we will refer to that data point as $x_{25}$ from now on.
+
+* Compute the standard score for
+    * $x_{25}$["mpg"]
+    * $x_{25}$["weight"]
+* Compute the product of these standard scores (call it $p_{25}$).
+* If you repeated this process for all rows of the *cars* dataframe and averaged all products $p_{i}$, what would the resulting number tell you ? (What is it called?)
+* Take a bootstrap sample from cars.mpg and compute the mean
+
+
+**Importing Standard Libraries**
+
+```{python}
+import numpy as np
+import matplotlib.pyplot as plt
+import pandas as pd
+pd.options.mode.chained_assignment = None # disable chained assignment warning
+import seaborn as sns
+from BIPMDS import *
+```
+
+
+**Loading our Functions**
+
+```{python}
+# %run ../ourFunctions.py
+# %precision 3
+```
+
+
+**Read in the Cars DF**
+
+```{python}
+cars = pd.read_csv('../data/Auto.csv')
+cars.shape
+```
+
+```{python}
+cars.head()
+```
+
+```{python}
+print(cars.iloc[25,])
+```
+
+```{python}
+plt.scatter("weight", "mpg",data=cars)
+plt.xlabel("weight")
+plt.ylabel("mpg")
+plt.show()
+```
+
+<!-- #region -->
+
+## Hypothesis Tests
+
+We have learned about the **bootstrap** as a slick way of resampling your data to obtain sampling distributions of various measures of interest,
+Without having to learn highly specific distributions (such as the $\chi^2$, Poisson, Binomial or F-distribution) the bootstrap enables us to
+
+
+1. get **confidence intervals**
+2. perform **one-sample tests**
+3. perform **two-sample tests**
+
+Imagine the EPA requiring the average mpg for 4-cylinder cars to be at least $\mu_0 = 30$ and needs to decide -based on this sample only- whether the manufacturers need to implement some improvements.
+In statistical jargon: can the EPA **reject the claim** that the **true mean** is at least 30 ?
+<!-- #endregion -->
+
+```{python}
+cars4=cars[cars["cylinders"]==4]
+empirical_mean = np.mean(cars4.mpg)
+empirical_mean
+```
+
+<!-- #region -->
+
+**There, we have it, the empirical mean is in fact below 30.**
+Is this sufficient evidence for the EPA to demand improvements ?
+Does $\bar{x} < \mu_0$ "prove" that $\mu < \mu_0$ ??
+
+Think about an experiment which tries to establish whether a pair of dice in a casino is biased ("gezinkt" in German). You toss the dice $50$ times and observe an average number of pips of $\bar{x} = 3.8$ which is clearly "way above" the required value of $\mu_0 = 3.5$ for a clean pair of dice. Should you go to the authorities and file a complaint ? Since no one really knows the true value of $\mu$ for these dice, how would a court decide whether they are unbiased ?
+
+1. **Innocent until proven guilty**: Always assume the opposite of what you want to illustrate ! That way you can gather evidence against this **Null hypothesis**, e.g. $H_0: \mu = 3.5 (\equiv \mu_0)$.
+2. Define a **test statistic** which is pertinent to the question you are seeking to answer (computed entirely from your sample). In this case, your test statistics could be e.g. the (scaled?) difference between the observed sample mean and the claim: $\bar{x} - \mu_0$.
+3. We define the **p-value** as the probability of observing a test statistic equally or more extreme than the one observed, given that $H_0$ is true.
+4. If the observed value of your test statistic seems very unlikely under $H_0$ we would favor the **alternative hypothesis** which is usually complementary, e.g. $H_A: \mu \neq 3.5$
+
+
+Notice that we used vague expressions such as *unlikely* in the procedure above. In a legal context, we would want to make statements such as "beyond a reasonable doubt". Well, in statistics we ry to quantifiy that notion by limiting the type-I error probability $\alpha$  to be at most e.g. $0.01$ or $0.05$. So none our decisions are ever "proofs" or free of error.
+
+It also means that you, the person conducting the hypothesis test, need to specify a value of $\alpha$, which clearly introduces a certain amount of subjectivity. Later on, we will discuss the inherent tradeoffs between type-I and type-II errors: only then will one fully understand the non-arbitrary choice of $\alpha$.
+<!-- #endregion -->
+
+## Parametric Tests 
+
+1. From the sample, compute $\bar{x}$ and $\hat{\sigma}$.
+2. Compute the test statistic
+$$t = \frac{\bar{x} - \mu_0}{\hat{\sigma}/\sqrt{n}}$$
+3. Reject $H_0$
+    * Two-sided test: if $|t| > t_{n-1, 1-\alpha/2}$
+    * Left-sided test: if $t   < t_{n-1, \alpha}$
+    * Right-sided test: if $t   > t_{n-1, 1-\alpha}$
+    * If $n>50$ one may replace the t distribution with the normal
+4. Define the p-value as twice the tail area of a t distribution
+5. Alternatively one rejects the Null if p-val $< \alpha$.
+
+Back to the casino example, assume the following empirical data:
+
+$\bar{x} = 3.8, n = 100, \hat{\sigma} = 1.7$
+
+$H_0: \mu = 3.5$, $H_A: \mu \neq 3.5$, $\alpha = 0.01$
+
+```{python}
+from scipy.stats import norm
+# that is the critical value that we compare our test statistic with
+print('two-sided cv: ',norm.ppf(1-0.01/2)) # returns the norm score
+print('one-sided cv: ',norm.ppf(1-0.01))
+```
+
+
+**Two sided test!**
+
+```{python}
+# We care about both sides since we do not know how the casino is using the biased dice.
+a=0.01
+n=200
+
+critValue = norm.ppf(1-a/2)
+z = np.abs((3.8-3.5)/(1.7/np.sqrt(n)))
+
+if (z < critValue):
+    s = "not"
+    s2 = "fail to"
+else:
+    s = ""   
+    s2 = ""
+
+print("The test statistic t =", np.round(z,3), "is", s ,"larger than the critical value",np.round(critValue,3), "so we",s2,"reject the Null" )
+norm.cdf(1-a/2)
+```
+
+
+**One sided test!**
+
+```{python}
+# We care only about one side since we do know that the casino makes
+# money off upward biased dice.
+
+critValue = norm.ppf(1-a)
+z = (3.8-3.5)/(1.7/np.sqrt(n))
+if (z < critValue):
+    s = "not"
+    s2 = "fail to"
+else:
+    s = ""   
+    s2 = ""
+
+print("The test statistic t =", np.round(z,3), "is", s ,"larger than the critical value",np.round(critValue,3), "so we",s2,"reject the Null" )
+#norm.cdf(1-a)
+```
+
+
+**p-value**
+
+```{python}
+#p-value is the right tail probability of values equal or larger than your test statistic
+pVal = 1-norm.cdf(z)
+print("The p value ", np.round(pVal,3), "is less than alpha", a, "so we reject the Null")
+```
+
+
+## Non parametric Tests
+
+Parametric Tests require many assumptions, that may not always be true, and are also a bit abstract. It often helps (i) robustness and (ii) the understanding of the testing process to use simulations instead.
+We now learn about two different ways of such simulations, each following the basic "pipeline":
+
+1. Clearly define the Null hypothesis.
+2. Define the test statistic.
+3. Generate many sets of simulated data (bootstrap replicates) **assuming the null hypothesis is true**
+4. Compute the test statistic for each simulated data set
+5. The p-value is the fraction of your simulated data sets for which the test statistic is at least as extreme as for the real data
+
+
+
+## Bootstrap Hypothesis Tests
+
+Besides computing confidence intervals we can also use the bootstrap to perform hypothesis test.
+We need to "fake" the process of drawing new samples again and again under the Null hypothesis, which might appear impossible since our one sample likely will have a sample mean not equal to $\mu_0$.
+
+The trick is to "shift" our data such that $\bar{x} = \mu_0$!
+As a test statistic we use the difference of the mean of the bootstrap value minus $\mu_0$. Notice that there is no need to scale this difference!
+
+We illustrate this with our casino example.
+
+```{python}
+np.random.choice(6,20)+1
+```
+
+```{python}
+np.random.seed(123)
+x = np.random.choice(6,n,p=[0.14,0.14,0.15,0.18,0.19,0.20])+1 #add a bias
+
+a=0.01
+n=400
+
+mu0=3.5
+xBar = np.round(np.mean(x),2)
+obsDiff = np.round(mu0-xBar,2)
+print("The sample mean is", xBar, ", so we shift our data by", obsDiff)
+```
+
+
+
+```{python}
+#Alternatively, if we had not shifted our data
+#TS = bs_mean_dice-xBar
+
+#The test statistic
+bs_mean_dice = draw_bs_reps(x+obsDiff,np.mean,10000)
+TS = bs_mean_dice-mu0
+plt.hist(TS);
+```
+
+```{python}
+#two sided p value
+pVal = np.mean( abs(TS) > 0.3)
+print("The two sided p value of", np.round(pVal,3), "is not smaller than alpha=",a,"so we fail to reject the Null." )
+```
+
+
+**Tasks**
+- Test $H_0: \mu \geq 30, H_A: \mu < 30$ for the mean mpg of 4-cylinder cars
+    * using bootstrap replicates
+    * via standard testing theory.
+- Compute the corresponding **p-values**.
+
+```{python}
+mu0=30
+empirical_mean = np.mean(cars4.mpg)
+```
+
+```{python}
+#assume the claim is true !!
+shift = mu0-empirical_mean
+cars4Shifted= cars4.mpg+shift
+bs_mean_mpg = draw_bs_reps(cars4Shifted,np.mean,10000)
+
+#The test statistic
+TS = bs_mean_mpg-mu0
+pVal = np.mean( TS < -shift)
+```
+
+```{python}
+#assume the claim is true !!
+shift = mu0-empirical_mean
+cars4Shifted= cars4.mpg+shift
+bs_mean_mpg = draw_bs_reps(cars4Shifted,np.mean,10000)
+
+#The test statistic
+TS = bs_mean_mpg-mu0
+pVal = np.mean( TS < -shift)
+
+plt.hist(TS);
+
+#np.percentile(bs_mean_mpg,5)
+#p value is simply the left tail beyond xBar
+#np.mean(bs_mean_mpg < empirical_mean)
+```
+
+```{python}
+print('shift =',shift)
+print("pValue =", pVal)
+```
+
+
+### From one sample to 2 samples {.unlisted .unnumbered}
+
+From Auto to birth weights
+
+```{python}
+preg=pd.read_hdf('../data/pregNSFG.h5', 'df')
+#only look at live births
+firsts = preg[(preg.outcome == 1) & (preg.birthord == 1)]
+#live[live.babysex == 1].babysex = "male"
+
+#we reduce the sample size further by conditioning on
+#the mother's age at the end of pregnancy
+firsts = firsts[(firsts.agepreg < 30) & (firsts.prglngth >= 30)]
+bwt = firsts[["babysex","totalwgt_lb"]]
+
+bwt.babysex.replace([1.0],"male",inplace=True)
+bwt.babysex.replace([2.0],"female",inplace=True)
+bwt = bwt.dropna()
+```
+
+```{python}
+print('shape:',bwt.shape)
+bwt.head()
+```
+
+```{python}
+grouped = bwt["totalwgt_lb"].groupby(bwt["babysex"])
+grouped.mean()
+```
+
+```{python}
+tmp=grouped.plot(kind='density', legend=True);
+```
+
+### A two-sample bootstrap hypothesis test for difference of means
+
+A one sample test compares a data set to one fixed number !
+
+We now want to compare two sets of data, both of which are samples! In particular test the hypothesis that male and female babies have the same biological weight (but not necessarily the same distribution).
+
+$H_0: \mu_m = \mu_f, H_A: \mu_m \neq \mu_f$
+
+To do the two-sample bootstrap test, we shift both arrays to have the same mean, since we are simulating the hypothesis that their means are, in fact, equal (**equal to what value ??**). We then draw bootstrap samples out of the shifted arrays and compute the difference in means. This constitutes a bootstrap replicate, and we generate many of them. The p-value is the fraction of replicates with a difference in means greater than or equal to what was observed.
+
+```{python}
+meanNull = np.mean(bwt.totalwgt_lb)# pooled mean
+w_m = bwt[bwt["babysex"]=="male"].totalwgt_lb
+w_f = bwt[bwt["babysex"]=="female"].totalwgt_lb
+empirical_diff_means = np.mean(w_m)-np.mean(w_f)
+#shift:
+
+w_m_shifted = w_m - np.mean(w_m) + meanNull
+w_f_shifted = w_f - np.mean(w_f) + meanNull
+
+
+# Compute 10,000 bootstrap replicates from shifted arrays
+M=1000
+bs_replicates_m = draw_bs_reps(w_m_shifted, np.mean, M)
+bs_replicates_f = draw_bs_reps(w_f_shifted, np.mean, M)
+
+# Get replicates of difference of means: bs_replicates
+bs_replicates = bs_replicates_m - bs_replicates_f
+
+tmp=plt.hist(bs_replicates)
+# Compute and print p-value: p
+```
+
+```{python}
+#debugging:
+if 0:
+    meanNull
+    #plt.hist(w_f_shifted)
+    #plt.hist(bs_replicates_m)
+    #bs_replicates_m
+    w_m_bs = np.random.choice(w_m, size=len(w_m))
+    np.nanmean(w_m_bs)
+    np.argwhere(np.isnan(w_m_bs))
+    np.argwhere(np.isnan(w_m))
+
+#p-value (one-sided):
+pVal = np.mean(bs_replicates> empirical_diff_means)
+#cutoff right tail
+#np.percentile(bs_replicates, 95)
+print("The one sided p value of", np.round(pVal,3), "is much smaller than alpha=",a,", so we fail to reject the Null" )
+
+print("-> The observed difference of ", np.round(empirical_diff_means,3), "is exremely unlikely to have occurred by chance alone")
+```

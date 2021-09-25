@@ -1,0 +1,261 @@
+<!-- #region -->
+# Statistical Thinking I
+
+```{r, echo = FALSE}
+library(reticulate)
+reticulate::use_condaenv(condaenv = "r-reticulate", required = TRUE)
+```
+
+## Overview
+
+1. Groupby
+    * Interactions
+    * Simple Model
+2. Boxplots
+    * Quantiles
+    * Whiskers
+3. Histograms and Standard Deviation
+
+
+**import libraries**
+<!-- #endregion -->
+
+```{python}
+import numpy as np
+import matplotlib.pyplot as plt
+import pandas as pd
+pd.options.mode.chained_assignment = None # disable chained assignment warning
+import seaborn as sns
+```
+
+## Contingency Tables as simple models 
+
+### Explore the Titanic Data {.unlisted .unnumbered}
+
+```{python}
+titanic = sns.load_dataset('titanic')
+titanic.head()
+```
+
+```{python}
+titanicSmall = titanic[['pclass','sex', 'survived']]
+SurvByClassSex = titanicSmall.groupby(['pclass','sex'])
+
+# survival probability
+survProb = SurvByClassSex.mean()
+survProb
+```
+
+```{python}
+# survival count
+survCount = SurvByClassSex.count()
+survCount
+```
+
+```{python}
+# indexing multi-index pandas dataframes with .xs()
+# female count only:
+survCount.xs(key="female",level=1)
+```
+
+### Task 1 {.unlisted .unnumbered}
+
+We can regard this simple counting exercise as a "predictive model" where we "predict" the outcome based on bucketing the data and "classify" the Survival status by $S=1$, if $P_S(sex,pclass) \geq 0.5$ and $0$ otherwise.
+
+1. Compute the **confusion matrix**, which is simply a $2x2$ contingency table of the predicted versus the actual outcomes. (Hint: Look at `pd.crosstab()`)
+2. (**MC**) Compute the overall accuracy of this model in two ways: (i) directly from the confusion matrix and (ii) from the survival probabilities. (Hint: Look at `SurvByClassSex.count()` and `np.dot()`)
+    * **A** 0.878
+    * **B** 0.887
+    * **C** 0.787
+    * **D** 0.778
+
+3. Higher accuracy(="classification rate") clearly is equivalent to a lower "misclassification rate", which in machine learning is also called a *loss function*. Discuss
+    * whether misclassifying a female P1 passenger should count equally towards (reducing) the quality of the model as misclassifying a male P1 passenger.
+    * whether there could be another loss function which would be more discriminatory.
+    * what you would consider equally spaced "losses"
+        * $0.3, 0.2, 0.1, 0$
+        * $0.1, 0.01, 0.001, ...$
+
+
+#### 1.1 Compute the confusion matrix {.unlisted .unnumbered}
+
+```{python}
+titanicSmall.loc[:,"surv_pred"] = titanic.loc[:,"sex"] == "female"
+ConfMat = pd.crosstab(titanicSmall["surv_pred"], titanicSmall["survived"])
+ConfMat
+```
+
+#### 1.2 Compute the overall accuracy of this model in two ways: {.unlisted .unnumbered}
+
+```{python}
+# method 1: using ConfMat.values accuracy = [(TN + TP) / N]
+N = np.sum(ConfMat.values)
+acc1 = np.round( (ConfMat.values[0,0]+ConfMat.values[1,1]) / N, 3)
+
+# method 2: using SurvProb and SurvByClassSex
+p = survProb.values
+acc2 = np.round( (survCount.values * p).sum() / N, 3)
+
+print('acc method1: {acc1}\nacc method2: {acc2}')
+```
+
+#### 1.3 Higher accuracy(="classification rate") clearly is equivalent to a lower "misclassification rate", which in machine learning is also called a loss function. Discuss: {.unlisted .unnumbered}
+
+
+* whether misclassifying a female P1 passenger should count equally towards (reducing) the quality of the model as misclassifying a male P1 passenger.
+
+```{python}
+fig, ax = plt.subplots(figsize=(8,6))
+sns.barplot(data=titanic,x="pclass",y="survived",hue="sex",ax=ax)
+
+sns.lineplot(x=[0.2,1.2,2.2],y=survProb.xs(key="female",level=1).values.flatten(),
+             ax=ax,color="k",linewidth=3,dashes=True)
+
+sns.lineplot(x=[-0.2,0.8,1.8],y=survProb.xs(key="male",level=1).values.flatten()
+             ,ax=ax,color="k",linewidth=3,dashes=True);
+```
+
+* whether there could be another loss function which would be more discriminatory.
+    * *Log Loss*
+
+
+* what you would consider equally spaced "losses"
+    * $0.3, 0.2, 0.1, 0$
+    * $0.1, 0.01, 0.001, ...$
+
+<!-- #region -->
+### Task 2 {.unlisted .unnumbered}
+
+We have seen a strong dependence of the *outcome* on the two "variables"/"features"/"regressors" *pclass* and *sex*.
+The natural question is whether there could be more factors "correlated with"/"influencing"/"affecting" Survival.
+
+
+1. Does the port of embarkment matter ?
+    * (**MC**) What is the distribution (counts) of embarkment? (Hint: look at `pd.value_counts` )
+        * **A** 168, 77, 644
+        * **B** 158, 80, 636
+        * **C** 170, 75, 639
+        * **D** 164, 79, 667
+    * (**MC**) What are the survival rates for *Southampton* as a function of `pclass`?
+        * **A** 0.54, 0.42, 0.17
+        * **B** 0.62, 0.39, 0.15
+        * **C** 0.58, 0.46, 0.19
+        * **D** 0.56, 0.37, 0.21
+    * Do the survival rates "look" different from *Cherbourg* ?
+    * How would you make sure that the observed differences are not due to chance ?
+
+2. Does the *fare* paid matter ?
+    * How would you quantify/visualize this ?
+    * What is the fundamental difference between the previous relationship of two variables ?
+    * Have you heard of the terms *confounding* or *confounders* or *marginal dependence* versus *conditional dependence* ?
+    * Discuss dependencies among the features. Revisit the port of embarkment question in this light !
+3. Does *age* matter ?
+    * (**MC**) What is the survival rate for passengers below the age of 18?
+        * **A** 0.47
+        * **B** 0.74
+        * **C** 0.54
+        * **D** 0.45
+    * (**MC**) What are the survival rates for passengers below the age of 18 stratified by pclass?
+        * **A** 0.91, 0.87, 0.36
+        * **B** 0.93, 0.88, 0.38
+        * **C** 0.95, 0.93, 0.37
+        * **D** 0.92, 0.91, 0.37
+    * How would you make sure that the observed differences are not due to chance ?
+
+
+<!-- #endregion -->
+
+#### 2.1 Does the port of embarkment matter ? {.unlisted .unnumbered}
+
+
+* What is the distribution (counts) of embarkment? (Hint: look at `pd.value_counts` )
+
+```{python}
+titanic['embarked'].value_counts()
+```
+
+* What are the survival rates for *Southampton* as a function of `pclass`?
+
+```{python}
+titanic.groupby(['embarked', 'pclass']).mean()[['survived']].xs(key="S")
+```
+
+* Do the survival rates "look" different from *Cherbourg* ?
+
+```{python}
+titanic.groupby(['embarked', 'pclass']).mean()[['survived']].xs(key="C")
+```
+
+* How would you make sure that the observed differences are not due to chance ?
+
+
+#### 2.2 Does the *fare* paid matter ? {.unlisted .unnumbered}
+
+
+**How would you quantify/visualize this?**
+
+```{python}
+titanic['surv_Jitter'] = titanic['survived'] +  np.random.normal(0,0.035,N)
+
+plt.scatter('fare', 'surv_Jitter', data = titanic, alpha = 0.2)
+plt.xlabel("fare")
+plt.ylabel("survived");
+```
+
+* What is the fundamental difference between the previous relationship of two variables ?
+
+
+* Have you heard of the terms *confounding* or *confounders* or *marginal dependence* versus *conditional dependence* ?
+
+
+* Discuss dependencies among the features. Revisit the port of embarkment question in this light !
+
+
+3. Does *age* matter ?
+
+
+* What is the survival rate for passengers below the age of 18?
+
+```{python}
+titanic['Below18'] = titanic['age'] < 18
+titanic.groupby('Below18').mean()[['survived']]
+```
+
+**Visualization of `age` and `survived`**
+
+```{python}
+sns.histplot(data=titanic,x="age",hue="survived",palette=["red","green"]);
+```
+
+* What are the survival rates for passengers below the age of 18 stratified by pclass?
+
+```{python}
+titanic['Below18'] = titanic['age'] < 18
+titanic.groupby(['Below18','pclass']).mean()[['survived']].xs(key=True)
+```
+
+* How would you make sure that the observed differences are not due to chance ?
+
+
+### Task 3 {.unlisted .unnumbered}
+
+1. Create two random (normally distibuted) vectors x1 and x2 of length 500
+2. Compute their individual stdevs
+3. Create 2 new variables: (i) xs: the sum of x1 and x2 and (ii) xm: the mean of x1 and x2
+4. Compute the stdevs of xs and xm
+
+```{python}
+from numpy.random import randn
+np.random.seed(123)
+
+x1=randn(500)
+x2=randn(500)
+x1[0:5]
+print(np.std(x1), np.std(x2) )
+
+xs=x1+x2
+xm=(x1+x2)/2
+
+print(np.std(xs), np.std(xm) )
+
+```

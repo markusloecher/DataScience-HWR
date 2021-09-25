@@ -1,0 +1,386 @@
+# Trees
+
+```{r, echo = FALSE}
+library(reticulate)
+reticulate::use_condaenv(condaenv = "r-reticulate", required = TRUE)
+```
+
+**Motivation**
+
+Decision trees are extremely intuitive ways to classify or label objects: you simply ask a series of questions designed to zero-in on the classification.
+
+The most commonly used binary splitting makes this extremely efficient: in a well-constructed tree, each question will cut the number of options by approximately half, very quickly narrowing the options even among a large number of classes. The trick, of course, comes in deciding which questions to ask at each step. In machine learning implementations of decision trees, the questions generally take the form of axis-aligned splits in the data: that is, each node in the tree splits the data into two groups using a cutoff value within one of the features. Let's now look at an example of this.
+
+Consider the following two-dimensional data, which has one of four class labels:
+
+```{python}
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+plt.style.use('ggplot')
+from sklearn.datasets import make_blobs
+
+X, y = make_blobs(n_samples=300, centers=4,
+                  random_state=0, cluster_std=1.0)
+plt.scatter(X[:, 0], X[:, 1], c=y, s=50, cmap='rainbow');
+```
+
+**Side-Note:**
+* From [GeeksforGeeks](https://www.geeksforgeeks.org/sys-path-in-python): "*When a module is imported within a Python file, the interpreter first searches for the specified module among its built-in modules. If not found it looks through the list of directories defined by `sys.path`.*"
+    * **`import sys`**
+    * `sys.path`
+* Add your own module directory to Python with:
+    * `sys.path.append()`
+
+```{python}
+# from helpers_05_08 import visualize_tree
+# from sklearn.tree import DecisionTreeClassifier
+# from sklearn.datasets import make_blobs
+#
+#         
+# fig, ax = plt.subplots(1, 4, figsize=(16, 3))
+# fig.subplots_adjust(left=0.02, right=0.98, wspace=0.1)
+#
+# X, y = make_blobs(n_samples=300, centers=4,
+#                   random_state=0, cluster_std=1.0)
+#
+# for axi, depth in zip(ax, range(1, 5)):
+#     model = DecisionTreeClassifier(max_depth=depth)
+#     visualize_tree(model, X, y, ax=axi)
+#     axi.set_title('depth = {0}'.format(depth))
+
+# fig.savefig('figures/05.08-decision-tree-levels.png')
+```
+
+**Decision Tree Levels**
+<img src="../figures/05.08-decision-tree-levels.png" width=1000>
+
+
+## Node Impurity 
+
+A classification tree is built by the following process: first the single variable
+is found which best splits the data into two groups (`best` will be defined
+shortly).  The data is separated, and then this process is applied
+*separately* to each sub-group, and so on recursively until the subgroups either reach a minimum size or until no improvement can be made.
+
+The partitioning method can be applied to many different kinds of
+data.  We will start by looking at the classification problem,
+which is one of the more instructive cases (but also has the
+most complex equations).
+The sample population consists of $n$ observations from $K$ classes.  A given
+model will break these observations into $k$ terminal groups;
+to each of these groups is assigned a predicted class.
+
+Most tree algorithms use one of several measures of impurity, or diversity, of a node.  Let us denote $\hat{p}_{mk}$ as the proportion of training observations in the $m$th region that are from the $k$th class. We then define the *Gini index* as
+$$
+G_m = \sum_{i=1}^K { \hat{p}_{mk}(1 - \hat{p}_{mk} ) }
+$$
+Remembering $p (1-p)$ to be the variance of the Bernoulli distribution, the Gini index measures the total variance across the $K$ classes. For nearly "pure" regions (all $\hat{p}_{mk}$ being close to 0 or 1), it takes on a very small value.
+
+An alternative measure is given by the information index or *cross entropy*
+$$
+D_m = - \sum_{i=1}^K { \hat{p}_{mk} \log{ \hat{p}_{mk} } }
+$$
+
+NOTE: The expressions above are general enough for multiple category classification and hence more complicated than the version discussed in class.For binary outcomes $(y \in 0,1)$ the Gini index reduces to simply
+$$
+G_m = 2 \hat{p}_m (1 - \hat{p}_m )
+$$
+
+The two impurity functions are plotted in the figure below,
+along with a rescaled version of the Gini measure.
+For the two class problem the measures differ only slightly, and
+will nearly always choose the same split point.
+
+<img src="../figures/Gini1.png" width=400>
+
+For example, in a two-class problem with 400 observations in each class (denote this by (400, 400)), suppose one split created nodes (300, 100) and (100, 300), while the other created nodes (200, 400) and (200, 0). Compute the misclassification rate and write it down formally.
+
+
+**Explanations and examples at:**
+
+https://scikit-learn.org/stable/modules/tree.html
+
+```{python}
+import pydot
+from IPython.display import Image
+
+from sklearn.model_selection import train_test_split, cross_val_score
+from six import StringIO  
+from sklearn.tree import DecisionTreeRegressor, DecisionTreeClassifier, export_graphviz
+from sklearn.ensemble import BaggingClassifier, RandomForestClassifier, BaggingRegressor, RandomForestRegressor, GradientBoostingRegressor
+from sklearn.metrics import mean_squared_error,confusion_matrix, classification_report
+
+sns.set_style('white')
+```
+
+```{python}
+from sklearn.datasets import load_iris
+from sklearn import tree
+from graphviz import Source
+import graphviz
+
+plt.rcParams["figure.figsize"]=3,3
+iris = load_iris()
+clf = tree.DecisionTreeClassifier()
+clf = clf.fit(iris.data, iris.target)
+
+dot_data = tree.export_graphviz(clf, out_file=None,
+                                feature_names=iris.feature_names,
+                                precision = 1,
+                    filled=True, rounded=True)  
+graph = graphviz.Source(dot_data)  
+graph
+
+```
+
+```{python}
+# This function creates images of tree models using pydot
+def print_tree(estimator, features, class_names=None, filled=True):
+    tree = estimator
+    names = features
+    color = filled
+    classn = class_names
+
+    dot_data = StringIO()
+    export_graphviz(estimator, out_file=dot_data, feature_names=features, class_names=classn, filled=filled)
+    graph = pydot.graph_from_dot_data(dot_data.getvalue())
+    return(graph)
+```
+
+## Regression Trees
+
+
+In R, I exported the dataset from package 'ISLR' to a csv file.
+
+```{python}
+df = pd.read_csv('../data/Hitters.csv').dropna()
+df.info()
+```
+
+```{python}
+X = df[['Years', 'Hits']].values
+y = np.log(df.Salary.values)
+
+fig, (ax1, ax2) = plt.subplots(1,2, figsize=(11,4))
+ax1.hist(df.Salary.values)
+ax1.set_xlabel('Salary')
+ax2.hist(y)
+ax2.set_xlabel('Log(Salary)');
+```
+
+```{python}
+regr = DecisionTreeRegressor(max_leaf_nodes=3)
+regr.fit(X, y)
+```
+
+#### Figure 8.1 {.unlisted .unnumbered} 
+
+```{python}
+dot_data = tree.export_graphviz(regr, out_file=None,
+                                feature_names=['Years', 'Hits'],
+                                precision = 1,
+                    filled=True, rounded=True)  
+graph = graphviz.Source(dot_data)  
+graph
+```
+
+**FIGURE 8.1** For the Hitters data, a regression tree for predicting the log
+salary of a baseball player, based on the number of years that he has played in
+the major leagues and the number of hits that he made in the previous year. At a
+given internal node, the label (of the form Xj < tk) indicates the left-hand branch
+emanating from that split, and the right-hand branch corresponds to Xj ≥ tk.
+For instance, the split at the top of the tree results in two large branches. The
+left-hand branch corresponds to Years<4.5, and the right-hand branch corresponds
+to Years>=4.5. The tree has two internal nodes and three terminal nodes, or
+leaves. The number in each leaf is the mean of the response for the observations
+that fall there.
+
+
+####  Figure 8.2 {.unlisted .unnumbered} 
+
+```{python}
+df.plot('Years', 'Hits', kind='scatter', color='orange', figsize=(7,6))
+plt.xlim(0,25)
+plt.ylim(ymin=-5)
+plt.xticks([1, 4.5, 24])
+plt.yticks([1, 117.5, 238])
+plt.vlines(4.5, ymin=-5, ymax=250)
+plt.hlines(117.5, xmin=4.5, xmax=25)
+plt.annotate('R1', xy=(2,117.5), fontsize='xx-large')
+plt.annotate('R2', xy=(11,60), fontsize='xx-large')
+plt.annotate('R3', xy=(11,170), fontsize='xx-large');
+```
+
+#### Pruning {.unlisted .unnumbered} 
+This is currently not supported in scikit-learn. See first point under 'disadvantages of decision trees in the <A href='http://scikit-learn.github.io/dev/modules/tree.html#'>documentation</A>. Implementation has been <A href='https://github.com/scikit-learn/scikit-learn/pull/941'>discussed</A> but Random Forests have better predictive qualities than a single pruned tree anyway if I understand correctly.
+
+
+
+## Classification Trees
+
+
+Dataset available on http://www-bcf.usc.edu/~gareth/ISL/data.html
+
+```{python}
+df2 = pd.read_csv('../data/Heart.csv').drop('Unnamed: 0', axis=1).dropna()
+df2.info()
+```
+
+```{python}
+df2.ChestPain = pd.factorize(df2.ChestPain)[0]
+df2.Thal = pd.factorize(df2.Thal)[0]
+```
+
+```{python}
+X2 = df2.drop('AHD', axis=1)
+y2 = pd.factorize(df2.AHD)[0]
+```
+
+```{python}
+clf = DecisionTreeClassifier(max_depth=None, max_leaf_nodes=6, max_features=3)
+clf.fit(X2,y2)
+```
+
+```{python}
+clf.score(X2,y2)
+```
+
+```{python}
+graph2, = print_tree(clf, features=X2.columns, class_names=['No', 'Yes'])
+Image(graph2.create_png())
+```
+
+### dtreeviz {.unlisted .unnumbered} 
+
+We are using the wonderful tree visualization library `dtreeviz` :
+https://github.com/parrt/dtreeviz
+
+```{python}
+from dtreeviz.trees import dtreeviz
+
+clf1 = DecisionTreeClassifier(max_depth=3)  # limit depth of tree
+iris = load_iris()
+clf1.fit(iris.data, iris.target)
+
+dtreeviz(clf1,
+   iris.data,
+   iris.target,
+   target_name='variety',
+  feature_names=iris.feature_names,
+   class_names=["setosa", "versicolor", "virginica"]  # need class_names for classifier
+  )  
+
+```
+
+#### Quiz {.unlisted .unnumbered} 
+
+1. Outliers
+   * Classification Trees are resistant to outliers
+   * Regression Trees are resistant to outliers
+2. Is "diversity" good or bad for prediction?
+3. The regions are disjoint and rectangular
+4. Interactions need to be explicitly be modeled like in regression.
+5. All rows with missing values in any column need to be removed
+6. Nature of trees
+   * Are trees "local" or "global" models?
+   * Trees are piecewise constant models
+
+
+### Lab {.unlisted .unnumbered} 
+ 
+
+#### Fitting Classification Trees {.unlisted .unnumbered} 
+
+
+In R, I exported the dataset from package 'ISLR' to a csv file.
+
+```{python}
+df3 = pd.read_csv('../data/Carseats.csv').drop('Unnamed: 0', axis=1)
+df3.head()
+```
+
+```{python}
+df3['High'] = df3.Sales.map(lambda x: 1 if x>8 else 0)
+df3.ShelveLoc = pd.factorize(df3.ShelveLoc)[0]
+
+df3.Urban = df3.Urban.map({'No':0, 'Yes':1})
+df3.US = df3.US.map({'No':0, 'Yes':1})
+df3.info()
+```
+
+```{python}
+df3.head(5)
+```
+
+```{python}
+X = df3.drop(['Sales', 'High'], axis=1)
+y = df3.High
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.5, random_state=0)
+```
+
+```{python}
+clf = DecisionTreeClassifier(max_depth=6)
+clf.fit(X, y)
+```
+
+```{python}
+print(classification_report(y, clf.predict(X)))
+```
+
+```{python}
+#graph3, = print_tree(clf, features=X.columns, class_names=['No', 'Yes'])
+#Image(graph3.create_png())
+```
+
+```{python}
+clf.fit(X_train, y_train)
+pred = clf.predict(X_test)
+```
+
+```{python}
+cm = pd.DataFrame(confusion_matrix(y_test, pred).T, index=['No', 'Yes'], columns=['No', 'Yes'])
+cm.index.name = 'Predicted'
+cm.columns.name = 'True'
+cm
+```
+
+```{python}
+# Precision of the model using test data is 74%
+print(classification_report(y_test, pred))
+```
+
+Pruning not implemented in scikit-learn.
+
+
+#### Fitting Regression Trees {.unlisted .unnumbered} 
+
+
+In R, I exported the dataset from package 'MASS' to a csv file.
+
+```{python}
+boston_df = pd.read_csv('../data/Boston.csv')
+boston_df.info()
+```
+
+```{python}
+from sklearn.datasets import *
+
+regr = tree.DecisionTreeRegressor(max_depth=3)
+boston = load_boston()
+regr.fit(boston.data, boston.target)
+```
+
+```{python}
+viz = dtreeviz(regr,
+               boston.data,
+               boston.target,
+               target_name='price',
+               feature_names=boston.feature_names)
+
+#viz.view()    
+viz
+```

@@ -1,0 +1,264 @@
+# Simple Linear Regressio
+
+(Chapter 3 ISL book)
+
+
+```{r, echo = FALSE}
+library(reticulate)
+reticulate::use_condaenv(condaenv = "r-reticulate", required = TRUE)
+```
+
+```{python}
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import axes3d
+import seaborn as sns
+import scipy
+
+from sklearn.preprocessing import scale
+import sklearn.linear_model as skl_lm
+from sklearn.metrics import mean_squared_error, r2_score
+import statsmodels.api as sm
+import statsmodels.formula.api as smf
+
+# %matplotlib inline
+sns.set_style('white')
+```
+
+### Load Datasets {.unlisted .unnumbered} 
+
+Datasets available on http://faculty.marshall.usc.edu/gareth-james/ISL/
+
+```{python}
+advertising = pd.read_csv('../data/Advertising.csv', usecols=[1,2,3,4])
+advertising.info()
+```
+
+```{python}
+credit = pd.read_csv('../data/Credit.csv', usecols=list(range(1,12)))
+credit['Student2'] = credit.Student.map({'No':0, 'Yes':1})
+credit.head(3)
+```
+
+```{python}
+auto = pd.read_csv('../data/Auto.csv', na_values='?').dropna()
+auto.info()
+```
+
+## Loss Functions
+
+
+Let us take a quick look at the distribution of weights and compute summary statistics
+
+```{python}
+tmp=plt.hist(auto["weight"])
+# LE = location estimate
+LE1 = np.round(np.mean(auto["weight"]),2)
+LE2 = np.round(np.median(auto["weight"]),2)
+LE3 = scipy.stats.mode(np.round(auto["weight"]/100)*100)
+plt.vlines(LE1,0,100, colors="red")
+plt.vlines(LE2,0,100, colors="black")
+plt.vlines(LE3[0],0,100, colors="green")
+
+print("mean:",  LE1)
+print("median:",  LE2)
+print("mode:",  LE3)
+```
+
+<!-- #region -->
+We can see a marked difference between the mean and the median (why again?).
+That brings up the general question, how to choose from the various "location measures" of a distribution, such as the mean, median, trimmed mean, geometric mean, harmonic mean, ...
+
+
+Can we define an objective optimality measure which would clearly favor one metric over another ?
+Welcome to the concept of a **loss function**.
+We all feel intuitively that the orange line (at 3615 lb) is in some sense inferior to the red and green numbers as a location measure. Why, because the distance from the data to orange is (on the average) larger than the distance to red and green. Let us call that average distance a "loss" and assume that we want to **minimize loss**.
+
+It turns out that there is not just one but various ways to define this distance/loss function ("LE" = location estimate):
+
+1. $$ L_0 = (1/n) \cdot \sum_{i=1}^n{|x_i - LE|^0}$$
+2. $$ L_1 = (1/n) \cdot \sum_{i=1}^n{|x_i - LE|^1}$$
+3. $$ L_2 = (1/n) \cdot \sum_{i=1}^n{|x_i - LE|^2}$$
+4. $$ L_p = (1/n) \cdot \sum_{i=1}^n{|x_i - LE|}^p$$
+
+**Your Tasks:**
+
+* Identify the one that is minimized by the average.
+* Identify the one that is minimized by the median.
+* Which measure is minimized by $L_0$ ?
+* Verify your assertions emprically !
+<!-- #endregion -->
+
+```{python}
+def L2(x,LE):
+    return(np.mean((x - LE) * (x - LE)))
+
+xg = np.linspace(LE1-20, LE1 +20, 51)
+MSE = np.empty_like(xg)
+for i, a in enumerate(xg):
+    MSE[i]= L2(auto["weight"], a)
+
+tmp=plt.scatter(xg,MSE)
+```
+
+## Least Squares
+
+Loss Function = squared residuals !
+
+**Least Squares** equals minimizing $RSS = \sum_{i=1}^n{u_i^2}$
+
+* Remind yourself of the definition of the slope of a straight line
+
+<div>
+<img src="../figures/SlopeIllustration.png" width="400"/>
+</div>
+
+$$
+\beta_1 = \frac{\Delta y}{\Delta x} =  \frac{y_2-y_1}{x_2-x_1}
+$$
+
+```{python}
+plt.figure(figsize=(8,6))
+tmp=sns.regplot(x=auto["weight"], y=auto["mpg"], order=1, ci=95,
+                scatter_kws={'color':'b', 's':9}, line_kws={'color':'r'})
+```
+
+[sklearn does not seem to offer even standard errors!](https://stackoverflow.com/questions/22381497/python-scikit-learn-linear-model-parameter-standard-error)
+
+Module **statsmodels** gives output closer in line with other statistical software:
+
+```{python}
+est = smf.ols('mpg ~ weight', auto).fit()
+est.summary().tables[1]
+```
+
+```{python}
+est = smf.ols('mpg ~ C(origin) + weight', auto).fit()
+est.summary().tables[1]
+```
+
+```{python}
+est = smf.ols('Sales ~ Newspaper', advertising).fit()
+est.summary().tables[1]
+```
+
+```{python}
+est = smf.ols('mpg ~ horsepower', auto).fit()
+est.summary(alpha=0.01).tables[1]
+```
+
+```{python}
+from scipy.stats import t
+tC =t.ppf(0.995,390)#2.588
+-0.1578 - tC*0.006
+#-0.1578 + tC*0.006
+est.conf_int(alpha = 0.01)
+```
+
+
+### Reproducing the ISL Book {.unlisted .unnumbered} 
+
+In the following sections we are mainly reproducing figures and results from the ISL book.
+
+**Figure 3.1 - Least squares fit**
+
+```{python}
+plt.figure(figsize=(8,6))
+sns.regplot(x=advertising.TV, y=advertising.Sales, order=1, ci=None, scatter_kws={'color':'r', 's':9})
+plt.xlim(-10,310)
+plt.ylim(ymin=0);
+```
+
+**Figure 3.2 - Regression coefficients - RSS**
+Note that the text in the book describes the coefficients based on uncentered data, whereas the plot shows the model based on centered data. The latter is visually more appealing for explaining the concept of a minimum RSS. I think that, in order not to confuse the reader, the values on the axis of the B0 coefficients have been changed to correspond with the text. The axes on the plots below are unaltered.
+
+```{python}
+np.corrcoef(advertising.TV, advertising.Sales)
+```
+
+```{python}
+#what data structures does the fit function want?
+X = np.array([[1, 1], [1, 2], [2, 2], [2, 3]])
+y = np.dot(X, np.array([1, 2])) + 3
+reg = skl_lm.LinearRegression().fit(X, y)
+reg.coef_
+type(advertising.Sales)
+```
+
+```{python}
+# Regression coefficients (Ordinary Least Squares)
+regr = skl_lm.LinearRegression()
+
+#X = scale(advertising.TV, with_mean=True, with_std=False).reshape(-1,1)
+X=advertising.TV.values.reshape(-1,1)
+X = scale(advertising.TV, with_mean=True, with_std=False).reshape(-1,1)
+
+y = advertising.Sales.values
+
+regr.fit(X,y)
+print(regr.intercept_)
+print(regr.coef_)
+```
+
+**Tasks**
+
+1. Compute the residuals, their sum and RSS (are they different for non-centered X?)
+2. Compute $R^2$ and compare with the correlation coefficient $\rho$.
+3. Interpret the meaning of the slope $\hat{\beta_1}$.
+4. Obtain $SE(\hat{\beta_1})$ and a 95% confidence interval for the slope.
+5. Discuss how one could use resampling to obtain non-parametric confidence intervals
+6. (homework) Test whether the true slope could be 0.
+
+### Least Squares {.unlisted .unnumbered} 
+
+Is RSS really minimized ?
+
+```{python}
+# Minimized RSS
+min_rss = np.sum((regr.intercept_+regr.coef_*X - y.reshape(-1,1))**2)/1000
+min_rss
+```
+
+<img src="../figures/RSS - Regression coefficients.png" width="1000"/>
+
+
+#### Confidence interval on page 67 & Table 3.1 & 3.2 - Statsmodels {.unlisted .unnumbered} 
+
+```{python}
+est = smf.ols('Sales ~ TV', advertising).fit()
+est.summary().tables[1]
+```
+
+```{python}
+# RSS with regression coefficients
+((advertising.Sales - (est.params[0] + est.params[1]*advertising.TV))**2).sum()/1000
+```
+
+**Table 3.1 & 3.2 - Scikit-learn**
+<table>
+    <tr>
+        <td>
+            <img src="../figures/ISLR-Table3-1.png" width="600"/>
+        </td>
+        <td>
+            <img src="../figures/ISLR-Table3-2.png" width="600"/>
+        </td>
+    </tr>
+</table>
+
+```{python}
+regr = skl_lm.LinearRegression()
+
+X = advertising.TV.values.reshape(-1,1)
+y = advertising.Sales
+
+regr.fit(X,y)
+print(regr.intercept_)
+print(regr.coef_)
+```
+
+```{python}
+Sales_pred = regr.predict(X)
+r2_score(y, Sales_pred)
+```

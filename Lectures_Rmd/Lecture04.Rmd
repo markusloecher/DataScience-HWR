@@ -1,0 +1,601 @@
+# Advanced Tests
+
+```{r, echo = FALSE}
+library(reticulate)
+reticulate::use_condaenv(condaenv = "r-reticulate", required = TRUE)
+```
+
+1. Permutation Tests
+2. Binary Processes
+    * AB Tests
+    * Binomial Distribution
+
+
+**Importing Our Functions**
+
+```{python}
+# %run ../ourFunctions.py
+# %precision 3
+```
+
+```{python}
+# # %load ../ourFunctions.py
+import numpy as np
+import matplotlib as matplt
+import matplotlib.pyplot as plt
+import pandas as pd
+import seaborn as sns
+from scipy.stats import norm
+from scipy import stats
+
+from numpy import random
+#random.seed(42)
+
+def ecdf(data):
+    """Compute ECDF for a one-dimensional array of measurements."""
+
+    # Number of data points: n
+    n = len(data)
+
+    # x-data for the ECDF: x
+    x = np.sort(data)
+
+    # y-data for the ECDF: y
+    y = np.arange(1, n+1) / n
+
+    return x, y
+
+def bootstrap_replicate_1d(data, func):
+    return func(np.random.choice(data, size=len(data)))
+
+def draw_bs_reps(data, func, size=1):
+    """Draw bootstrap replicates."""
+
+    # Initialize array of replicates: bs_replicates
+    bs_replicates = np.empty(size)
+
+    # Generate replicates
+    for i in range(size):
+        bs_replicates[i] = bootstrap_replicate_1d(data, func)
+
+    return bs_replicates
+
+def bs_2sample_test(xA, xB, func, direction =("two-sided","left", "right")[0], size=1000):
+    # Compute "pooled" mean
+    mean_overall = np.mean([xA,xB])
+
+    empirical_diff_means = np.mean(xA)-np.mean(xB)
+
+    # Generate shifted arrays
+    xA_underNull = xA - np.mean(xA) + mean_overall
+    xB_underNull = xB - np.mean(xB) + mean_overall
+
+    # Compute 10,000 bootstrap replicates from shifted arrays
+    bs_replicates_m = draw_bs_reps(xA_underNull, np.mean, size=size)
+    bs_replicates_f = draw_bs_reps(xB_underNull, np.mean, size=size)
+
+    # Get replicates of difference of means: bs_replicates
+    bs_replicates = bs_replicates_m - bs_replicates_f
+
+    # Compute and print p-value: p
+    if direction == "two-sided":        
+        p = np.sum(np.abs(bs_replicates) >= np.abs(empirical_diff_means)) / len(bs_replicates)
+    if direction == "left":        
+        p = np.sum(bs_replicates <= empirical_diff_means) / len(bs_replicates)
+    if direction == "right":        
+        p = np.sum(bs_replicates >= empirical_diff_means) / len(bs_replicates)
+    print('p-value =', p)
+
+    return bs_replicates
+
+def plot2ECDFs(x1, x2,leg=('male', 'female'),xlab='birth weight(g)',ylab='ECDF',title=''):
+    # Compute ECDF for sample size 40: m_40, f_40
+    mx_40, my_40 = ecdf(x1)
+    fx_40, fy_40 = ecdf(x2)
+
+    # Plot all ECDFs on the same plot
+    _ = plt.plot(mx_40, my_40, marker = '.', linestyle = 'none')
+    _ = plt.plot(fx_40, fy_40, marker = '.', linestyle = 'none')
+
+    # Make nice margins
+    plt.margins(0.02)
+
+    # Annotate the plot
+    plt.legend(leg, loc='lower right')
+    _ = plt.xlabel(xlab)
+    _ = plt.ylabel(ylab)
+    _ = plt.title(title)
+
+    # Display the plot
+    plt.grid()
+    plt.show()
+
+def mean_density_comparison(M=500, n=10):
+
+    #Generate an gender iteration array
+    gender_iter = ['male', 'female']
+
+    #Create an empty DataFrame with 'gender' and 'dbirwt' column
+    columns = ['gender', 'dbirwt']
+    df_new = pd.DataFrame(columns=columns)
+
+    #Create an empty array to store the standard deviation of the differnt gender 'male' = std_dev[0], 'female' = std_dev[1]
+    std_dev = np.empty(2)
+
+    #Iterate over gender and create a specific data subset
+    for ind,v in enumerate(gender_iter):
+        subset = df_cleaned[df_cleaned.gender == v]
+
+        #create M random sample means of n samples and add it to df_new
+        for i in range(M):
+            rand_samples = np.random.choice(subset.dbirwt, n)
+            x = np.mean(rand_samples)
+            df_new.loc[len(df_new)+1] = [v, x]
+
+        #plot male and female data and calculate the standard daviation of the data
+        plot_data = df_new[df_new.gender == v]
+        std_dev[ind] = np.std(plot_data['dbirwt'])  
+
+        plot_data.dbirwt.plot.density()
+        plt.xlabel('dbirwt')
+        plt.legend(gender_iter)
+		#plt.grid()
+		#plt.title("n=" + str(n))
+
+    #return the sample mean data
+    return df_new
+    #return the standard deviation of ['male', 'female']
+    #return std_dev
+
+# Test the function
+# SM40 = mean_density_comparison(M=100, n=40)
+# plt.figure()
+# SM640 = mean_density_comparison(M=100, n=640)
+
+# # Permutation tests
+
+def permutation_sample(data1, data2):
+    """Generate a permutation sample from two data sets."""
+
+    # Concatenate the data sets: data
+    data = np.concatenate((data1, data2))
+
+    # Permute the concatenated array: permuted_data
+    permuted_data = np.random.permutation(data)
+
+    # Split the permuted array into two: perm_sample_1, perm_sample_2
+    perm_sample_1 = permuted_data[:len(data1)]
+    perm_sample_2 = permuted_data[len(data1):]
+
+    return perm_sample_1, perm_sample_2
+
+def draw_perm_reps(data_1, data_2, func, size=1):
+    """Generate multiple permutation replicates."""
+
+    # Initialize array of replicates: perm_replicates
+    perm_replicates = np.empty(size)
+
+    for i in range(size):
+        # Generate permutation sample
+        perm_sample_1, perm_sample_2 = permutation_sample(data_1, data_2)
+
+        # Compute the test statistic
+        perm_replicates[i] = func(perm_sample_1, perm_sample_2)
+
+    return perm_replicates
+
+def diff_of_means(data_1, data_2):
+    """Difference in means of two arrays."""
+
+    # The difference of means of data_1, data_2: diff
+    diff = np.mean(data_1) - np.mean(data_2)
+
+    return diff
+
+```
+
+<!-- #region -->
+
+## Permutation 2-sample test
+
+We have used the bootstrap to compare two sets of data, both of which are samples. In particular, we can test two-sample hypotheses such as  
+
+$H_0: \mu_m = \mu_f, H_A: \mu_m \neq \mu_f$
+
+or the one-sided versions:
+
+$H_0: \mu_m = \mu_f, H_A: \mu_m > \mu_f$
+
+$H_0: \mu_m = \mu_f, H_A: \mu_m < \mu_f$
+
+
+Another way to compare 2 distributions (in some ways much more straightforward than the bootstrap) is **permutation sampling**. It directly simulates the hypothesis that two variables have identical probability distributions.
+
+A permutation sample of two arrays having respectively $n_1$ and $n_2$ entries is constructed by concatenating the arrays together, scrambling the contents of the concatenated array, and then taking the first $n_1$ entries as the permutation sample of the first array and the last $n_2$ entries as the permutation sample of the second array.
+
+At DataCamp the first example offers a nice visualization of this process:
+
+<div>
+<img src="../figures/PennsylvaniaOhioDataCamp.png" width="400"/>
+</div>
+
+Complete the code below to run a permutation test:
+<!-- #endregion -->
+
+```{python}
+#def permutation_sample(data1, data2):
+#    """Generate a permutation sample from two data sets."""
+#
+#    # Concatenate the data sets: data
+#    data = np.concatenate((data1, data2))
+#
+#    # Permute the concatenated array: permuted_data
+#    permuted_data = np.random.permutation(data)
+#
+#    # Split the permuted array into two: perm_sample_1, perm_sample_2
+#    perm_sample_1 = permuted_data[:len(data1)]
+#    perm_sample_2 = permuted_data[len(data1):]
+#
+#    return perm_sample_1, perm_sample_2
+#
+#def draw_perm_reps(data_1, data_2, func, size=1):
+#    """Generate multiple permutation replicates."""
+#
+#    # Initialize array of replicates: perm_replicates
+#    np.random.seed(123)
+#    perm_replicates = np.empty(size)
+#
+#    for i in range(size):
+#        # Generate permutation sample
+#        perm_sample_1, perm_sample_2 = permutation_sample(data_1, data_2)
+#
+#    # Compute the test statistic
+#    perm_replicates[i] = func(perm_sample_1, perm_sample_2)
+#    #perm_replicates[i] = np.mean(data_1) - np.mean(data_2)
+#
+#    return perm_replicates
+#
+#def diff_of_means(data_1, data_2):
+#    """Difference in means of two arrays."""
+#
+#    # The difference of means of data_1, data_2: diff
+#    diff = np.mean(data_1) - np.mean(data_2)
+#
+#    return diff
+```
+
+
+**Let us apply our first permutation sampling on the Titanic data. (First, we explore the data a bit)**
+
+```{python}
+titanic = sns.load_dataset('titanic')
+titanic.head()
+```
+
+```{python}
+PclassSurv = titanic.groupby(['pclass', 'survived'])
+PclassSurv.size()
+```
+
+```{python}
+pd.crosstab(titanic.pclass, titanic.survived,margins=True)
+```
+
+```{python}
+WomenOnly = titanic[titanic["sex"]=="female"]
+pd.crosstab(WomenOnly.pclass, WomenOnly.survived,margins=True)
+```
+
+
+**Test the claim that the survival chances of women in 1st and 2nd class were pretty much the same.**
+
+1. Write down the Null hypothesis and test statistic
+2. Write code that generates permutation samples from two data sets
+3. Generate many **permutation replicates** for the relevant Titanic subset
+4. Compute a p-value
+
+
+
+2. Write code that generates permutation samples from two data sets
+
+```{python}
+Women1 = WomenOnly[WomenOnly["pclass"]==1].survived
+Women2 = WomenOnly[WomenOnly["pclass"]==2].survived
+
+obsDiff = np.mean(Women1)-np.mean(Women2)
+
+#perm_sample_1, perm_sample_2 = permutation_sample(Women1, Women2)
+np.random.seed(123)
+#tmp=np.concatenate((perm_sample_1, perm_sample_2))
+perm_replicates = draw_perm_reps(Women1, Women2, diff_of_means, 10000)
+```
+
+```{python}
+obsDiff
+```
+
+```{python}
+perm_replicates
+```
+
+
+3. Generate many **permutation replicates** for the relevant Titanic subset
+
+```{python}
+tmp=plt.hist(perm_replicates)
+plt.vlines(obsDiff,0,2500,colors="red")
+plt.vlines(-obsDiff,0,2500, colors="red")
+
+obsDiff = np.mean(Women1)-np.mean(Women2)
+pVal2 = np.mean(abs(perm_replicates) > obsDiff)
+print(pVal2)
+
+#pVal1=np.mean(perm_replicates > obsDiff)
+boolArray =  perm_replicates > obsDiff
+pVal1=np.sum(boolArray)/len(perm_replicates)
+
+print(pVal1)
+```
+
+
+4. Compute a p-value
+
+```{python}
+# # %load ../InNotebookSolutions/class4_sol2.py
+Women1 = WomenOnly[WomenOnly["pclass"]==1].survived
+Women2 = WomenOnly[WomenOnly["pclass"]==2].survived
+
+obsDiff = np.mean(Women1)-np.mean(Women2)
+
+# Acquire permutation samples: perm_replicates
+perm_replicates = draw_perm_reps(Women1, Women2, diff_of_means, 10000)
+
+#p-value:
+print('p-vlaue:', np.mean(perm_replicates >obsDiff))
+```
+
+**What is the difference between these two methods ?**
+
+Testing the hypothesis that two samples have the same distribution may be done with a bootstrap test, but a permutation test is preferred because it is more accurate (exact, in fact). But a permutation test is not as versatile as the bootstrap.
+
+We often want to test the hypothesis that population A and population B have the same mean, but not necessarily the same distribution. This is difficult with a permutation test as it assumes **exchangeability**.
+
+We will get back to this topic!
+
+[More info..](https://ntrs.nasa.gov/archive/nasa/casi.ntrs.nasa.gov/20150001882.pdf)
+
+
+
+## 2-sample t test
+
+Of course there is an equivalent fully parametric 2-sample test, the t-test:
+
+```{python}
+preg = pd.read_hdf('../data/pregNSFG.h5', 'df')
+
+#only look at live births
+live = preg[preg.outcome == 1]
+
+#define first babies
+firsts = live[live.birthord == 1]
+
+#and all others
+others = live[live.birthord != 1]
+```
+
+```{python}
+tRes = stats.ttest_ind(firsts.prglngth.values, others.prglngth.values)
+
+#arrg precision is not working
+pd.set_option('precision', 4)
+p = pd.Series([tRes.pvalue,tRes.statistic], index = ['p-value:', 'test statistic:'])
+```
+
+```{python}
+print(p)
+```
+
+```{python}
+tRes = stats.ttest_ind(firsts.prglngth.values, others.prglngth.values)
+
+#arrg precision is not working
+pd.set_option('precision', 4)
+p = pd.Series([tRes.pvalue,tRes.statistic], index = ['p-value:', 'test statistic:'])
+```
+
+```{python}
+#ttest_ind often underestimates p for unequal variances:
+
+tRes = stats.ttest_ind(firsts.prglngth.values, others.prglngth.values, equal_var = False)
+p = pd.Series([tRes.pvalue,tRes.statistic], index = ['p-value:', 'test statistic:'])
+```
+
+```{python}
+print(p)
+```
+
+```{python}
+#ttest_ind often underestimates p for unequal variances:
+
+tRes = stats.ttest_ind(firsts.prglngth.values, others.prglngth.values, equal_var = False)
+p = pd.Series([tRes.pvalue,tRes.statistic], index = ['p-value:', 'test statistic:'])
+```
+
+
+**Can you reproduce the first p-value from the [test statistic](https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.t.html) ?**
+
+```{python}
+# # %load ../InNotebookSolutions/class4_sol_t.py
+#get a quantile:
+stats.t.ppf(0.975,10)
+
+#reproduce p-value:
+n1 = len(firsts.prglngth.values)
+n2 = len(others.prglngth.values)
+pVal = 2*(1-stats.t.cdf(1.3802,n1+n2-2))
+print('p-value:',pVal)
+```
+
+
+## Random Walks
+
+An illustrative application of basic stochastic concepts in binary processes is the simulation of random walks. Let’s first consider a simple random walk starting at 0 with steps of 1 and -1 occurring with equal probability ($p = 0.5$).
+
+```{python}
+nsteps = 10000
+draws = np.random.randint(0, 2, size=nsteps)
+steps = np.where(draws > 0, 1, -1)
+walk = steps.cumsum() # random walk !
+fig = plt.figure(); ax = fig.add_subplot(1, 1, 1)
+ax.plot(walk, linewidth=0.5)
+ax.grid()
+```
+
+**Extra Credit**
+
+A more complicated statistic is the first crossing time, the step at which the random walk reaches a particular value. Here we might want to know how long it took the random walk to get at least 10 steps away from the origin 0 in either direction.
+np.abs(walk) >= 10 gives us a boolean array indicating where the walk has reached or exceeded 10, but we want the index of the first 10 or -10. This can be computed using argmax, which returns the first index of the maximum value in the boolean array (True is the maximum value):
+
+```{python}
+(np.abs(walk) >= 10).argmax()
+```
+
+
+### Simulating Many Random Walks at Once {.unlisted .unnumbered} 
+
+If your goal was to simulate many random walks, say 5,000 of them, you can generate all of the random walks with minor modifications to the above code. The numpy.random functions if passed a 2-tuple will generate a 2D array of draws, and we can compute the cumulative sum across the rows to compute all 5,000 random walks in one shot
+
+```{python}
+nwalks = 5000
+nsteps = 10000
+draws = np.random.randint(0, 2, size=(nwalks, nsteps)) # 0 or 1
+steps = np.where(draws > 0, 1, -1)
+walks = steps.cumsum(1)
+```
+
+```{python}
+walks.shape
+```
+
+```{python}
+nwalks = 5000
+nsteps = 10000
+draws = np.random.randint(0, 2, size=(nwalks, nsteps)) # 0 or 1
+steps = np.where(draws > 0, 1, -1)
+walks = steps.cumsum(1)
+```
+
+```{python}
+fig = plt.figure()
+ax = fig.add_subplot(1, 1, 1)
+
+ax.plot(walks[1,:], 'k', label='one', linewidth=0.25)
+ax.plot(walks[2,:], label='two', linestyle ='--', linewidth=0.25)
+ax.plot(walks[3,:],  label='three', linestyle ='--', linewidth=0.25)
+ax.plot(walks[4,:],  label='four', linestyle ='--', linewidth=0.25)
+ax.grid()
+
+#a very useless legend just because we can
+ax.legend(loc='best');
+```
+
+
+### The $\sqrt{n}$ law again !
+
+Compute the variance and/or standard deviation at times $1000, 4000, 9000$.
+
+```{python}
+print('std_1000:', np.std(walks[:,1000]))
+print('std_4000:', np.std(walks[:,4000]))
+print('std_9000:', np.std(walks[:,9000]))
+```
+
+**Extra Credit**
+
+Out of these walks, let’s compute the minimum crossing time to 30 or -30. This is slightly tricky because not all 5,000 of them reach 30. We can check this using the *any* method.
+
+We can then use this boolean array to select out the rows of walks that actually cross the absolute 30 level and call argmax across axis 1 to get the crossing times:
+
+```{python}
+hits30 = (np.abs(walks) >= 30).any(1)
+hits30
+hits30.sum() # Number that hit 30 or -30
+
+crossing_times = (np.abs(walks[hits30]) >= 30).argmax(1)
+crossing_times.mean()
+```
+
+
+### Tasks {.unlisted .unnumbered} 
+
+1. Compute the stdev for multiples of 100 iterations and find a pattern
+2. Repeat for "biased" random walks, where $p \neq 0.5$. Try $p = 0.1$ and $p = 0.9$
+3. Learn
+    * the analytic formular for variance/stdev of coin flips
+    * the actual distribution (chap 3.4 in https://www.openintro.org/stat/)
+    * its approximation
+4. Complete the labeling of the two axis (with the help of https://codeandstats.shinyapps.io/binomialtails/)
+ ![BinomialTails](../figures/BinomialTails.png)
+
+
+
+### Binomial Probability Distribution {.unlisted .unnumbered} 
+
+1. Explore the *binom* function from scipy.stats
+
+2. Size matters: insurance company A insures 100 cars, company B 400 cars. The probability of a car being stolen is 10%. Compute the probabilities that more than 15% of the respective fleets are stolen.
+
+4. Faced with a mutliple choice test containing 20 question with 4 choices each you decide in desparation to just guess all answers. What is the probability that you will pass, i.e. get at least 10 correct answers?
+
+5. Think about nonparametric versions of the above answers
+
+```{python}
+from scipy.stats import binom
+```
+
+
+### A/B Testing {.unlisted .unnumbered} 
+
+1. Perform a permutation test on the DataCamp example:
+
+<div>
+<img src="../figures/DC_ABtest.png" width="400"/>
+</div>
+
+
+**What does A/B testing have to do with random walks?**
+
+```{python}
+# Construct arrays of data: campaigns A and B
+clickthroughA = np.array([True] * 45 + [False] * (500-45))
+clickthroughB = np.array([True] * 67 + [False] * (500-67))
+
+obsDiff = np.mean(clickthroughB)-np.mean(clickthroughA)
+
+# Acquire permutation samples: perm_replicates
+perm_replicates = draw_perm_reps(clickthroughB, clickthroughA, diff_of_means, 10000)
+```
+
+```{python}
+#p-value:
+np.mean(perm_replicates >= obsDiff)
+```
+
+```{python}
+# Construct arrays of data: campaigns A and B
+clickthroughA = np.array([True] * 45 + [False] * (500-45))
+clickthroughB = np.array([True] * 67 + [False] * (500-67))
+
+obsDiff = np.mean(clickthroughB)-np.mean(clickthroughA)
+
+# Acquire permutation samples: perm_replicates
+perm_replicates = draw_perm_reps(clickthroughB, clickthroughA, diff_of_means, 10000)
+
+plt.hist(perm_replicates)
+plt.vlines(obsDiff,0,3000,colors="red")
+plt.vlines(-obsDiff,0,3000, colors="red");
+```
+
+```{python}
+
+```

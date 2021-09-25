@@ -1,0 +1,556 @@
+#  Multiple Linear Regression 
+
+```{r, echo = FALSE}
+library(reticulate)
+reticulate::use_condaenv(condaenv = "r-reticulate", required = TRUE)
+```
+
+How can we extend our analysis of the advertising data in order
+to accommodate these two additional predictors?
+One option is to run three separate simple linear regressions, each of
+which uses a different advertising medium as a predictor.
+
+However, the approach of fitting a separate simple linear regressionmodel
+for each predictor is not entirely satisfactory. First of all, it is unclear how to
+make a single prediction of sales given levels of the three advertising media
+budgets, since each of the budgets is associated with a separate regression
+equation. Second, each of the three regression equations ignores the other
+two media in forming estimates for the regression coefficients. We will see
+shortly that if the media budgets are correlated with each other in the 200
+markets that constitute our data set, then this can lead to very misleading
+estimates of the individual media effects on sales.
+Instead of fitting a separate simple linear regression model for each predictor,
+a better approach is to extend the simple linear regression model
+(3.5) so that it can directly accommodate multiple predictors. We can do
+this by giving each predictor a separate slope coefficient in a single model.
+In general, suppose that we have p distinct predictors. Then the multiple
+linear regression model takes the form
+$$
+Y = \beta_0 + \beta_1 X_1 + \ldots + \beta_p X_p + \epsilon
+$$
+
+We interpret $\beta_j$ as the average effect on Y of a one unit increase in $X_j$, **holding all other predictors fixed**.
+
+
+**Importing Standard Libs**
+
+```{python}
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import axes3d
+import seaborn as sns
+import scipy
+
+from sklearn.preprocessing import scale
+import sklearn.linear_model as skl_lm
+from sklearn.metrics import mean_squared_error, r2_score
+import statsmodels.api as sm
+import statsmodels.formula.api as smf
+
+# %matplotlib inline
+sns.set_style('white')
+```
+
+## Statsmodels
+
+
+### Table 3.3 - Statsmodels {.unlisted .unnumbered} 
+
+```{python}
+advertising = pd.read_csv('../data/Advertising.csv')
+```
+
+```{python}
+est = smf.ols('Sales ~ Radio', advertising).fit()
+est.summary().tables[1]
+```
+
+```{python}
+est = smf.ols('Sales ~ Newspaper', advertising).fit()
+est.summary().tables[1]
+```
+
+```{python}
+est = smf.ols('Sales ~ TV', advertising).fit()
+est.summary().tables[1]
+```
+
+### Table 3.4 & 3.6 - Statsmodels {.unlisted .unnumbered} 
+
+We interpret these results as follows: for a given
+amount of TV and newspaper advertising, spending an additional $1,000
+on radio advertising leads to an increase in sales by approximately 189
+units. Comparing these coefficient estimates to those displayed in Tables 3.1
+and 3.3, we notice that the multiple regression coefficient estimates for
+TV and radio are pretty similar to the simple linear regression coefficient
+estimates. However, while the newspaper regression coefficient estimate in
+Table 3.3 was significantly non-zero, the coefficient estimate for newspaper
+in the multiple regression model is close to zero, and the corresponding
+p-value is no longer significant, with a value around 0.86. This illustrates that the simple and multiple regression coefficients can be quite different.
+This difference stems from the fact that in the simple regression case, the
+slope term represents the average effect of a 1,000 increase in newspaper
+advertising, ignoring other predictors such as TV and radio. In contrast, in
+the multiple regression setting, the coefficient for newspaper represents the
+average effect of increasing newspaper spending by 1,000 **while holding TV and radio fixed**.
+
+```{python}
+est = smf.ols('Sales ~ TV + Radio + Newspaper', advertising).fit()
+print(est.summary())
+```
+
+### Table 3.5 - Correlation Matrix {.unlisted .unnumbered} 
+
+Does it make sense for the multiple regression to suggest no relationship
+between sales and newspaper while the simple linear regression implies the
+opposite? In fact it does. Consider the correlation matrix for the three
+predictor variables and response variable, displayed in Table 3.5. Notice
+that the correlation between radio and newspaper is 0.35. This reveals a
+tendency to spend more on newspaper advertising in markets where more
+is spent on radio advertising. Now suppose that the multiple regression is
+correct and newspaper advertising has no direct impact on sales, but radio
+advertising does increase sales. Then in markets where we spend more
+on radio our sales will tend to be higher, and as our correlation matrix
+shows, we also tend to spend more on newspaper advertising in those same
+markets. Hence, in a simple linear regression which only examines sales
+versus newspaper, we will observe that higher values of newspaper tend to be
+associated with higher values of sales, even though newspaper advertising
+does not actually affect sales. So newspaper sales are a surrogate for radio
+advertising; newspaper gets “credit” for the effect of radio on sales.
+This slightly counterintuitive result is very common in many real life
+situations. Consider an absurd example to illustrate the point. Running
+a regression of shark attacks versus ice cream sales for data collected at
+a given beach community over a period of time would show a positive
+relationship, similar to that seen between sales and newspaper. Of course
+no one (yet) has suggested that ice creams should be banned at beaches
+to reduce shark attacks. In reality, higher temperatures cause more people
+to visit the beach, which in turn results in more ice cream sales and more
+shark attacks. A multiple regression of attacks versus ice cream sales and
+temperature reveals that, as intuition implies, the former predictor is no
+longer significant after adjusting for temperature.
+
+```{python}
+advertising.corr()
+```
+
+### Figure 3.5 - Multiple Linear Regression {.unlisted .unnumbered} 
+
+<img src="../figures/ISLR-Fig3.5.png" width=600>
+
+```{python}
+regr = skl_lm.LinearRegression()
+
+X = advertising[['Radio', 'TV']].values
+y = advertising.Sales
+
+regr.fit(X,y)
+print(regr.coef_)
+print(regr.intercept_)
+```
+
+```{python}
+# What are the min/max values of Radio & TV?
+# Use these values to set up the grid for plotting.
+advertising[['Radio', 'TV']].describe()
+```
+
+```{python}
+# Create a coordinate grid
+Radio = np.arange(0,50)
+TV = np.arange(0,300)
+
+B1, B2 = np.meshgrid(Radio, TV, indexing='xy')
+Z = np.zeros((TV.size, Radio.size))
+
+for (i,j),v in np.ndenumerate(Z):
+        Z[i,j] =(regr.intercept_ + B1[i,j]*regr.coef_[0] + B2[i,j]*regr.coef_[1])
+```
+
+```{python}
+# Create plot
+fig = plt.figure(figsize=(10,6))
+fig.suptitle('Regression: Sales ~ Radio + TV Advertising', fontsize=20)
+
+ax = axes3d.Axes3D(fig)
+
+ax.plot_surface(B1, B2, Z, rstride=10, cstride=5, alpha=0.4)
+ax.scatter3D(advertising.Radio, advertising.TV, advertising.Sales, c='r')
+
+ax.set_xlabel('Radio')
+ax.set_xlim(0,50)
+ax.set_ylabel('TV')
+ax.set_ylim(ymin=0)
+ax.set_zlabel('Sales');
+```
+
+## Other Considerations in the Regression Model 
+
+
+### Collinearity {.unlisted .unnumbered} 
+
+<!-- #region -->
+#### "Exact Collinearity" {.unlisted .unnumbered} 
+
+
+**Tasks**
+
+1. You try to impress your investors with the number of advertising channels that you have investigated. So you make a copy of the TV column, call it *facebook* and refit the linear multiple regression.
+
+2. **Multi-Collinearity**: You have learned from your foolish mistakes and are more ambitiously creating *fake data*: You create a new column *instagram* by adding TV and Radio and subtracting 3 times Newspaper. Now, refit the linear multiple regression.
+<!-- #endregion -->
+
+```{python}
+advertising["facebook"] = advertising.TV
+#advertising.info()
+
+est = smf.ols('Sales ~ TV + Radio + Newspaper + facebook', advertising).fit()
+es = est.summary()
+es.tables[1]
+```
+
+Multicollinearity is treated VERY differently in statsmodels than in R as discussed in this
+[post on medium](https://medium.com/@docintangible/multicollinearity-in-pythons-statsmodels-ols-vs-r-s-lm-6fc9a994154c) as well on [stackoverflow](https://stackoverflow.com/questions/25676145/capturing-high-multi-collinearity-in-statsmodels).
+Worthwhile to inspect the [condition number](https://en.wikipedia.org/wiki/Condition_number#Matrices):
+
+```{python}
+es.tables[2]
+```
+
+```{python}
+advertising["instagram"] = advertising.TV +advertising.Radio - 3*advertising.Newspaper
+#advertising.info()
+
+est = smf.ols('Sales ~ TV + Radio + Newspaper + instagram', advertising).fit()
+es = est.summary()
+es.tables[1]
+```
+
+```{python}
+es.tables[2]
+```
+
+**Figure 3.6**
+
+What about non-exact collinearities?
+
+```{python}
+credit = pd.read_csv('../data/Credit.csv', usecols=list(range(1,12)))
+credit['Student2'] = credit.Student.map({'No':0, 'Yes':1})
+credit.head()
+```
+
+```{python}
+sns.pairplot(credit[['Balance','Age','Cards','Education','Income','Limit','Rating']]);
+```
+
+
+**Figure 3.14**
+
+```{python}
+fig, (ax1,ax2) = plt.subplots(1,2, figsize=(12,5))
+
+# Left plot
+ax1.scatter(credit.Limit, credit.Age, facecolor='None', edgecolor='r')
+ax1.set_ylabel('Age')
+
+# Right plot
+ax2.scatter(credit.Limit, credit.Rating, facecolor='None', edgecolor='r')
+ax2.set_ylabel('Rating')
+
+for ax in fig.axes:
+    ax.set_xlabel('Limit')
+    ax.set_xticks([2000,4000,6000,8000,12000])
+```
+
+#### "High Collinearity" {.unlisted .unnumbered} 
+
+*Collinearity* refers to the situation in which two or more predictor variables are closely related to one another. The concept of collinearity is illustrated in Figure 3.14 using the Credit data set. In the left-hand panel of Figure 3.14, the two predictors limit and age appear to have no obvious relationship.
+In contrast, in the right-hand panel of Figure 3.14, the predictors
+limit and rating are very highly correlated with each other, and we say
+that they are **collinear**. The presence of collinearity can pose problems in the regression context, since it can be difficult to separate out the individual effects of collinear variables on the response. In other words, since limit and rating tend to increase or decrease together, it can be difficult to determine how each one separately is associated with the response, *balance*.
+
+
+**Figure 3.15**
+
+```{python}
+y = credit.Balance
+
+# Regression for left plot
+X = credit[['Age', 'Limit']].values
+regr1 = skl_lm.LinearRegression()
+regr1.fit(scale(X.astype('float'), with_std=False), y)
+print('Age/Limit\n',regr1.intercept_)
+print(regr1.coef_)
+
+# Regression for right plot
+X2 = credit[['Rating', 'Limit']].values
+regr2 = skl_lm.LinearRegression()
+regr2.fit(scale(X2.astype('float'), with_std=False), y)
+print('\nRating/Limit\n',regr2.intercept_)
+print(regr2.coef_)
+```
+
+```{python}
+# Create grid coordinates for plotting
+B_Age = np.linspace(regr1.coef_[0]-3, regr1.coef_[0]+3, 100)
+B_Limit = np.linspace(regr1.coef_[1]-0.02, regr1.coef_[1]+0.02, 100)
+
+B_Rating = np.linspace(regr2.coef_[0]-3, regr2.coef_[0]+3, 100)
+B_Limit2 = np.linspace(regr2.coef_[1]-0.2, regr2.coef_[1]+0.2, 100)
+
+X1, Y1 = np.meshgrid(B_Limit, B_Age, indexing='xy')
+X2, Y2 = np.meshgrid(B_Limit2, B_Rating, indexing='xy')
+Z1 = np.zeros((B_Age.size,B_Limit.size))
+Z2 = np.zeros((B_Rating.size,B_Limit2.size))
+
+Limit_scaled = scale(credit.Limit.astype('float'), with_std=False)
+Age_scaled = scale(credit.Age.astype('float'), with_std=False)
+Rating_scaled = scale(credit.Rating.astype('float'), with_std=False)
+
+# Calculate Z-values (RSS) based on grid of coefficients
+for (i,j),v in np.ndenumerate(Z1):
+    Z1[i,j] =((y - (regr1.intercept_ + X1[i,j]*Limit_scaled +
+                    Y1[i,j]*Age_scaled))**2).sum()/1000000
+
+for (i,j),v in np.ndenumerate(Z2):
+    Z2[i,j] =((y - (regr2.intercept_ + X2[i,j]*Limit_scaled +
+                    Y2[i,j]*Rating_scaled))**2).sum()/1000000
+```
+
+```{python}
+fig = plt.figure(figsize=(12,5))
+fig.suptitle('RSS - Regression coefficients', fontsize=20)
+
+ax1 = fig.add_subplot(121)
+ax2 = fig.add_subplot(122)
+
+min_RSS = r'$\beta_0$, $\beta_1$ for minimized RSS'
+
+# Left plot
+CS = ax1.contour(X1, Y1, Z1, cmap=plt.cm.Set1, levels=[21.25, 21.5, 21.8])
+ax1.scatter(regr1.coef_[1], regr1.coef_[0], c='r', label=min_RSS)
+ax1.clabel(CS, inline=True, fontsize=10, fmt='%1.1f')
+ax1.set_ylabel(r'$\beta_{Age}$', fontsize=17)
+
+# Right plot
+CS = ax2.contour(X2, Y2, Z2, cmap=plt.cm.Set1, levels=[21.5, 21.8])
+ax2.scatter(regr2.coef_[1], regr2.coef_[0], c='r', label=min_RSS)
+ax2.clabel(CS, inline=True, fontsize=10, fmt='%1.1f')
+ax2.set_ylabel(r'$\beta_{Rating}$', fontsize=17)
+ax2.set_xticks([-0.1, 0, 0.1, 0.2])
+
+for ax in fig.axes:
+    ax.set_xlabel(r'$\beta_{Limit}$', fontsize=17)
+    ax.legend()
+```
+
+**Figure 3.15**
+Figure 3.15 illustrates some of the difficulties that can result from collinearity.
+The left-hand panel of Figure 3.15 is a contour plot of the RSS (3.22)
+associated with different possible coefficient estimates for the regression
+of balance on limit and age. Each ellipse represents a set of coefficients
+that correspond to the same RSS, with ellipses nearest to the center taking
+on the lowest values of RSS. The  dots and associated dashed lines represent the coefficient estimates that result in the smallest possible
+RSS—in other words, these are the least squares estimates. The axes for
+limit and age have been scaled so that the plot includes possible coefficient
+estimates that are up to four standard errors on either side of the
+least squares estimates. Thus the plot includes all plausible values for the
+coefficients. For example, we see that the true limit coefficient is almost
+certainly somewhere between 0.15 and 0.20.
+In contrast, the right-hand panel of Figure 3.15 displays contour plots
+of the RSS associated with possible coefficient estimates for the regression
+of balance onto limit and rating, which we know to be highly collinear.
+Now the contours run along a narrow valley; there is a broad range of
+values for the coefficient estimates that result in equal values for RSS.
+Hence a small change in the data could cause the pair of coefficient values
+that yield the smallest RSS—that is, the least squares estimates—to move
+anywhere along this valley. This results in a great deal of uncertainty in the
+coefficient estimates. Notice that the scale for the limit coefficient now runs
+from roughly −0.2 to 0.2; this is an eight-fold increase over the plausible
+range of the limit coefficient in the regression with age.
+
+
+
+<img src="../figures/ISLR-Table3-11.png" width=500>
+
+**Table 3.11** compares the coefficient estimates obtained from two separate multiple regression models. The first is a regression of balance on age and limit, and the second is a regression of balance on rating and limit. In the first regression, both age and limit are highly significant with very small pvalues.
+In the second, the collinearity between limit and rating has caused
+the standard error for the limit coefficient estimate to increase by a factor of 12 and the p-value to increase to 0.701. In other words, the importance of the limit variable has been masked due to the presence of collinearity.
+To avoid such a situation, it is desirable to identify and address potential collinearity problems while fitting the model.
+
+
+
+## Categorical Variables
+
+- Dummy Coding
+- Interpretation of coefficients
+
+**Table 3.7**
+
+<img src="../figures/ISLR-Table3-7.png" width=500>
+
+```{python}
+est = smf.ols('Balance ~ Gender ', credit).fit()
+est.summary().tables[1]
+```
+
+**Table 3.8**
+
+```{python}
+np.unique(credit["Ethnicity"])
+credit.groupby("Ethnicity")["Balance"].mean()
+```
+
+```{python}
+est = smf.ols('Balance ~ Ethnicity', credit).fit()
+est.summary().tables[1]
+```
+
+## Interactions
+
+**Table 3.9**
+
+```{python}
+est = smf.ols('Sales ~ TV + Radio + TV*Radio', advertising).fit()
+est.summary().tables[1]
+```
+
+### Interaction between qualitative and quantitative variables {.unlisted .unnumbered} 
+
+```{python}
+credit["Income2"] = credit["Income"] + scipy.stats.norm.rvs(400)
+```
+
+```{python}
+est1 = smf.ols('Balance ~ Income + Income2 + C(Student)', credit).fit()
+regr1 = est1.params
+est2 = smf.ols('Balance ~ Income + Income*C(Student)', credit).fit()
+regr2 = est2.params
+
+print('Regression 1 - without interaction term')
+est1.summary().tables[1]
+```
+
+```{python}
+np.mean(credit["Income"])
+```
+
+```{python}
+est2 = smf.ols('Balance ~ Income + Income*C(Ethnicity)*C(Student)', credit).fit()
+est2.summary().tables[1]
+```
+
+```{python}
+print('\nRegression 2 - with interaction term')
+est2.summary().tables[1]
+```
+
+```{python}
+# Income (x-axis)
+income = np.linspace(0,150)
+
+# Balance without interaction term (y-axis)
+student1 = np.linspace(regr1['Intercept']+regr1['C(Student)[T.Yes]'],
+                       regr1['Intercept']+regr1['C(Student)[T.Yes]']+150*regr1['Income'])
+non_student1 =  np.linspace(regr1['Intercept'], regr1['Intercept']+150*regr1['Income'])
+
+# Balance with iteraction term (y-axis)
+student2 = np.linspace(regr2['Intercept']+regr2['C(Student)[T.Yes]'],
+                       regr2['Intercept']+regr2['C(Student)[T.Yes]']+
+                       150*(regr2['Income']+regr2['Income:C(Student)[T.Yes]']))
+non_student2 =  np.linspace(regr2['Intercept'], regr2['Intercept']+150*regr2['Income'])
+
+# Create plot
+fig, (ax1,ax2) = plt.subplots(1,2, figsize=(12,5))
+ax1.plot(income, student1, 'r', income, non_student1, 'k')
+
+ax2.plot(income, student2, 'r', income, non_student2, 'k')
+
+for ax in fig.axes:
+    ax.legend(['student', 'non-student'], loc=2)
+    ax.set_xlabel('Income')
+    ax.set_ylabel('Balance')
+    ax.set_ylim(ymax=1550)
+```
+
+## Non-linear relationships 
+
+**Figure 3.8**
+
+```{python}
+auto = pd.read_csv('../data/Auto.csv', na_values='?').dropna()
+```
+
+```{python}
+sns.regplot(x='weight', y='mpg', data=auto,fit_reg=True, order=2)
+```
+
+```{python}
+# With Seaborn's regplot() you can easily plot higher order polynomials.
+plt.scatter(x=auto.horsepower, y=auto.mpg, facecolors='None', edgecolors='k', alpha=.5)
+sns.regplot(x=auto.horsepower, y=auto.mpg, ci=None, label='Linear', scatter=False, color='orange')
+sns.regplot(x=auto.horsepower, y=auto.mpg, ci=None, label='Degree 2', order=2, scatter=False, color='lightblue')
+sns.regplot(x=auto.horsepower, y=auto.mpg, ci=None, label='Degree 5', order=5, scatter=False, color='g')
+plt.legend()
+plt.ylim(5,55)
+plt.xlim(40,240);
+```
+
+**Table 3.10**
+
+```{python}
+auto['horsepower2'] = auto.horsepower**2
+auto.head(3)
+```
+
+```{python}
+est = smf.ols('mpg ~ horsepower + horsepower2', auto).fit()
+est.summary().tables[1]
+```
+
+### Outliers {.unlisted .unnumbered} 
+
+**Figure 3.9**
+
+```{python}
+regr = skl_lm.LinearRegression()
+
+# Linear fit
+X = auto.horsepower.values.reshape(-1,1)
+y = auto.mpg
+regr.fit(X, y)
+
+auto['pred1'] = regr.predict(X)
+auto['resid1'] = auto.mpg - auto.pred1
+
+# Quadratic fit
+X2 = auto[['horsepower', 'horsepower2']].values
+regr.fit(X2, y)
+
+auto['pred2'] = regr.predict(X2)
+auto['resid2'] = auto.mpg - auto.pred2
+```
+
+```{python}
+fig, (ax1,ax2) = plt.subplots(1,2, figsize=(12,5))
+
+# Left plot
+sns.regplot(x=auto.pred1, y=auto.resid1, lowess=True,
+            ax=ax1, line_kws={'color':'r', 'lw':1},
+            scatter_kws={'facecolors':'None', 'edgecolors':'k', 'alpha':0.5})
+ax1.hlines(0,xmin=ax1.xaxis.get_data_interval()[0],
+           xmax=ax1.xaxis.get_data_interval()[1], linestyles='dotted')
+ax1.set_title('Residual Plot for Linear Fit')
+
+# Right plot
+sns.regplot(x=auto.pred2, y=auto.resid2, lowess=True,
+            line_kws={'color':'r', 'lw':1}, ax=ax2,
+            scatter_kws={'facecolors':'None', 'edgecolors':'k', 'alpha':0.5})
+ax2.hlines(0,xmin=ax2.xaxis.get_data_interval()[0],
+           xmax=ax2.xaxis.get_data_interval()[1], linestyles='dotted')
+ax2.set_title('Residual Plot for Quadratic Fit')
+
+for ax in fig.axes:
+    ax.set_xlabel('Fitted values')
+    ax.set_ylabel('Residuals')
+```

@@ -1,0 +1,461 @@
+# Classification
+
+```{r, echo = FALSE}
+library(reticulate)
+reticulate::use_condaenv(condaenv = "r-reticulate", required = TRUE)
+```
+
+```{python}
+import pandas as pd
+import numpy as np
+import matplotlib as mpl
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import axes3d
+import seaborn as sns
+
+from sklearn.preprocessing import scale
+import sklearn.linear_model as skl_lm
+from sklearn.metrics import mean_squared_error, r2_score
+import statsmodels.api as sm
+import statsmodels.formula.api as smf
+
+from scipy import stats
+#in response to: module 'scipy.stats' has no attribute 'chisqprob'
+#stats.chisqprob = lambda chisq, df: stats.chi2.sf(chisq, df)
+
+from scipy import special
+# %matplotlib inline
+sns.set_style('white')
+
+# %precision 3
+```
+
+## Datasets
+
+
+### Load data {.unlisted .unnumbered} 
+
+```{python}
+#1. default data from ISLR
+
+# In R, we exported the dataset from package 'ISLR' to an Excel file
+df = pd.read_csv('../data/Default.csv',index_col=0)
+
+#2. Titanic
+
+titanic = sns.load_dataset('titanic')
+
+df.head(3)
+```
+
+```{python}
+# Note: factorize() returns two objects: a label array and an array with the unique values.
+df.default.factorize()
+```
+
+```{python}
+# We are only interested in the first object.
+df['default2'] = df.default.factorize()[0]
+df['student2'] = df.student.factorize()[0]
+```
+
+### Data Exploration {.unlisted .unnumbered} 
+
+
+**Figure 4.1 (ISLR) - Default data set**
+
+```{python}
+fig = plt.figure(figsize=(12,5))
+gs = mpl.gridspec.GridSpec(1, 4)
+ax1 = plt.subplot(gs[0,:-2])
+ax2 = plt.subplot(gs[0,-2])
+ax3 = plt.subplot(gs[0,-1])
+
+# Take a fraction of the samples where target value (default) is 'no'
+df_no = df[df.default2 == 0].sample(frac=0.15)
+# Take all samples  where target value is 'yes'
+df_yes = df[df.default2 == 1]
+df_ = df_no.append(df_yes)
+
+ax1.scatter(x=df_[df_.default == 'Yes'].balance, y=df_[df_.default == 'Yes'].income, s=40, c='orange', marker='+',
+            linewidths=1)
+ax1.scatter(x=df_[df_.default == 'No'].balance, y=df_[df_.default == 'No'].income, s=40, marker='o', linewidths=1,
+            edgecolors='lightblue', facecolors='white', alpha=.6)
+
+ax1.set_ylim(ymin=0)
+ax1.set_ylabel('Income')
+ax1.set_xlim(xmin=-100)
+ax1.set_xlabel('Balance')
+
+c_palette = {'No':'lightblue', 'Yes':'orange'}
+sns.boxplot(x='default', y='balance', data=df, orient='v', ax=ax2, palette=c_palette)
+sns.boxplot(x='default', y='income', data=df, orient='v', ax=ax3, palette=c_palette)
+gs.tight_layout(plt.gcf())
+```
+
+
+## Logistic Regression
+
+
+Recall our fit to the Titanic data from last week and the dilemma that some predictions and interpretations (such as the intercept) often led to survival probabilities outside the range $[0,1]$.
+
+
+```{python}
+est = smf.ols('survived ~ age + C(pclass) + C(sex)', titanic).fit()
+print(est.summary().tables[1])
+```
+
+```{python}
+est = smf.logit('survived ~ age + C(pclass) + C(sex)', data=titanic)
+print(est.fit().summary())
+```
+
+This is not the only shortcoming of **linear** regression (LR) for binary outcomes! Other problems include heteroskedasticity and incorrect scaling of probabilities even inside the range $[0,1]$.
+
+One solution is to transform the linear output of the (LR) to an S-shape via the **sigmoidal** function $s(z) = 1/(1+exp(-z))$, which is the strategy taken by **logistic regression** (example: Figure 4.2 from the ISLR book):
+
+```{python}
+##first the sklearn module LogisticRegression
+X_train = df.balance.values.reshape(-1,1)
+y = df.default2
+
+# Create array of test data. Calculate the classification probability
+# and predicted classification.
+X_test = np.arange(df.balance.min(), df.balance.max()).reshape(-1,1)
+
+clf = skl_lm.LogisticRegression(solver='newton-cg')
+clf.fit(X_train,y)
+#compare to Table 4.1 which was obtained with R:
+print('coefficients: ',clf.coef_)
+print('intercept :', clf.intercept_)
+
+prob = clf.predict_proba(X_test)
+
+fig, (ax1, ax2) = plt.subplots(1,2, figsize=(12,5))
+# Left plot
+sns.regplot(x=df.balance, y=df.default2, order=1, ci=None,
+            scatter_kws={'color':'orange'},
+            line_kws={'color':'lightblue', 'lw':2}, ax=ax1)
+# Right plot
+ax2.scatter(x=X_train, y=y, color='orange')
+ax2.plot(X_test, prob[:,1], color='lightblue')
+
+for ax in fig.axes:
+    ax.hlines(1, xmin=ax.xaxis.get_data_interval()[0],
+              xmax=ax.xaxis.get_data_interval()[1], linestyles='dashed', lw=1)
+    ax.hlines(0, xmin=ax.xaxis.get_data_interval()[0],
+              xmax=ax.xaxis.get_data_interval()[1], linestyles='dashed', lw=1)
+    ax.set_ylabel('Probability of default')
+    ax.set_xlabel('Balance')
+    ax.set_yticks([0, 0.25, 0.5, 0.75, 1.])
+    ax.set_xlim(xmin=-100)
+```
+
+```{python}
+# now statsmodels:
+#X_train = sm.add_constant(df.balance)
+#est = smf.Logit(y.ravel(), X_train).fit()
+
+est = smf.logit('default2 ~ balance', data=df)
+print(est.fit().summary())
+```
+
+```{python}
+#Mini Tasks: fit a logistic regression to the Titanic data
+#Try to make sense of the coefficients!
+est = smf.logit('survived ~  C(pclass) + C(sex)', data=titanic)
+print(est.fit().summary().tables[1])
+```
+
+```{python}
+pHat = est.fit().predict()
+pred = pHat > 0.5
+pd.crosstab(pred, titanic.survived)
+```
+
+### Coefficients as Odds {.unlisted .unnumbered} 
+
+
+For "normal regression" we know that the value of $\beta_j$ simply gives us $\Delta y$ if $x_j$ is increased by one unit.
+
+In order to fully understand the exact meaning of the coefficients for a LR model we need to first warm up to the definition of a **link function** and the concept of **probability odds**.
+
+Using linear regression as a starting point
+
+$$
+y_i = \beta_0 + \beta_1 x_{1,i} + \beta_2 x_{2,i} + \ldots +\beta_k x_{k,i} + \epsilon_i
+$$
+
+we modify the right hand side such that (i) the model is still basically a linear combination of the $x_j$s but (ii) the output is -like a probability- bounded between 0 and 1. This is achieved by "wrapping" a sigmoid function $s(z) = 1/(1+exp(-z))$ around the weighted sum of the $x_j$s:
+
+$$
+y_i = s(\beta_0 + \beta_1 x_{1,i} + \beta_2 x_{2,i} + \ldots +\beta_k x_{k,i} + \epsilon_i)
+$$
+
+The sigmoid function, depicted below to the left, transforms the real axis to the interval $(0;1)$ and can be interpreted as a probability.
+
+<img src="../figures/ISLR-Fig4-2.png" width=600>
+
+The inverse of the sigmoid is the *logit* (depicted above to the right), which is defined as $log(p/(1-p))$. For the case where p is a probability we call the ratio $p/(1-p)$ the **probability odds**. Thus, the logit is the log of the odds and logistic regression models these *log-odds* as a linear combination of the values of x.
+
+Finally, we can interpret the coefficients directly: the odds of a positive outcome are multiplied by a factor of $exp(\beta_j)$ for every unit change in $x_j$.
+(In that light, logistic regression is reminiscient of linear regression with logarithmically transformed dependent variable which also leads to multiplicative rather than additive effects.)
+
+Summary
+
+$$
+p(x) = \frac{e^{\beta_0 + \beta_1 x_1 + \ldots + \beta_k x_k}}{1 + e^{\beta_0 + \beta_1 x_1 + \ldots + \beta_k x_k}}
+$$
+Odds
+$$
+\frac{p(x)}{1-p(x)} = e^{\beta_0 + \beta_1 x_1 + \ldots + \beta_k x_k}
+$$
+
+
+This post has a more detailed view on the interpretations of the coefficients:
+
+https://blog.hwr-berlin.de/codeandstats/interpretation-of-the-coefficients-in-logistic-regression/
+
+
+#### Comments {.unlisted .unnumbered} 
+
+1. When your data are **linearly separable** there is (ironically) a fitting problem ! See iris example below
+2. *Logistic regression preserves the marginal probabilities.*
+The sum of the predicted probability scores for any subgroup of the training data (which includes all of it) will be equal to the number of positives.
+
+3. *What is deviance ?*
+Deviance (also referred to as *log loss*) is a measure of how well the model fits the data. It is 2 times the negative log likelihood of the dataset, given the model.
+$$
+dev = - \sum_i{y_i \cdot \log p_i + (1-y_i) \cdot \log (1-p_i)}
+$$
+In Python, you can use the log_loss function from scikit-learn, with documentation found [here](http://scikit-learn.org/stable/modules/generated/sklearn.metrics.log_loss.html).
+If you think of deviance as analogous to variance, then the null deviance is similar to the variance of the data around the average rate of positive examples. The residual deviance is similar to the variance of the data around the model. As an exercise we will calculate the deviances in a homework.
+4. **Pseudo $R^2$** [McFadden's $R^2$](http://thestatsgeek.com/2014/02/08/r-squared-in-logistic-regression/) is defined as $1−LL_{mod}/LL_0$, where $LL_{mod}$ is the log likelihood value for the fitted model and $LL_{0}$ is the log likelihood for the null model which includes only an intercept as predictor (so that every individual is predicted the same probability of 'success').
+    * For a logistic regression model the log likelihood value is always negative (because the likelihood contribution from each observation is a probability between 0 and 1). If your model doesn't really predict the outcome better than the null model, $LL_{mod}$ will not be much larger than $LL_{0}$ , and so $LL_{mod}/LL_0 \sim 1$ , and McFadden's pseudo-R2 is close to 0 (your model has no predictive value).
+    * Conversely if your model was really good, those individuals with a success (1) outcome would have a fitted probability close to 1, and vice versa for those with a failure (0) outcome. In this case if you go through the likelihood calculation the likelihood contribution from each individual for your model will be close to zero, such that $LL_{mod}$ is close to zero, and McFadden's pseudo-R2 squared is close to 1, indicating very good predictive ability.
+
+```{python}
+def logloss(true_label, predicted, eps=1e-15):
+    p = np.clip(predicted, eps, 1 - eps)
+    if true_label == 1:
+        return -np.log(p)
+    else:
+        return -np.log(1 - p)
+```
+
+```{python}
+p= np.linspace(0.001,1,100)#.reshape(-1,1)
+plt.plot(logloss(1,p), "b-");
+```
+
+### Think Stats Data {.unlisted .unnumbered} 
+
+The NSFG dataset includes 244 variables about
+each pregnancy and another 3087 variables about each respondent. Maybe some of those variables have predictive power. To
+nd out which ones are most useful, why not try them all?
+Testing the variables in the pregnancy table is easy, but in order to use the variables in the respondent table, we have to match up each pregnancy with a respondent. In theory we could iterate through the rows of the pregnancy table, use the caseid to find the corresponding respondent, and copy the values from the correspondent table into the pregnancy table. But that would be slow.
+
+A better option is to recognize this process as a join operation as defined in SQL and other relational database languages ([see](https://en.wikipedia.org/wiki/Join_(SQL))). Join is implemented as a DataFrame method, so we can perform the operation like this:
+
+```{python}
+live = pd.read_csv('../data/JoinedpregNSFG.csv.gz')
+live.head()
+```
+
+```{python}
+#define first babies
+firsts = live[live.birthord == 1]
+#and all others:
+others = live[live.birthord != 1]
+```
+
+```{python}
+# from this discussion, it seems that statsmodels still uses the defunct
+# chisqprob, so we have to define it ourselves:
+# https://github.com/statsmodels/statsmodels/issues/3931
+from scipy import stats
+stats.chisqprob = lambda chisq, df: stats.chi2.sf(chisq, df)
+stats.chisqprob(10,3)
+```
+
+The mother's age seems to have a small, non significant effect.
+
+```{python}
+live['boy'] = (live.babysex==1).astype(int)
+SexvsAge = smf.logit('boy ~ agepreg', data=live)
+results = SexvsAge.fit()
+print(results.summary())
+```
+
+```{python}
+live["fmarout5"].value_counts()
+```
+
+### The Trivers-Willard hypothesis {.unlisted .unnumbered} 
+
+**Exercise 11.2** The Trivers-Willard hypothesis suggests that for many mammals the sex ratio depends on \maternal condition"; that is, factors like the mother's age, size, health, and social status. [See](https://en.wikipedia.org/wiki/Trivers-Willard_hypothesis).
+Some studies have shown this effect among humans, but results are mixed.
+As an exercise, use a data mining approach to test the other variables in the pregnancy and respondent files.
+
+In the solution for exercise 11.2 the author uses a data mining approach to find the "best" model:
+
+(Task: can we find out the meaning of the 2 new variables??)
+
+```{python}
+formula='boy ~ agepreg + fmarout5==5 + infever==1'
+model = smf.logit(formula, data=live)
+results = model.fit()
+print(results.summary())
+```
+
+### Tasks {.unlisted .unnumbered} 
+
+1. Compute the ROC curve and AUC for the NSFG data
+2. Use cross validation to estimate some accuracy measure of classification for the
+    * Titanic survival
+    * sex prediction for the NSFG data
+3. Translate the coefficient for Pclass 3 into both odds and probability of survival (compared to the reference level Pclass 1).
+4. Compute the survival probability of the first passenger in the data set.
+
+```{python}
+import patsy
+
+y, X = patsy.dmatrices('survived ~ age + C(pclass) + C(sex)', titanic)
+#y = titanic["survived"]
+```
+
+```{python}
+from sklearn.model_selection import cross_val_score
+clf = skl_lm.LogisticRegression() # solver='newton-cg')
+
+cv_results = cross_val_score(clf, X, np.ravel(y), cv=10)
+print(np.round(cv_results,2))
+
+```
+
+### The Iris dataset {.unlisted .unnumbered} 
+
+<img src="../figures/irisDataCamp.png" width=600>
+
+```{python}
+from sklearn import datasets
+
+plt.style.use('ggplot')
+iris = datasets.load_iris()
+print(iris.data.shape)
+
+X = iris.data
+y = iris.target
+df = pd.DataFrame(X, columns=iris.feature_names)
+_ = pd.plotting.scatter_matrix(df, c = y, figsize = [8, 8],s=150, marker = 'D');
+```
+
+Looks like we could build a perfect classifier with just *petal width* ?
+
+<img src="../figures/irisDataCampPairwise.png" width=600>
+
+```{python}
+iris.feature_names
+```
+
+```{python}
+df["setosa"]= (y==0)
+df.head()
+df.columns
+```
+
+```{python}
+X = iris["data"][:,3:]  # petal width
+
+logit = sm.Logit((iris["target"]==0).astype('int'), X)
+logit.fit().params
+```
+
+```{python}
+#sklearn
+from sklearn.linear_model import LogisticRegression
+
+def LogReg(xCol=3, target=2,penalty="l2"):
+    X = iris["data"][:,xCol:]  # petal width
+    y = (iris["target"]==target).astype('int')
+
+    log_reg = LogisticRegression(penalty=penalty)
+    log_reg.fit(X,y)
+
+    X_new = np.linspace(0,3,1000).reshape(-1,1)
+    y_proba = log_reg.predict_proba(X_new)
+
+    flowerType=["setosa", "versicolor", "virginica"]
+
+    plt.plot(X,y,"b.")
+    plt.plot(X_new,y_proba[:,1],"g-",label=flowerType[target])
+    plt.plot(X_new,y_proba[:,0],"b--",label="not " + flowerType[target])
+    plt.xlabel(iris.feature_names[xCol], fontsize=14)
+    plt.ylabel("Probability", fontsize=14)
+    plt.legend(loc="upper left", fontsize=14)
+    plt.show()
+
+    return log_reg
+
+log_reg = LogReg()
+
+log_reg.predict([[1.7],[1.5]])
+```
+
+```{python}
+log_reg = LogReg(target=0)
+```
+
+## Other Classifiers
+
+### K Nearest Neighbors
+
+```{python}
+from sklearn.neighbors import KNeighborsClassifier
+iris = datasets.load_iris()
+knn = KNeighborsClassifier(n_neighbors=6)
+knn.fit(iris['data'], iris['target'])
+
+
+```
+
+Task: Split the iris data into training and test. Predict on test
+
+```{python}
+#prediction = knn.predict(X_test)
+#print('Prediction {}’.format(prediction))
+```
+
+### Multinomial Logistic Regression
+
+```{python}
+import statsmodels.api as st
+#different way of importing data
+iris = st.datasets.get_rdataset('iris', 'datasets')
+
+y = iris.data.Species
+
+y.head(3)
+
+x = iris.data.iloc[:, 0]
+
+x = st.add_constant(x, prepend = False)
+
+x.head()
+```
+
+```{python}
+mdl = st.MNLogit(y, x)
+
+mdl_fit = mdl.fit()
+
+print(mdl_fit.summary())
+```
+
+```{python}
+### marginal effects ###
+
+mdl_margeff = mdl_fit.get_margeff()
+
+print(mdl_margeff.summary())
+```

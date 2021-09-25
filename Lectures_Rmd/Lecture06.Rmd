@@ -1,0 +1,310 @@
+# Advanced Linear Regression
+
+```{r, echo = FALSE}
+library(reticulate)
+reticulate::use_condaenv(condaenv = "r-reticulate", required = TRUE)
+```
+
+```{python}
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import axes3d
+import seaborn as sns
+
+from sklearn.preprocessing import scale
+import sklearn.linear_model as skl_lm
+from sklearn.metrics import mean_squared_error, r2_score
+import statsmodels.api as sm
+import statsmodels.formula.api as smf
+
+# %matplotlib inline
+sns.set_style('white')
+
+# %precision 3
+```
+
+## Dummy Coding
+
+```{python}
+titanic = sns.load_dataset('titanic')
+titanic.head()
+```
+
+```{python}
+#no dummies
+est = smf.ols('survived ~ age + pclass + sex + fare', titanic).fit()
+est.summary().tables[1]
+```
+
+### Task 1 {.unlisted .unnumbered} 
+
+- Change Pclass to a factor/categorical variable
+- What is the fundamental difference between modeling Pclass as an integer or a factor?
+- Why seems one "level" always be missing? Learn/argue about *design/model matrices* and remember the discussion about multicollinearity from last week.
+- Drop *Pclass* from the model and compare the coeffients and std. errors for *Fare*.
+
+```{python}
+#yes dummies
+```
+
+```{python}
+#drop pclass:
+```
+
+### Interactions {.unlisted .unnumbered} 
+
+#### Factor-Factor {.unlisted .unnumbered} 
+
+```{python}
+#interaction terms for factors:
+est = smf.ols('survived ~ age  + C(sex): C(pclass) ', titanic).fit()
+est.summary().tables[1]
+```
+
+```{python}
+#interaction terms for factors with metric variables:
+est = smf.ols('survived ~ C(sex): age +C(sex)  ', titanic).fit()
+est.summary().tables[1]
+```
+
+##### Interactions between `qualitative` and `quantitative` variables {.unlisted .unnumbered} 
+
+Consider the Credit data set, and suppose that we wish to
+predict balance using income (quantitative) and student
+(qualitative).
+Without an interaction term, the model takes the form
+$$ balance_i = \beta_0 + \beta_1 \cdot income_i +
+\begin{cases}
+    \beta_2 ,\hspace{1cm} \text{if ith person is a student} \\
+    0 ,\hspace{1.1cm} \text{    if ith person is not a student}
+\end{cases}
+$$
+
+With interactions, it takes the form
+$$ balance_i =
+\begin{cases}
+    (\beta_0 + \beta_2) + (\beta_1 + \beta_3) \cdot income_i   ,\hspace{0.6cm} \text{if student} \\
+    \beta_0 + \beta_1 \cdot income_i ,\hspace{3cm} \text{    if not student}
+\end{cases}
+$$
+
+```{python}
+credit = pd.read_csv('../data/Credit.csv', usecols=list(range(1,12)))
+credit['Student2'] = credit.Student.map({'No':0, 'Yes':1})
+
+est1 = smf.ols('Balance ~ Income + Student2', credit).fit()
+regr1 = est1.params
+est2 = smf.ols('Balance ~ Income + Income*Student2', credit).fit()
+regr2 = est2.params
+
+print('Regression 1 - without interaction term')
+#print(est1.summary().tables[1])
+print(regr1)
+print('\nRegression 2 - with interaction term')
+#print(est2.summary().tables[1])
+print(regr2)
+```
+
+#### Figure 3.7 (ISLR) {.unlisted .unnumbered} 
+
+```{python}
+# Income (x-axis)
+income = np.linspace(0,150)
+
+# Balance without interaction term (y-axis)
+student1 = np.linspace(regr1['Intercept']+regr1['Student2'],
+                       regr1['Intercept']+regr1['Student2']+150*regr1['Income'])
+non_student1 =  np.linspace(regr1['Intercept'], regr1['Intercept']+150*regr1['Income'])
+
+# Balance with iteraction term (y-axis)
+student2 = np.linspace(regr2['Intercept']+regr2['Student2'],
+                       regr2['Intercept']+regr2['Student2']+
+                       150*(regr2['Income']+regr2['Income:Student2']))
+non_student2 =  np.linspace(regr2['Intercept'], regr2['Intercept']+150*regr2['Income'])
+
+# Create plot
+fig, (ax1,ax2) = plt.subplots(1,2, figsize=(12,5))
+ax1.plot(income, student1, 'r', income, non_student1, 'k')
+ax2.plot(income, student2, 'r', income, non_student2, 'k')
+
+for ax in fig.axes:
+    ax.legend(['student', 'non-student'], loc=2)
+    ax.set_xlabel('Income')
+    ax.set_ylabel('Balance')
+    ax.set_ylim(ymax=1550)
+
+#General question: the figures all look like blurry png's,
+#no way to get high quality vector graphics?
+```
+
+
+## Model Complexity {.unlisted .unnumbered} 
+
+Compare the following models:
+
+```{python}
+advertising = pd.read_csv('../data/Advertising.csv', usecols=[1,2,3,4])
+np.set_printoptions(3)
+
+est1 = smf.ols('Sales ~ TV', advertising).fit()
+print(r'$R^2=${:1.3f}'.format(est1.rsquared))
+
+advertising["TV2"] = advertising.TV**2
+est2 = smf.ols('Sales ~ TV + TV2', advertising).fit()
+print(r'$R^2=${:1.3f}'.format(est2.rsquared))
+
+advertising["TV3"] = advertising.TV**3
+est3 = smf.ols('Sales ~ TV + TV2 + TV3', advertising).fit()
+print(r'$R^2=${:1.3f}'.format(est3.rsquared))
+
+advertising["TV4"] = advertising.TV**4
+est3 = smf.ols('Sales ~ TV + TV2 + TV3 + TV4', advertising).fit()
+print(r'$R^2=${:1.3f}'.format(est3.rsquared))
+```
+
+## Overfitting  
+
+Can we "play this game" indefinitely?
+Check graphically:
+
+```{python}
+#sns.regplot('TV', 'Sales', data=advertising,fit_reg=True, order=10)
+fit = np.polyfit(advertising.TV, advertising.Sales,2)
+```
+
+```{python}
+from numpy.polynomial import Polynomial
+plt.plot(advertising.TV, advertising.Sales, "o")
+p = Polynomial.fit(advertising.TV, advertising.Sales, 25)
+plt.plot(*p.linspace());
+```
+
+How do we quantify the notion of **overfitting**, i.e. the (obvious?) impression that the model is "too wiggly", or **too complex** ?
+
+The $R^2$ on the data we used to fit the model is useless for this purpose because it seems to only improve the more complex the model becomes!
+
+One useful idea seems the following: if the orange line does not really capture the "true model", i.e. has adapted too much to the noise, its performance on a test set would be worse than a simpler model.
+
+<img src="../figures/ISLR-Fig2-10.png" width=600>
+
+Let us examine this idea by using a
+
+### Train Test Split {.unlisted .unnumbered} 
+
+```{python}
+from sklearn.metrics import mean_squared_error
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+
+X = advertising[["Radio", "Newspaper", "TV"]]
+y = advertising.Sales
+# Create training and test sets
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.3, random_state=42)
+```
+
+```{python}
+#X_train[0:5,:]
+#pd.DataFrame(X).head()
+X_train.head()
+#advertising.head()
+```
+
+### Task 2 {.unlisted .unnumbered} 
+
+1. Compare the $R^2$ and *rmse* for the quadratic and quartic models on the test data
+2. Boston housing data
+    * Compute the $R^2$ for the test portion
+    * Compare with the adjusted $R^2$.
+    * Think about the model complexity parameter in OLS.
+    * How would one choose which variables should be part of the model?
+
+```{python}
+p,stats = Polynomial.fit(advertising.TV, advertising.Sales, 25, full=True)
+
+from sklearn.preprocessing import PolynomialFeatures
+poly = PolynomialFeatures(degree=25)
+X = poly.fit_transform(advertising.TV.values.reshape(-1, 1))
+regr = skl_lm.LinearRegression().fit(X, advertising.Sales)
+yHat = regr.intercept_+ np.dot(X,regr.coef_)
+
+plt.plot(advertising.TV, advertising.Sales, "o")
+plt.plot(advertising.TV, yHat, "x")
+
+np.corrcoef(yHat, advertising.Sales)[0,1]**2
+```
+
+**Boston Housing Data**
+
+```{python}
+boston = pd.read_csv('../data/boston.csv')
+boston.head()
+```
+
+```{python}
+X = boston.drop('medv', axis=1).values
+y = boston['medv'].values
+```
+
+```{python}
+boston.columns
+```
+
+```{python}
+x_vars = "+".join(boston.columns[:-1])
+est = smf.ols('medv ~ ' + x_vars, boston).fit()
+print(est.summary()) #.tables[1]
+```
+
+```{python}
+from sklearn.metrics import mean_squared_error
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+```
+
+## Cross Validation
+
+**Drawbacks of validation set approach**
+
+- The validation estimate of the test error can be highly variable, depending on precisely which observations are included in the training/validation set.
+- In the validation approach, only a subset of the observations - those that are included in the training set rather than in the validation set - are used to fit the model.
+- This suggests that the validation set error may tend to **overestimate the test error** for the model fit on the entire data set.
+
+**K-fold Cross-validation**
+
+- randomly divide the data into K equal-sized parts. We leave out part k, fit the model to the other K-1 parts (combined), and then obtain predictions for the left-out kth part.
+- This is done in turn for each part $k = 1,2, \ldots, K$, and then the results are combined.
+
+```{python}
+from sklearn.model_selection import cross_val_score
+
+reg_all = LinearRegression()
+
+cv_results = cross_val_score(reg_all, X, y, cv=5)
+
+print("CV results: ", cv_results)
+print("CV results mean: ", np.mean(cv_results))
+```
+
+<!-- #region -->
+**Comments**
+
+- For non-equal fold sizes, we need to compute the weighted mean!
+- Setting $K = n$ yields n-fold or **leave-one out cross-validation** (LOOCV).
+- With least-squares linear or polynomial regression, an amazing shortcut makes the cost of LOOCV the same as that of a single model fit! The following formula holds:
+$$
+CV_n = \frac{1}{n} \sum{\left( \frac{y_i - \hat{y}_i}{1-h_i} \right)^2}
+$$
+where $\hat{y}_i$ is the ith fitted value from the original least
+squares fit, and $h_i$ is the leverage (see ISLR book for details.) This is like the ordinary MSE, except the ith residual is divided by $1-h_i$.
+
+
+### Task 3 {.unlisted .unnumbered} 
+
+- Sketch the code for your own CV function.
+- Reproduce the left panel of Fig. 5.6, i.e. the right panel of Fig 2.9 from the ISLR book
+
+
+<img src="../figures/ISLR-Fig2-9.png" width=600>
+<!-- #endregion -->

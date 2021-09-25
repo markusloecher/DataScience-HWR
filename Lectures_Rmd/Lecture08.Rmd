@@ -1,0 +1,562 @@
+#  Regularized Regression
+
+```{r, echo = FALSE}
+library(reticulate)
+reticulate::use_condaenv(condaenv = "r-reticulate", required = TRUE)
+```
+
+```{python}
+import pandas as pd
+import numpy as np
+import matplotlib as mpl
+import matplotlib.pyplot as plt
+
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.model_selection import train_test_split
+from sklearn import datasets
+
+# %precision 3
+```
+
+## Other Classifiers
+
+### K-Nearest Neighbors (KNN)
+
+<img src="../figures/irisDataCampKNN.png" width=600>
+
+```{python}
+iris = datasets.load_iris()
+knn = KNeighborsClassifier(n_neighbors=6)
+knn.fit(iris['data'], iris['target'])
+```
+
+Task: Split the iris data into training and test. Predict on test
+
+```{python}
+# Split into training and test set
+X = iris['data']
+y = iris['target']
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.3, random_state=42)
+
+# Create a k-NN classifier with 7 neighbors: knn
+knn = KNeighborsClassifier(n_neighbors=6)
+
+# Fit the classifier to the training data
+knn.fit(X_train, y_train)
+
+# Print the accuracy
+print(knn.score(X_test, y_test))
+```
+
+<!-- #region -->
+Simple Idea, no modeling assumptions at all !!
+Think about the following:
+
+- What is "the model", i.e. what needs to be stored ? (coefficients, functions, ...)
+- What is the model complexity ?
+- Does this only work for classification ? What would be the regression analogy ?
+- What improvements could we make to the simple idea ?
+- In the modeling world:
+    * linear ?
+    * local vs. global
+    * memory/CPU requirements
+    * wide versus tall data ?
+
+
+#### Handwritten Digits
+<!-- #endregion -->
+
+```{python}
+digits = datasets.load_digits()
+import matplotlib.pyplot as plt
+
+#how can I improve the plots ? (i..e no margins, box around plot...)
+plt.figure(1)
+
+for i in np.arange(10)+1:
+    plt.subplot(2, 5, i)
+    plt.axis('off')
+    #plt.gray()
+    #plt.matshow(digits.images[i-1])
+    plt.imshow(digits.images[i-1], cmap=plt.cm.gray_r, interpolation='nearest')
+plt.show()
+
+```
+
+```{python}
+# Create feature and target arrays
+X = digits.data
+y = digits.target
+
+# Split into training and test set
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.2, random_state=42, stratify=y)
+
+# Create a k-NN classifier with 7 neighbors: knn
+knn = KNeighborsClassifier(n_neighbors=7)
+
+# Fit the classifier to the training data
+knn.fit(X_train, y_train)
+
+# Print the accuracy
+print(knn.score(X_test, y_test))
+```
+
+```{python}
+# Big Confusion Matrix
+preds = knn.predict(X_test)
+
+pd.crosstab(preds,y_test)
+```
+
+**Task**
+
+Construct a model complexity curve for the digits dataset! In this exercise, you will compute and plot the training and testing accuracy scores for a variety of different neighbor values. By observing how the accuracy scores differ for the training and testing sets with different values of k, you will develop your intuition for overfitting and underfitting.
+
+```{python}
+# # Setup arrays to store train and test accuracies
+# neighbors = np.arange(1, 20)
+# train_accuracy = np.empty(len(neighbors))
+# test_accuracy = np.empty(len(neighbors))
+#
+# # Loop over different values of k
+# for i, k in enumerate(neighbors):
+#     # Setup a k-NN Classifier with k neighbors: knn
+#     knn = KNeighborsClassifier(___)
+#
+#     # Fit the classifier to the training data
+#     ___
+#     
+#     #Compute accuracy on the training set
+#     train_accuracy[i] = ___
+#
+#     #Compute accuracy on the testing set
+#     test_accuracy[i] = ___
+#
+# # Generate plot
+# plt.title('k-NN: Varying Number of Neighbors')
+# plt.plot(___, label = 'Testing Accuracy')
+# plt.plot(___, label = 'Training Accuracy')
+# plt.legend()
+# plt.xlabel('Number of Neighbors')
+# plt.ylabel('Accuracy')
+# plt.show()
+```
+
+### Multinomial Logistic Regression
+
+```{python}
+from sklearn.linear_model import LogisticRegression
+iris = datasets.load_iris()
+
+log_reg = LogisticRegression(multi_class='multinomial',solver='sag', max_iter=100, random_state=42)
+log_reg.fit(iris["data"][:,3:],iris["target"])
+
+preds = log_reg.predict_proba(iris["data"][:,3:])
+
+preds[1:5,:]
+```
+
+**Task**: Compute a confusion matrix
+
+
+
+**Further Reading and Explorations:**
+* Read about "one versus all" pitted against multinomial. Check out this [notebook](plot_logistic_multinomial.ipynb).
+* Read about [marginal probabilities](http://data.princeton.edu/wws509/stata/mlogit.html).
+
+
+### ROC Curves
+
+Simplest to go back to 2 labels from lesson 7:
+
+```{python}
+iris = datasets.load_iris()
+X = iris["data"][:,3:]
+y = (iris["target"]==2).astype(int)
+# Split into training and test set
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.3, random_state=42)
+
+log_reg = LogisticRegression()
+log_reg.fit(X_train,y_train)
+
+y_pred = log_reg.predict_proba(X_test)
+y_pred_prob = y_pred[:,1]
+
+from sklearn.metrics import classification_report
+from sklearn.metrics import confusion_matrix
+
+print(confusion_matrix(y_test, y_pred_prob > 0.25 ))
+
+print(confusion_matrix(y_test, y_pred_prob > 0.5 ))
+
+print(confusion_matrix(y_test, y_pred_prob > 0.75 ))
+```
+
+<!-- #region -->
+**The need for more sophisticated metrics than accuracy and single thresholding**
+
+This is particularly relevant for imbalanced classes, example: Emails
+
+- Spam classification
+    * 99% of emails are real; 1% of emails are spam
+- Could build a classifier that predicts ALL emails as real
+    * 99% accurate!
+    * But horrible at actually classifying spam
+    * Fails at its original purpose
+<table>
+<tr>
+    <td><img src="../figures/DataCampConfusionMatrix.png" width=600></td>
+    <td><img src="../figures/ISLR-Table4.7.png" width=600></td>
+</tr>
+</table>
+
+
+ **Metrics from CM**
+
+- Precision: $$\frac{TP}{TP+FP}$$
+- Recall: $$\frac{TP}{TP+FN}$$
+- F1 score:
+$$2 \cdot \frac{precision \cdot recall}{precision + recall}$$
+The F1 score is the harmonic average of the precision and recall, where an F1 score reaches its best value at 1 (perfect precision and recall) and worst at 0. ()
+- High precision: Not many real emails predicted as spam
+- High recall: Predicted most spam emails correctly
+
+<!-- #endregion -->
+
+```{python}
+#Example:
+```
+
+```{python}
+print(classification_report(y_test, y_pred_prob > 0.5 ))
+```
+
+But we still need to fix a threshold for any of the metrics above to work !
+
+Wouldn't it be best to communicate the prediction quality over a wide range (all!) of thresholds and enable the user to choose the most suitable one for his/her application !
+That is the idea of the **Receiver Operating Characteristic (ROC)** curve!
+
+<img src="../figures/DataCampROCexample.png" width=600>
+
+```{python}
+#The pima-indians- diabetes data:
+#  https://www.kaggle.com/uciml/pima-indians-diabetes-database#diabetes.csv
+
+col_names = ['pregnant', 'glucose', 'bp', 'skin', 'insulin', 'bmi', 'pedigree', 'age', 'label']
+# load dataset
+pima = pd.read_csv("../data/diabetes.csv", header=None, names=col_names,skiprows=[0])
+pima.head()
+```
+
+```{python}
+pima.info()
+```
+
+```{python}
+a = [1,2,3]
+b = [*a]
+b
+```
+
+```{python}
+#split dataset in features and target variable
+feature_cols = ['pregnant', 'insulin', 'bmi', 'age','glucose','bp','pedigree']
+X = pima[feature_cols] # Features
+y = pima.label # Target variable
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.3, random_state=42)
+```
+
+```{python}
+log_reg = LogisticRegression(max_iter=200)
+log_reg.fit(X_train,y_train)
+
+y_pred = log_reg.predict_proba(X_test)
+y_pred_prob = y_pred[:,1]
+```
+
+```{python}
+# # Setup arrays to store train and test accuracies
+# neighbors = np.arange(1, 20)
+# train_accuracy = np.empty(len(neighbors))
+# test_accuracy = np.empty(len(neighbors))
+#
+# # Loop over different values of k
+# for i, k in enumerate(neighbors):
+#     # Setup a k-NN Classifier with k neighbors: knn
+#     knn = KNeighborsClassifier(___)
+#
+#     # Fit the classifier to the training data
+#     ___
+#     
+#     #Compute accuracy on the training set
+#     train_accuracy[i] = ___
+#
+#     #Compute accuracy on the testing set
+#     test_accuracy[i] = ___
+#
+# # Generate plot
+# plt.title('k-NN: Varying Number of Neighbors')
+# plt.plot(___, label = 'Testing Accuracy')
+# plt.plot(___, label = 'Training Accuracy')
+# plt.legend()
+# plt.xlabel('Number of Neighbors')
+# plt.ylabel('Accuracy')
+# plt.show()
+```
+
+```{python}
+from sklearn.metrics import roc_curve
+
+fpr, tpr, thresholds = roc_curve(y_test, y_pred_prob)
+plt.plot([0, 1], [0, 1], 'k--')
+plt.plot(fpr, tpr, label='Logistic Regression')
+plt.xlabel('False Positive Rate')
+plt.ylabel('True Positive Rate')
+plt.title('Logistic Regression ROC Curve')
+plt.show();
+```
+
+**Area under the ROC curve (AUC)**
+
+```{python}
+from sklearn.metrics import roc_auc_score
+
+roc_auc_score(y_test, y_pred_prob)
+```
+
+**AUC using cross-validation**
+
+```{python}
+from sklearn.model_selection import cross_val_score
+
+cv_scores = cross_val_score(log_reg, X, y, cv=10, scoring='roc_auc')
+
+print(cv_scores)
+```
+
+
+### Regularized Regression
+
+We will illustrate the concepts on the Boston housing data set
+
+```{python}
+boston = pd.read_csv('../data/boston.csv')
+#print(boston.head())
+X = boston.drop('medv', axis=1).values
+y = boston['medv'].values
+```
+
+**Variable Selection**
+
+[ISLR slides on model selection](../figures/model_selection.pdf)
+
+
+####  L2 Regression
+
+Recall: Linear regression minimizes a loss function
+- It chooses a coefficient for each feature variable
+- Large coefficients can lead to overfitting
+- Penalizing large coefficients: Regularization
+
+**Detour: $L_p$ norms**
+
+http://mathworld.wolfram.com/VectorNorm.html
+
+Our new penalty term in finding the coefficients $\beta_j$ is the minimization
+
+$$
+\sum_{i=1}^n{\left( y_i - \beta_0 - \sum_{j=1}^p{\beta_j x_{ij}} \right)^2} + \lambda \sum_{j=1}^p{\beta_j^2} = RSS + \lambda \sum_{j=1}^p{\beta_j^2}
+$$
+
+Instead of obtaining **one** set of coefficients we have a dependency of $\beta_j$  on $\lambda$:
+
+<img src="../figures/RidgeCoefficients1.png" width=600>
+
+```{python}
+from sklearn.linear_model import Ridge
+X_train, X_test, y_train, y_test = train_test_split(X, y,test_size = 0.3, random_state=42)
+
+ridge = Ridge(alpha=0.1, normalize=True)
+ridge.fit(X_train, y_train)
+ridge_pred = ridge.predict(X_test)#?does this automatically take care of nromalization ??
+#Returns the coefficient of determination R^2 of the prediction.
+ridge.score(X_test, y_test)
+ridge_pred[0:5]
+```
+
+```{python}
+ridge2 = Ridge(alpha=0.1, normalize=False)
+ridge2.fit(X_train, y_train)
+ridge2_pred = ridge2.predict(X_test)
+ridge2_pred[0:5]
+ridge2.coef_
+```
+
+####  L1 Regression
+
+Our penalty termy looks slightly different (with big consequences for **sparsity**)
+
+$$
+\sum_{i=1}^n{\left( y_i - \beta_0 - \sum_{j=1}^p{\beta_j x_{ij}} \right)^2} + \lambda \sum_{j=1}^p{| \beta_j |} = RSS + \lambda \sum_{j=1}^p{| \beta_j |}
+$$
+
+<img src="../figures/LassoCoefficients1.png" width=600>
+
+(Comment: *LASSO* = "least absolute shrinkage and selection operator")
+
+```{python}
+from sklearn.linear_model import Lasso
+
+lasso = Lasso(alpha=0.1, normalize=True)
+lasso.fit(X_train, y_train)
+lasso_pred = lasso.predict(X_test)
+#Returns the coefficient of determination R^2 of the prediction.
+lasso.score(X_test, y_test)
+lasso.coef_
+```
+
+**Feature Selection Property of the LASSO**
+
+```{python}
+names = boston.drop('medv', axis=1).columns
+lasso_coef = lasso.fit(X, y).coef_
+_ = plt.plot(range(len(names)), lasso_coef)
+_ = plt.xticks(range(len(names)), names, rotation=60)
+_ = plt.ylabel('Coefficients')
+plt.show()
+```
+
+**Tuning the shrinkage parameter with CV**
+
+(It seems that $\lambda$ is often referred to as $\alpha$)
+
+From sklearn.linear_model:
+
+* LassoCV
+* RidgeCV
+* GridSearchCV
+
+```{python}
+from sklearn.linear_model import RidgeCV
+
+reg = RidgeCV(alphas=[1e-3, 1e-2, 1e-1, 1],store_cv_values = True)
+reg.fit(X, y)
+reg.score(X, y)
+
+reg.cv_values_
+#Open Questions:
+#1. how to extract all scores, possibly even the individual folds?
+#2. What is the optimal alpha ??
+#reg.cv_values_
+```
+
+```{python}
+from sklearn.linear_model import LassoCV
+
+reg = LassoCV(cv=5, random_state=0).fit(X, y)
+reg.score(X, y)
+```
+
+```{python}
+from sklearn.model_selection import KFold
+from sklearn.model_selection import GridSearchCV
+
+diabetes = datasets.load_diabetes()
+X = diabetes.data[:150]
+y = diabetes.target[:150]
+
+
+lasso = Lasso(random_state=0,max_iter=2000)
+#logarithmically spaced sequence
+alphas = np.logspace(-4, -0.5, 20)
+
+tuned_parameters = [{'alpha': alphas}]
+n_folds = 5
+
+reg = GridSearchCV(lasso, tuned_parameters, cv=n_folds, refit=False)
+reg.fit(X, y)
+```
+
+```{python}
+scores = reg.cv_results_['mean_test_score']
+scores_std = reg.cv_results_['std_test_score']
+plt.figure().set_size_inches(8, 6)
+plt.semilogx(alphas, scores)
+
+# plot error lines showing +/- std. errors of the scores
+std_error = scores_std / np.sqrt(n_folds)
+
+plt.semilogx(alphas, scores + std_error, 'b--')
+plt.semilogx(alphas, scores - std_error, 'b--')
+
+# alpha=0.2 controls the translucency of the fill color
+plt.fill_between(alphas, scores + std_error, scores - std_error, alpha=0.2)
+
+plt.ylabel('CV score +/- std error')
+plt.xlabel('alpha')
+plt.axhline(np.max(scores), linestyle='--', color='.5')
+plt.xlim([alphas[0], alphas[-1]])
+```
+
+**How much can you trust the selection of alpha?**
+
+Task: Find the opimal Alpha parameters (maximising the generalization score) on different subsets of the data
+
+<!-- #region -->
+#### ElasticNet
+
+**The mystery of the additional $\alpha$ paramater**
+
+* The elastic net for correlated variables, which uses a penalty that is part L1, part L2.
+* Compromise between the ridge regression penalty $(\alpha = 0)$ and the lasso penalty $(\alpha = 1)$.
+* This penalty is particularly useful in the $p >> N$ situation, or any situation where there are many correlated predictor variables.
+
+
+$$
+ RSS + \lambda \sum_{j=1}^p{ \left( \frac{1}{2} (1-\alpha) \beta_j^2 + \alpha | \beta_j | \right)}
+$$
+The right hand side can be written as
+$$
+  \sum_{j=1}^p{ \frac{1}{2} \lambda (1-\alpha) \beta_j^2 + \alpha \lambda | \beta_j |} = \sum_{j=1}^p{  \lambda_R \beta_j^2 +  \lambda_L | \beta_j |}
+$$
+with the Ridge penalty parameter $\lambda_R \equiv \frac{1}{2} \lambda (1-\alpha)$ and the lasso penalty parameter $\lambda_L \equiv \alpha \lambda$.
+So we see that with
+$$
+\alpha = \frac{\lambda_L}{\lambda_L+ 2 \lambda_R}, \mbox{ and } \lambda= \lambda_L+ 2 \lambda_R
+$$
+<!-- #endregion -->
+
+Further Reading:
+- this [notebook](plot_lasso_coordinate_descent_path.ipynb) shows how to plot the entire "path" of coefficients.
+
+
+### Kaggle
+
+####  [Housing Data](https://www.kaggle.com/c/house-prices-advanced-regression-techniques) {.unlisted .unnumbered} 
+
+
+
+
+This [notebook](../data/kaggle/HousePrices/EDA.ipynb) (despite its annoying "humor") is a good start.
+(Get it [directly](https://www.kaggle.com/pmarcelino/comprehensive-data-exploration-with-python) from kaggle)
+
+
+####  Your first submission {.unlisted .unnumbered} 
+
+<img src="../figures/kaggle_HousePrices1.jpg" width=600>
+
+```{python}
+df_train = pd.read_csv('../data/kaggle/HousePrices/train.csv')
+df_test = pd.read_csv('../data/kaggle/HousePrices/test.csv')
+```
+
+```{python}
+df_train
+```
+
+```{python}
+# Submission:
+# pred_df = pd.DataFrame(y_pred, index=df_test.index, columns=["SalePrice"])
+# pred_df.to_csv('../data/kaggle/HousePrices/submissions/en1.csv', header=True, index_label='Id')
+```
