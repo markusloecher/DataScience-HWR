@@ -1,4 +1,8 @@
 
+#### Advice: Do not get stuck in a local minimum:
+
+![StuckInLocalMinimum](figures/StuckInLocalMinimum.png)
+
 Welcome to most important course you’ll ever take: **Data Science** 🙄
 Here is my overview of the structure and contents of this unique blend
 of stats/coding/machine learning: The first few weeks will focus on
