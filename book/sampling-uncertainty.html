@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Lesson 2 Sampling Uncertainty | 581092 Data Science</title>
+  <meta name="description" content="Welcome to most important course you’ll ever take: Data Science 🙄" />
+  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Lesson 2 Sampling Uncertainty | 581092 Data Science" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="Welcome to most important course you’ll ever take: Data Science 🙄" />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Lesson 2 Sampling Uncertainty | 581092 Data Science" />
+  
+  <meta name="twitter:description" content="Welcome to most important course you’ll ever take: Data Science 🙄" />
+  
+
+<meta name="author" content="M Loecher" />
+
+
+<meta name="date" content="2021-09-24" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="statistical-thinking-i.html"/>
+<link rel="next" href="testing.html"/>
+<script src="libs/header-attrs-2.7/header-attrs.js"></script>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">BIPM Data Science</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a>
+<ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#course-components"><i class="fa fa-check"></i>Course components</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#grading"><i class="fa fa-check"></i>Grading</a>
+<ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#software-and-environments"><i class="fa fa-check"></i>Software and Environments</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="1" data-path="statistical-thinking-i.html"><a href="statistical-thinking-i.html"><i class="fa fa-check"></i><b>1</b> Statistical Thinking I</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="statistical-thinking-i.html"><a href="statistical-thinking-i.html#overview"><i class="fa fa-check"></i><b>1.1</b> Overview</a></li>
+<li class="chapter" data-level="1.2" data-path="statistical-thinking-i.html"><a href="statistical-thinking-i.html#contingency-tables-as-simple-models"><i class="fa fa-check"></i><b>1.2</b> Contingency Tables as simple models</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="sampling-uncertainty.html"><a href="sampling-uncertainty.html"><i class="fa fa-check"></i><b>2</b> Sampling Uncertainty</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="sampling-uncertainty.html"><a href="sampling-uncertainty.html#ab-testing"><i class="fa fa-check"></i><b>2.1</b> A/B Testing</a></li>
+<li class="chapter" data-level="2.2" data-path="sampling-uncertainty.html"><a href="sampling-uncertainty.html#distributions"><i class="fa fa-check"></i><b>2.2</b> Distributions</a></li>
+<li class="chapter" data-level="2.3" data-path="sampling-uncertainty.html"><a href="sampling-uncertainty.html#hacker-statistic"><i class="fa fa-check"></i><b>2.3</b> Hacker Statistic</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="testing.html"><a href="testing.html"><i class="fa fa-check"></i><b>3</b> Testing</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="testing.html"><a href="testing.html#hypothesis-tests"><i class="fa fa-check"></i><b>3.1</b> Hypothesis Tests</a></li>
+<li class="chapter" data-level="3.2" data-path="testing.html"><a href="testing.html#parametric-tests"><i class="fa fa-check"></i><b>3.2</b> Parametric Tests</a></li>
+<li class="chapter" data-level="3.3" data-path="testing.html"><a href="testing.html#non-parametric-tests"><i class="fa fa-check"></i><b>3.3</b> Non parametric Tests</a></li>
+<li class="chapter" data-level="3.4" data-path="testing.html"><a href="testing.html#bootstrap-hypothesis-tests"><i class="fa fa-check"></i><b>3.4</b> Bootstrap Hypothesis Tests</a>
+<ul>
+<li class="chapter" data-level="3.4.1" data-path="testing.html"><a href="testing.html#a-two-sample-bootstrap-hypothesis-test-for-difference-of-means"><i class="fa fa-check"></i><b>3.4.1</b> A two-sample bootstrap hypothesis test for difference of means</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="advanced-tests.html"><a href="advanced-tests.html"><i class="fa fa-check"></i><b>4</b> Advanced Tests</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="advanced-tests.html"><a href="advanced-tests.html#permutation-2-sample-test"><i class="fa fa-check"></i><b>4.1</b> Permutation 2-sample test</a></li>
+<li class="chapter" data-level="4.2" data-path="advanced-tests.html"><a href="advanced-tests.html#sample-t-test"><i class="fa fa-check"></i><b>4.2</b> 2-sample t test</a></li>
+<li class="chapter" data-level="4.3" data-path="advanced-tests.html"><a href="advanced-tests.html#random-walks"><i class="fa fa-check"></i><b>4.3</b> Random Walks</a>
+<ul>
+<li class="chapter" data-level="4.3.1" data-path="advanced-tests.html"><a href="advanced-tests.html#the-sqrtn-law-again"><i class="fa fa-check"></i><b>4.3.1</b> The <span class="math inline">\(\sqrt{n}\)</span> law again !</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="simple-linear-regressio.html"><a href="simple-linear-regressio.html"><i class="fa fa-check"></i><b>5</b> Simple Linear Regressio</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="simple-linear-regressio.html"><a href="simple-linear-regressio.html#loss-functions"><i class="fa fa-check"></i><b>5.1</b> Loss Functions</a></li>
+<li class="chapter" data-level="5.2" data-path="simple-linear-regressio.html"><a href="simple-linear-regressio.html#least-squares"><i class="fa fa-check"></i><b>5.2</b> Least Squares</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html"><i class="fa fa-check"></i><b>6</b> Multiple Linear Regression</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#statsmodels"><i class="fa fa-check"></i><b>6.1</b> Statsmodels</a></li>
+<li class="chapter" data-level="6.2" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#other-considerations-in-the-regression-model"><i class="fa fa-check"></i><b>6.2</b> Other Considerations in the Regression Model</a></li>
+<li class="chapter" data-level="6.3" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#categorical-variables"><i class="fa fa-check"></i><b>6.3</b> Categorical Variables</a></li>
+<li class="chapter" data-level="6.4" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#interactions"><i class="fa fa-check"></i><b>6.4</b> Interactions</a></li>
+<li class="chapter" data-level="6.5" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#non-linear-relationships"><i class="fa fa-check"></i><b>6.5</b> Non-linear relationships</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="advanced-linear-regression.html"><a href="advanced-linear-regression.html"><i class="fa fa-check"></i><b>7</b> Advanced Linear Regression</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="advanced-linear-regression.html"><a href="advanced-linear-regression.html#dummy-coding"><i class="fa fa-check"></i><b>7.1</b> Dummy Coding</a></li>
+<li class="chapter" data-level="7.2" data-path="advanced-linear-regression.html"><a href="advanced-linear-regression.html#overfitting"><i class="fa fa-check"></i><b>7.2</b> Overfitting</a></li>
+<li class="chapter" data-level="7.3" data-path="advanced-linear-regression.html"><a href="advanced-linear-regression.html#cross-validation"><i class="fa fa-check"></i><b>7.3</b> Cross Validation</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="classification.html"><a href="classification.html"><i class="fa fa-check"></i><b>8</b> Classification</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="classification.html"><a href="classification.html#datasets"><i class="fa fa-check"></i><b>8.1</b> Datasets</a></li>
+<li class="chapter" data-level="8.2" data-path="classification.html"><a href="classification.html#logistic-regression"><i class="fa fa-check"></i><b>8.2</b> Logistic Regression</a></li>
+<li class="chapter" data-level="8.3" data-path="classification.html"><a href="classification.html#other-classifiers"><i class="fa fa-check"></i><b>8.3</b> Other Classifiers</a>
+<ul>
+<li class="chapter" data-level="8.3.1" data-path="classification.html"><a href="classification.html#k-nearest-neighbors"><i class="fa fa-check"></i><b>8.3.1</b> K Nearest Neighbors</a></li>
+<li class="chapter" data-level="8.3.2" data-path="classification.html"><a href="classification.html#multinomial-logistic-regression"><i class="fa fa-check"></i><b>8.3.2</b> Multinomial Logistic Regression</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="regularized-regression.html"><a href="regularized-regression.html"><i class="fa fa-check"></i><b>9</b> Regularized Regression</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="regularized-regression.html"><a href="regularized-regression.html#other-classifiers-1"><i class="fa fa-check"></i><b>9.1</b> Other Classifiers</a>
+<ul>
+<li class="chapter" data-level="9.1.1" data-path="regularized-regression.html"><a href="regularized-regression.html#k-nearest-neighbors-knn"><i class="fa fa-check"></i><b>9.1.1</b> K-Nearest Neighbors (KNN)</a></li>
+<li class="chapter" data-level="9.1.2" data-path="regularized-regression.html"><a href="regularized-regression.html#multinomial-logistic-regression-1"><i class="fa fa-check"></i><b>9.1.2</b> Multinomial Logistic Regression</a></li>
+<li class="chapter" data-level="9.1.3" data-path="regularized-regression.html"><a href="regularized-regression.html#roc-curves"><i class="fa fa-check"></i><b>9.1.3</b> ROC Curves</a></li>
+<li class="chapter" data-level="9.1.4" data-path="regularized-regression.html"><a href="regularized-regression.html#regularized-regression-1"><i class="fa fa-check"></i><b>9.1.4</b> Regularized Regression</a></li>
+<li class="chapter" data-level="9.1.5" data-path="regularized-regression.html"><a href="regularized-regression.html#kaggle"><i class="fa fa-check"></i><b>9.1.5</b> Kaggle</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="trees.html"><a href="trees.html"><i class="fa fa-check"></i><b>10</b> Trees</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="trees.html"><a href="trees.html#node-impurity"><i class="fa fa-check"></i><b>10.1</b> Node Impurity</a></li>
+<li class="chapter" data-level="10.2" data-path="trees.html"><a href="trees.html#regression-trees"><i class="fa fa-check"></i><b>10.2</b> Regression Trees</a></li>
+<li class="chapter" data-level="10.3" data-path="trees.html"><a href="trees.html#classification-trees"><i class="fa fa-check"></i><b>10.3</b> Classification Trees</a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="from-trees-to-forests.html"><a href="from-trees-to-forests.html"><i class="fa fa-check"></i><b>11</b> From Trees to Forests</a>
+<ul>
+<li class="chapter" data-level="11.1" data-path="from-trees-to-forests.html"><a href="from-trees-to-forests.html#classification-tree"><i class="fa fa-check"></i><b>11.1</b> Classification Tree</a></li>
+<li class="chapter" data-level="11.2" data-path="from-trees-to-forests.html"><a href="from-trees-to-forests.html#ensembles-of-estimators"><i class="fa fa-check"></i><b>11.2</b> Ensembles of Estimators</a></li>
+<li class="chapter" data-level="11.3" data-path="from-trees-to-forests.html"><a href="from-trees-to-forests.html#bagging"><i class="fa fa-check"></i><b>11.3</b> Bagging</a></li>
+<li class="chapter" data-level="11.4" data-path="from-trees-to-forests.html"><a href="from-trees-to-forests.html#random-forests"><i class="fa fa-check"></i><b>11.4</b> Random Forests</a></li>
+</ul></li>
+<li class="chapter" data-level="12" data-path="explainable-ml.html"><a href="explainable-ml.html"><i class="fa fa-check"></i><b>12</b> Explainable ML</a>
+<ul>
+<li class="chapter" data-level="12.1" data-path="explainable-ml.html"><a href="explainable-ml.html#partial-dependence-plots"><i class="fa fa-check"></i><b>12.1</b> Partial dependence plots</a></li>
+<li class="chapter" data-level="12.2" data-path="explainable-ml.html"><a href="explainable-ml.html#shap-values"><i class="fa fa-check"></i><b>12.2</b> SHAP values</a>
+<ul>
+<li class="chapter" data-level="12.2.1" data-path="explainable-ml.html"><a href="explainable-ml.html#titanic"><i class="fa fa-check"></i><b>12.2.1</b> Titanic</a></li>
+<li class="chapter" data-level="12.2.2" data-path="explainable-ml.html"><a href="explainable-ml.html#force-plots"><i class="fa fa-check"></i><b>12.2.2</b> Force plots</a></li>
+<li class="chapter" data-level="12.2.3" data-path="explainable-ml.html"><a href="explainable-ml.html#tasks-3"><i class="fa fa-check"></i><b>12.2.3</b> Tasks</a></li>
+</ul></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">581092 Data Science</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="sampling-uncertainty" class="section level1" number="2">
+<h1><span class="header-section-number">Lesson 2</span> Sampling Uncertainty</h1>
+<p><strong>Overview</strong></p>
+<ol style="list-style-type: decimal">
+<li>Taking Samples
+<ul>
+<li>Variation of samples</li>
+<li>The <span class="math inline">\(1/\sqrt{n}\)</span> law</li>
+</ul></li>
+<li>Distributions
+<ul>
+<li>densities</li>
+<li>ecdfs</li>
+</ul></li>
+<li>Parametric (“analytic”) versus nonparametric (“hacker statistics”)
+<ul>
+<li>Confidence Intervals</li>
+<li>Testing</li>
+</ul></li>
+<li>Resampling
+<ul>
+<li>Permutations</li>
+<li>Bootstrap</li>
+</ul></li>
+</ol>
+<p><strong>Importing libraries</strong></p>
+<div class="sourceCode" id="cb35"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb35-1"><a href="sampling-uncertainty.html#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb35-2"><a href="sampling-uncertainty.html#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb35-3"><a href="sampling-uncertainty.html#cb35-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb35-4"><a href="sampling-uncertainty.html#cb35-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> numpy <span class="im">import</span> random</span>
+<span id="cb35-5"><a href="sampling-uncertainty.html#cb35-5" aria-hidden="true" tabindex="-1"></a>random.seed(<span class="dv">42</span>) <span class="co">#What is this for ???</span></span></code></pre></div>
+<p><strong>Importing the Birthweights Dataframe</strong></p>
+<div class="sourceCode" id="cb36"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb36-1"><a href="sampling-uncertainty.html#cb36-1" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(<span class="st">&#39;../data/BirthWeights.csv&#39;</span>)[[<span class="st">&quot;sex&quot;</span>, <span class="st">&quot;dbirwt&quot;</span>]]</span>
+<span id="cb36-2"><a href="sampling-uncertainty.html#cb36-2" aria-hidden="true" tabindex="-1"></a>df.head()</span></code></pre></div>
+<pre><code>##       sex  dbirwt
+## 0    male    2551
+## 1    male    2778
+## 2  female    2976
+## 3  female    3345
+## 4  female    3175</code></pre>
+<div id="operator-overloading" class="section level2 unlisted unnumbered">
+<h2>Operator Overloading</h2>
+<p>The [] operator is overloaded. This means, that depending on the inputs, pandas will do something completely different. Here are the rules for the different objects you pass to just the indexing operator.</p>
+<ul>
+<li>string — return a column as a Series</li>
+<li>list of strings — return all those columns as a DataFrame</li>
+<li>a slice — select rows (can do both label and integer location — confusing!)</li>
+<li>a sequence of booleans — select all rows where True</li>
+</ul>
+<p>In summary, primarily just the indexing operator selects columns, but if you pass it a sequence of booleans it will select all rows that are <code>True</code>.</p>
+<div class="sourceCode" id="cb38"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb38-1"><a href="sampling-uncertainty.html#cb38-1" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> df[(df[ <span class="st">&quot;dbirwt&quot;</span>] <span class="op">&lt;</span> <span class="dv">6000</span>) <span class="op">&amp;</span> (df[ <span class="st">&quot;dbirwt&quot;</span>] <span class="op">&gt;</span> <span class="dv">2000</span>)] <span class="co"># 2000 &lt; birthweight &lt; 6000</span></span>
+<span id="cb38-2"><a href="sampling-uncertainty.html#cb38-2" aria-hidden="true" tabindex="-1"></a>df.head()</span></code></pre></div>
+<pre><code>##       sex  dbirwt
+## 0    male    2551
+## 1    male    2778
+## 2  female    2976
+## 3  female    3345
+## 4  female    3175</code></pre>
+<p><strong>Boxplot of weight vs. sex</strong></p>
+<div class="sourceCode" id="cb40"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb40-1"><a href="sampling-uncertainty.html#cb40-1" aria-hidden="true" tabindex="-1"></a>df.describe()</span></code></pre></div>
+<pre><code>##             dbirwt
+## count  4909.000000
+## mean   3480.557344
+## std     529.280103
+## min    2012.000000
+## 25%    3146.000000
+## 50%    3486.000000
+## 75%    3827.000000
+## max    5981.000000</code></pre>
+<div class="sourceCode" id="cb42"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb42-1"><a href="sampling-uncertainty.html#cb42-1" aria-hidden="true" tabindex="-1"></a>tmp<span class="op">=</span>df.boxplot( <span class="st">&quot;dbirwt&quot;</span>,<span class="st">&quot;sex&quot;</span>)</span>
+<span id="cb42-2"><a href="sampling-uncertainty.html#cb42-2" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span></code></pre></div>
+<p><strong>We notice a small difference in the average weight, which is more clearly visible when we plot overlaying densities for male/female</strong></p>
+<div class="sourceCode" id="cb43"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb43-1"><a href="sampling-uncertainty.html#cb43-1" aria-hidden="true" tabindex="-1"></a>bwghtBySex <span class="op">=</span> np.<span class="bu">round</span>(df[[<span class="st">&quot;dbirwt&quot;</span>,<span class="st">&quot;sex&quot;</span>]].groupby(<span class="st">&quot;sex&quot;</span>)[[<span class="st">&quot;dbirwt&quot;</span>]].mean())</span>
+<span id="cb43-2"><a href="sampling-uncertainty.html#cb43-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-3"><a href="sampling-uncertainty.html#cb43-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(bwghtBySex, <span class="st">&#39;</span><span class="ch">\n</span><span class="st">&#39;</span>)</span></code></pre></div>
+<pre><code>##         dbirwt
+## sex           
+## female  3427.0
+## male    3533.0</code></pre>
+<div class="sourceCode" id="cb45"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb45-1"><a href="sampling-uncertainty.html#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&#39;mean: &#39;</span>,bwghtBySex.mean())</span></code></pre></div>
+<pre><code>## mean:  dbirwt    3480.0
+## dtype: float64</code></pre>
+<div class="sourceCode" id="cb47"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb47-1"><a href="sampling-uncertainty.html#cb47-1" aria-hidden="true" tabindex="-1"></a>tmp<span class="op">=</span>df[[<span class="st">&quot;dbirwt&quot;</span>,<span class="st">&quot;sex&quot;</span>]].groupby(<span class="st">&quot;sex&quot;</span>)[<span class="st">&quot;dbirwt&quot;</span>].plot(kind<span class="op">=</span><span class="st">&#39;density&#39;</span>, legend<span class="op">=</span><span class="va">True</span>)</span></code></pre></div>
+</div>
+<div id="ab-testing" class="section level2" number="2.1">
+<h2><span class="header-section-number">2.1</span> A/B Testing</h2>
+<p>Let us hypothesize that one wanted to classify babies into male/female solely based on their weight. What would its accuracy be if we applied the following simple rule:</p>
+<p>if dbirwt &gt; 3480 y = male else y = female</p>
+<p>This would be the equivalent of testing for global warming by measuring the temperature on <strong>one</strong> day. We all know that it took a long time (= many samples) to reliably detect a small difference like 0.5 degrees buried in the noise. Let us apply the same idea here. Maybe we can build a high-accuracy classifier if we weighed enough babies separately for each sex.</p>
+<p><strong>Confusion Matrix for simple classifier</strong></p>
+<div class="sourceCode" id="cb48"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb48-1"><a href="sampling-uncertainty.html#cb48-1" aria-hidden="true" tabindex="-1"></a>df[<span class="st">&quot;predMale&quot;</span>] <span class="op">=</span> df[<span class="st">&quot;dbirwt&quot;</span>] <span class="op">&gt;</span> <span class="dv">3480</span></span>
+<span id="cb48-2"><a href="sampling-uncertainty.html#cb48-2" aria-hidden="true" tabindex="-1"></a>pd.crosstab(df[<span class="st">&quot;predMale&quot;</span>], df[<span class="st">&quot;sex&quot;</span>])</span></code></pre></div>
+<pre><code>## sex       female  male
+## predMale              
+## False       1331  1105
+## True        1100  1373</code></pre>
+<div class="sourceCode" id="cb50"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb50-1"><a href="sampling-uncertainty.html#cb50-1" aria-hidden="true" tabindex="-1"></a>Acc0 <span class="op">=</span> (<span class="dv">1367</span><span class="op">+</span><span class="dv">1377</span>)<span class="op">/</span><span class="dv">5000</span></span>
+<span id="cb50-2"><a href="sampling-uncertainty.html#cb50-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;Accuracy of lame classifier:&quot;</span>, Acc0)</span>
+<span id="cb50-3"><a href="sampling-uncertainty.html#cb50-3" aria-hidden="true" tabindex="-1"></a><span class="co">#Think about the baseline accuracy</span></span></code></pre></div>
+<pre><code>## Accuracy of lame classifier: 0.5488</code></pre>
+</div>
+<div id="distributions" class="section level2" number="2.2">
+<h2><span class="header-section-number">2.2</span> Distributions</h2>
+<div id="mean-density-comparison-function" class="section level3 unlisted unnumbered">
+<h3>Mean Density Comparison Function</h3>
+<p><strong>Write a function which:</strong></p>
+<ol style="list-style-type: decimal">
+<li>draws repeated (e.g. M=500) random samples of size n (e.g. 40, 640) from each sex from the data</li>
+<li>Computes the stdevs for the sample means of each sex separately</li>
+<li>Repeats the above density plot for the sample mean distributions</li>
+<li>computes the confusion matrix/accuracy of a classifier that applies the rule <span class="math inline">\(\bar{x} &gt; 3480\)</span>.</li>
+</ol>
+<p><code>Hint: np.random.choice(df["dbirwt"],2)</code></p>
+<div class="sourceCode" id="cb52"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb52-1"><a href="sampling-uncertainty.html#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> mean_density_comparison(df_cleaned, M<span class="op">=</span><span class="dv">500</span>, n<span class="op">=</span><span class="dv">10</span>):</span>
+<span id="cb52-2"><a href="sampling-uncertainty.html#cb52-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-3"><a href="sampling-uncertainty.html#cb52-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">#Generate a sex iteration array</span></span>
+<span id="cb52-4"><a href="sampling-uncertainty.html#cb52-4" aria-hidden="true" tabindex="-1"></a>    sex_iter <span class="op">=</span> [<span class="st">&#39;male&#39;</span>, <span class="st">&#39;female&#39;</span>]</span>
+<span id="cb52-5"><a href="sampling-uncertainty.html#cb52-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-6"><a href="sampling-uncertainty.html#cb52-6" aria-hidden="true" tabindex="-1"></a>    <span class="co">#Create an empty DataFrame with &#39;sex&#39; and &#39;dbirwt&#39; column</span></span>
+<span id="cb52-7"><a href="sampling-uncertainty.html#cb52-7" aria-hidden="true" tabindex="-1"></a>    columns <span class="op">=</span> [<span class="st">&#39;sex&#39;</span>, <span class="st">&#39;dbirwt&#39;</span>]</span>
+<span id="cb52-8"><a href="sampling-uncertainty.html#cb52-8" aria-hidden="true" tabindex="-1"></a>    df_new <span class="op">=</span> pd.DataFrame(columns<span class="op">=</span>columns)</span>
+<span id="cb52-9"><a href="sampling-uncertainty.html#cb52-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-10"><a href="sampling-uncertainty.html#cb52-10" aria-hidden="true" tabindex="-1"></a>    <span class="co">#Create an empty array to store the standard deviation of the differnt sex &#39;male&#39; = std_dev[0], &#39;female&#39; = std_dev[1]</span></span>
+<span id="cb52-11"><a href="sampling-uncertainty.html#cb52-11" aria-hidden="true" tabindex="-1"></a>    std_dev <span class="op">=</span> np.empty(<span class="dv">2</span>)</span>
+<span id="cb52-12"><a href="sampling-uncertainty.html#cb52-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-13"><a href="sampling-uncertainty.html#cb52-13" aria-hidden="true" tabindex="-1"></a>    <span class="co">#Iterate over sex and create a specific data subset</span></span>
+<span id="cb52-14"><a href="sampling-uncertainty.html#cb52-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> ind,v <span class="kw">in</span> <span class="bu">enumerate</span>(sex_iter):</span>
+<span id="cb52-15"><a href="sampling-uncertainty.html#cb52-15" aria-hidden="true" tabindex="-1"></a>        subset <span class="op">=</span> df_cleaned[df_cleaned.sex <span class="op">==</span> v]</span>
+<span id="cb52-16"><a href="sampling-uncertainty.html#cb52-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-17"><a href="sampling-uncertainty.html#cb52-17" aria-hidden="true" tabindex="-1"></a>        <span class="co">#create M random sample means of n samples and add it to df_new</span></span>
+<span id="cb52-18"><a href="sampling-uncertainty.html#cb52-18" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(M):</span>
+<span id="cb52-19"><a href="sampling-uncertainty.html#cb52-19" aria-hidden="true" tabindex="-1"></a>            rand_samples <span class="op">=</span> np.random.choice(subset.dbirwt, n)</span>
+<span id="cb52-20"><a href="sampling-uncertainty.html#cb52-20" aria-hidden="true" tabindex="-1"></a>            x <span class="op">=</span> np.mean(rand_samples)<span class="co">#sample mean per sex</span></span>
+<span id="cb52-21"><a href="sampling-uncertainty.html#cb52-21" aria-hidden="true" tabindex="-1"></a>            df_new.loc[<span class="bu">len</span>(df_new)<span class="op">+</span><span class="dv">1</span>] <span class="op">=</span> [v, x]</span>
+<span id="cb52-22"><a href="sampling-uncertainty.html#cb52-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-23"><a href="sampling-uncertainty.html#cb52-23" aria-hidden="true" tabindex="-1"></a>        <span class="co">#plot male and female data and calculate the standard deviation of the data</span></span>
+<span id="cb52-24"><a href="sampling-uncertainty.html#cb52-24" aria-hidden="true" tabindex="-1"></a>        plot_data <span class="op">=</span> df_new[df_new.sex <span class="op">==</span> v]</span>
+<span id="cb52-25"><a href="sampling-uncertainty.html#cb52-25" aria-hidden="true" tabindex="-1"></a>        std_dev[ind] <span class="op">=</span> np.std(plot_data[<span class="st">&#39;dbirwt&#39;</span>])  </span>
+<span id="cb52-26"><a href="sampling-uncertainty.html#cb52-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-27"><a href="sampling-uncertainty.html#cb52-27" aria-hidden="true" tabindex="-1"></a>        plot_data.dbirwt.plot.density()</span>
+<span id="cb52-28"><a href="sampling-uncertainty.html#cb52-28" aria-hidden="true" tabindex="-1"></a>        plt.xlabel(<span class="st">&#39;dbirwt&#39;</span>)</span>
+<span id="cb52-29"><a href="sampling-uncertainty.html#cb52-29" aria-hidden="true" tabindex="-1"></a>        plt.legend(sex_iter)</span>
+<span id="cb52-30"><a href="sampling-uncertainty.html#cb52-30" aria-hidden="true" tabindex="-1"></a>        <span class="co">#plt.grid()</span></span>
+<span id="cb52-31"><a href="sampling-uncertainty.html#cb52-31" aria-hidden="true" tabindex="-1"></a>        <span class="co">#plt.title(&quot;n=&quot; + str(n))</span></span>
+<span id="cb52-32"><a href="sampling-uncertainty.html#cb52-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-33"><a href="sampling-uncertainty.html#cb52-33" aria-hidden="true" tabindex="-1"></a>    <span class="co">#return the sample mean data</span></span>
+<span id="cb52-34"><a href="sampling-uncertainty.html#cb52-34" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> df_new</span></code></pre></div>
+<p><strong>Testing the Function</strong></p>
+<div class="sourceCode" id="cb53"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb53-1"><a href="sampling-uncertainty.html#cb53-1" aria-hidden="true" tabindex="-1"></a>SM640 <span class="op">=</span> mean_density_comparison(df, M<span class="op">=</span><span class="dv">500</span>, n<span class="op">=</span><span class="dv">640</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb54"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb54-1"><a href="sampling-uncertainty.html#cb54-1" aria-hidden="true" tabindex="-1"></a>grouped640 <span class="op">=</span> SM640[<span class="st">&quot;dbirwt&quot;</span>].groupby(SM640[<span class="st">&quot;sex&quot;</span>])</span>
+<span id="cb54-2"><a href="sampling-uncertainty.html#cb54-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb54-3"><a href="sampling-uncertainty.html#cb54-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;n=640, means:&quot;</span>, grouped640.mean())</span></code></pre></div>
+<pre><code>## n=640, means: sex
+## female    3427.276397
+## male      3533.081803
+## Name: dbirwt, dtype: float64</code></pre>
+<div class="sourceCode" id="cb56"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb56-1"><a href="sampling-uncertainty.html#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb57"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb57-1"><a href="sampling-uncertainty.html#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;n=640, SESMs:&quot;</span>, grouped640.std())</span></code></pre></div>
+<pre><code>## n=640, SESMs: sex
+## female    20.937106
+## male      19.819436
+## Name: dbirwt, dtype: float64</code></pre>
+<div class="sourceCode" id="cb59"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb59-1"><a href="sampling-uncertainty.html#cb59-1" aria-hidden="true" tabindex="-1"></a>SM40 <span class="op">=</span> mean_density_comparison(df, M<span class="op">=</span><span class="dv">500</span>, n<span class="op">=</span><span class="dv">40</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb60"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb60-1"><a href="sampling-uncertainty.html#cb60-1" aria-hidden="true" tabindex="-1"></a>grouped40 <span class="op">=</span> SM40[<span class="st">&quot;dbirwt&quot;</span>].groupby(SM40[<span class="st">&quot;sex&quot;</span>])</span>
+<span id="cb60-2"><a href="sampling-uncertainty.html#cb60-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb60-3"><a href="sampling-uncertainty.html#cb60-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;n=40, means:&quot;</span>, grouped40.mean())</span></code></pre></div>
+<pre><code>## n=40, means: sex
+## female    3423.30740
+## male      3527.34015
+## Name: dbirwt, dtype: float64</code></pre>
+<div class="sourceCode" id="cb62"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb62-1"><a href="sampling-uncertainty.html#cb62-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb63"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb63-1"><a href="sampling-uncertainty.html#cb63-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;n=40, SESMs:&quot;</span>, grouped40.std())</span></code></pre></div>
+<pre><code>## n=40, SESMs: sex
+## female    82.787145
+## male      84.921927
+## Name: dbirwt, dtype: float64</code></pre>
+<p>How much smaller is <span class="math inline">\(\sigma_{\bar{x},640}\)</span> than <span class="math inline">\(\sigma_{\bar{x},40}\)</span> ?
+Compare that factor to the ratio of the sample sizes <span class="math inline">\(640/40 = 16\)</span></p>
+</div>
+<div id="empirical-cumulative-distribution-function" class="section level3 unlisted unnumbered">
+<h3>Empirical Cumulative Distribution Function</h3>
+<p>The density -like a histogram- has a few complications that include the arbitrary choice of bin width (kernel width for density) and the loss of information. Welcome to the <em>empirical cumulative distribution function</em> <strong>ecdf</strong></p>
+<p><strong>ECDF Function</strong></p>
+<div class="sourceCode" id="cb65"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb65-1"><a href="sampling-uncertainty.html#cb65-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> ecdf(data):</span>
+<span id="cb65-2"><a href="sampling-uncertainty.html#cb65-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">&quot;&quot;&quot;Compute ECDF for a one-dimensional array of measurements.&quot;&quot;&quot;</span></span>
+<span id="cb65-3"><a href="sampling-uncertainty.html#cb65-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb65-4"><a href="sampling-uncertainty.html#cb65-4" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Number of data points: n</span></span>
+<span id="cb65-5"><a href="sampling-uncertainty.html#cb65-5" aria-hidden="true" tabindex="-1"></a>    n <span class="op">=</span> <span class="bu">len</span>(data)</span>
+<span id="cb65-6"><a href="sampling-uncertainty.html#cb65-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb65-7"><a href="sampling-uncertainty.html#cb65-7" aria-hidden="true" tabindex="-1"></a>    <span class="co"># x-data for the ECDF: x</span></span>
+<span id="cb65-8"><a href="sampling-uncertainty.html#cb65-8" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> np.sort(data)</span>
+<span id="cb65-9"><a href="sampling-uncertainty.html#cb65-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb65-10"><a href="sampling-uncertainty.html#cb65-10" aria-hidden="true" tabindex="-1"></a>    <span class="co"># y-data for the ECDF: y</span></span>
+<span id="cb65-11"><a href="sampling-uncertainty.html#cb65-11" aria-hidden="true" tabindex="-1"></a>    y <span class="op">=</span> np.arange(<span class="dv">1</span>, n<span class="op">+</span><span class="dv">1</span>) <span class="op">/</span> n</span>
+<span id="cb65-12"><a href="sampling-uncertainty.html#cb65-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb65-13"><a href="sampling-uncertainty.html#cb65-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> x, y</span></code></pre></div>
+<p><strong>ECDF Plot</strong></p>
+<div class="sourceCode" id="cb66"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb66-1"><a href="sampling-uncertainty.html#cb66-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute ECDF for sample size 40: m_40, f_40</span></span>
+<span id="cb66-2"><a href="sampling-uncertainty.html#cb66-2" aria-hidden="true" tabindex="-1"></a>male40 <span class="op">=</span> SM40[SM40.sex <span class="op">==</span> <span class="st">&quot;male&quot;</span>][<span class="st">&quot;dbirwt&quot;</span>]</span>
+<span id="cb66-3"><a href="sampling-uncertainty.html#cb66-3" aria-hidden="true" tabindex="-1"></a>female40 <span class="op">=</span> SM40[SM40.sex <span class="op">==</span> <span class="st">&quot;female&quot;</span>][<span class="st">&quot;dbirwt&quot;</span>]</span>
+<span id="cb66-4"><a href="sampling-uncertainty.html#cb66-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb66-5"><a href="sampling-uncertainty.html#cb66-5" aria-hidden="true" tabindex="-1"></a>mx_40, my_40 <span class="op">=</span> ecdf(male40)</span>
+<span id="cb66-6"><a href="sampling-uncertainty.html#cb66-6" aria-hidden="true" tabindex="-1"></a>fx_40, fy_40 <span class="op">=</span> ecdf(female40)</span>
+<span id="cb66-7"><a href="sampling-uncertainty.html#cb66-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb66-8"><a href="sampling-uncertainty.html#cb66-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot all ECDFs on the same plot</span></span>
+<span id="cb66-9"><a href="sampling-uncertainty.html#cb66-9" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots()</span>
+<span id="cb66-10"><a href="sampling-uncertainty.html#cb66-10" aria-hidden="true" tabindex="-1"></a>_ <span class="op">=</span> ax.plot(mx_40, my_40, marker <span class="op">=</span> <span class="st">&#39;.&#39;</span>, linestyle <span class="op">=</span> <span class="st">&#39;none&#39;</span>)</span>
+<span id="cb66-11"><a href="sampling-uncertainty.html#cb66-11" aria-hidden="true" tabindex="-1"></a>_ <span class="op">=</span> ax.plot(fx_40, fy_40, marker <span class="op">=</span> <span class="st">&#39;.&#39;</span>, linestyle <span class="op">=</span> <span class="st">&#39;none&#39;</span>)</span>
+<span id="cb66-12"><a href="sampling-uncertainty.html#cb66-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb66-13"><a href="sampling-uncertainty.html#cb66-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Make nice margins</span></span>
+<span id="cb66-14"><a href="sampling-uncertainty.html#cb66-14" aria-hidden="true" tabindex="-1"></a>plt.margins(<span class="fl">0.02</span>)</span>
+<span id="cb66-15"><a href="sampling-uncertainty.html#cb66-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb66-16"><a href="sampling-uncertainty.html#cb66-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Annotate the plot</span></span>
+<span id="cb66-17"><a href="sampling-uncertainty.html#cb66-17" aria-hidden="true" tabindex="-1"></a>plt.legend((<span class="st">&#39;male&#39;</span>, <span class="st">&#39;female&#39;</span>), loc<span class="op">=</span><span class="st">&#39;lower right&#39;</span>)</span></code></pre></div>
+<pre><code>## &lt;matplotlib.legend.Legend object at 0x7fb1bdf4ff28&gt;</code></pre>
+<div class="sourceCode" id="cb68"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb68-1"><a href="sampling-uncertainty.html#cb68-1" aria-hidden="true" tabindex="-1"></a>_ <span class="op">=</span> plt.xlabel(<span class="st">&#39;birth weight(g)&#39;</span>)</span>
+<span id="cb68-2"><a href="sampling-uncertainty.html#cb68-2" aria-hidden="true" tabindex="-1"></a>_ <span class="op">=</span> plt.ylabel(<span class="st">&#39;ECDF&#39;</span>)</span>
+<span id="cb68-3"><a href="sampling-uncertainty.html#cb68-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb68-4"><a href="sampling-uncertainty.html#cb68-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the plot</span></span>
+<span id="cb68-5"><a href="sampling-uncertainty.html#cb68-5" aria-hidden="true" tabindex="-1"></a>plt.grid()</span>
+<span id="cb68-6"><a href="sampling-uncertainty.html#cb68-6" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div>
+<p><img src="BIPM_DS_files/figure-html/unnamed-chunk-35-1.png" width="672" /></p>
+<table style="width:88%;">
+<colgroup>
+<col width="87%" />
+</colgroup>
+<tbody>
+<tr class="odd">
+<td align="left">- What is the relationship to quantiles/percentiles ?
+- Find the IQR !
+- Sketch the densities just from the ecdf.</td>
+</tr>
+<tr class="even">
+<td align="left">### Checking Normality of sample mean distribution {.unlisted .unnumbered}</td>
+</tr>
+<tr class="odd">
+<td align="left">```python
+# Compute mean and standard deviation: mu, sigma
+mu = np.mean(male40)
+sigma = np.std(male40)</td>
+</tr>
+<tr class="even">
+<td align="left"># Sample out of a normal distribution with this mu and sigma: samples
+samples = np.random.normal(mu, sigma, 10000)</td>
+</tr>
+<tr class="odd">
+<td align="left"># Get the CDF of the samples and of the data
+x_theor, y_theor = ecdf(samples)</td>
+</tr>
+<tr class="even">
+<td align="left"># Plot the CDFs and show the plot
+_ = plt.plot(mx_40, my_40, marker=‘.’ linestyle=‘none’)
+_ = plt.plot(x_theor, y_theor)</td>
+</tr>
+<tr class="odd">
+<td align="left">plt.margins(0.02)
+_ = plt.xlabel(‘birth weight (g)’)
+_ = plt.ylabel(‘CDF’)
+_ = plt.title(‘CDF of Birthweight’)</td>
+</tr>
+<tr class="even">
+<td align="left">plt.grid()
+plt.show()
+```</td>
+</tr>
+<tr class="odd">
+<td align="left"><img src="BIPM_DS_files/figure-html/unnamed-chunk-36-1.png" width="672" /></td>
+</tr>
+<tr class="even">
+<td align="left"><strong>Tasks</strong>
+1. Find the “5% tails” which are just the (0.05, 0.95) quantiles
+2. Read up on theoretical quantiles: <a href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.norm.html#scipy.stats.norm" class="uri">https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.norm.html#scipy.stats.norm</a>
+3. stone age: get the “5% tails” from a normal table.
+4. How many stdevs do you need to cover the 90% sample interval ?
+5. Can you replace the “empirical theoretical cdf” from above with the exact line without sampling 10000 random numbers from a normal distribution ?</td>
+</tr>
+</tbody>
+</table>
+<p>Let us recap what we observed when sampling from a “population”: The <em>sample mean distribution</em> gets narrower with increasing sample size n, SESM =<span class="math inline">\(\sigma_{\bar{x}} = \sigma/\sqrt{n}\)</span>.
+Take a look at this <a href="http://onlinestatbook.com/stat_sim/sampling_dist/">interactive applet</a> for further understanding.</p>
+<p>How is this useful ? And how is it relevant because in reality we would only have <strong>one sample</strong>, not hundreds !</p>
+<p><strong>Small Tasks</strong></p>
+<ol style="list-style-type: decimal">
+<li>Choose one random sample of size n=40 from the male babies and compute <span class="math inline">\(\bar{x}\)</span>, <span class="math inline">\(\hat{\sigma}\)</span>. Assume all that is known to you, are these two <em>summary statistics</em>. In particular, we do <strong>not know</strong> the true mean <span class="math inline">\(\mu\)</span>!</li>
+<li>Argue intuitively with the ecdf plot about plausible values of <span class="math inline">\(\mu\)</span>.</li>
+<li>More precisely: what interval around <span class="math inline">\(\bar{x}\)</span> would contain <span class="math inline">\(\mu\)</span> with 90% probability ?</li>
+</ol>
+</div>
+</div>
+<div id="hacker-statistic" class="section level2" number="2.3">
+<h2><span class="header-section-number">2.3</span> Hacker Statistic</h2>
+<p>The ability to draw new samples from a population with a known mean is a luxury that we usually do not have. Is there any way to “fake” new samples using just the one “lousy” sample we have at hand ?
+This might sound like an impossible feat analogously to “pulling yourself up by your own <strong>bootstraps</strong>!”</p>
+<div class="figure">
+<img src="../figures/DC_bootstrap_animated.gif" title="segment" alt="" />
+<p class="caption">BootstrapIllustration</p>
+</div>
+<p>But that is exactly what we will try now:</p>
+<p><strong>Tasks</strong>
+1. Look up the help for <a href="https://docs.scipy.org/doc/numpy15.0/reference/generated/numpy.random.choice.html">np.random.choice()</a>
+<br>
+2. Draw repeated samples of size n=40 from the sample above.
+3. Compute the mean of each sample and store it an array.
+4. Plot the histogram
+5. Compute the stdev of this distribution and compare to the SEM.
+<br>
+6. Write a function that computes <em>bootstrap replicates</em> of the mean from a sample.
+7. Generalize this function to accept any summary statistic, not just the mean.</p>
+<ol start="2" style="list-style-type: decimal">
+<li>Draw repeated samples of size n=40 from the sample above.</li>
+<li>Compute the mean of each sample and store it an array.</li>
+<li>Plot the histogram</li>
+<li>Compute the stdev of this distribution and compare to the SEM.</li>
+</ol>
+<div class="sourceCode" id="cb69"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb69-1"><a href="sampling-uncertainty.html#cb69-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> draw_bs_reps_mean(data, size<span class="op">=</span><span class="dv">100</span>):</span>
+<span id="cb69-2"><a href="sampling-uncertainty.html#cb69-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">&quot;&quot;&quot;Draw bootstrap replicates.&quot;&quot;&quot;</span></span>
+<span id="cb69-3"><a href="sampling-uncertainty.html#cb69-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb69-4"><a href="sampling-uncertainty.html#cb69-4" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Initialize array of replicates: bs_replicates</span></span>
+<span id="cb69-5"><a href="sampling-uncertainty.html#cb69-5" aria-hidden="true" tabindex="-1"></a>    bs_replicates <span class="op">=</span> np.empty(size)</span>
+<span id="cb69-6"><a href="sampling-uncertainty.html#cb69-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb69-7"><a href="sampling-uncertainty.html#cb69-7" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Generate replicates</span></span>
+<span id="cb69-8"><a href="sampling-uncertainty.html#cb69-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(size):</span>
+<span id="cb69-9"><a href="sampling-uncertainty.html#cb69-9" aria-hidden="true" tabindex="-1"></a>        bs_replicates[i] <span class="op">=</span> np.mean(np.random.choice(data, size<span class="op">=</span><span class="bu">len</span>(data)))</span>
+<span id="cb69-10"><a href="sampling-uncertainty.html#cb69-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb69-11"><a href="sampling-uncertainty.html#cb69-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> bs_replicates</span></code></pre></div>
+<ol start="4" style="list-style-type: decimal">
+<li>Plot the histogram</li>
+<li>Compute the stdev of this distribution and compare to the SEM.</li>
+</ol>
+<div class="sourceCode" id="cb70"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb70-1"><a href="sampling-uncertainty.html#cb70-1" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> draw_bs_reps_mean(data<span class="op">=</span>samples, size<span class="op">=</span><span class="dv">40</span>)</span>
+<span id="cb70-2"><a href="sampling-uncertainty.html#cb70-2" aria-hidden="true" tabindex="-1"></a>plt.hist(x<span class="op">=</span>data)<span class="op">;</span></span>
+<span id="cb70-3"><a href="sampling-uncertainty.html#cb70-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;STDEV: </span><span class="sc">{np.</span>std(data)<span class="sc">}</span><span class="ss">&quot;</span>)</span></code></pre></div>
+<pre><code>## STDEV: 0.8246957554773962</code></pre>
+<ol start="6" style="list-style-type: decimal">
+<li>Write a function that computes <em>bootstrap replicates</em> of the mean from a sample.</li>
+<li>Generalize this function to accept any summary statistic, not just the mean.</li>
+</ol>
+<div class="sourceCode" id="cb72"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb72-1"><a href="sampling-uncertainty.html#cb72-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> bootstrap_replicate_1d(data, func):</span>
+<span id="cb72-2"><a href="sampling-uncertainty.html#cb72-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> func(np.random.choice(data, size<span class="op">=</span><span class="bu">len</span>(data)))</span>
+<span id="cb72-3"><a href="sampling-uncertainty.html#cb72-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb72-4"><a href="sampling-uncertainty.html#cb72-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> draw_bs_reps(data, func <span class="op">=</span> np.mean, size<span class="op">=</span><span class="dv">100</span>):</span>
+<span id="cb72-5"><a href="sampling-uncertainty.html#cb72-5" aria-hidden="true" tabindex="-1"></a>    <span class="co">&quot;&quot;&quot;Draw bootstrap replicates.&quot;&quot;&quot;</span></span>
+<span id="cb72-6"><a href="sampling-uncertainty.html#cb72-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb72-7"><a href="sampling-uncertainty.html#cb72-7" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Initialize array of replicates: bs_replicates</span></span>
+<span id="cb72-8"><a href="sampling-uncertainty.html#cb72-8" aria-hidden="true" tabindex="-1"></a>    bs_replicates <span class="op">=</span> np.empty(size)</span>
+<span id="cb72-9"><a href="sampling-uncertainty.html#cb72-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb72-10"><a href="sampling-uncertainty.html#cb72-10" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Generate replicates</span></span>
+<span id="cb72-11"><a href="sampling-uncertainty.html#cb72-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(size):</span>
+<span id="cb72-12"><a href="sampling-uncertainty.html#cb72-12" aria-hidden="true" tabindex="-1"></a>        bs_replicates[i] <span class="op">=</span> bootstrap_replicate_1d(data, func)</span>
+<span id="cb72-13"><a href="sampling-uncertainty.html#cb72-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb72-14"><a href="sampling-uncertainty.html#cb72-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> bs_replicates</span></code></pre></div>
+<div class="sourceCode" id="cb73"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb73-1"><a href="sampling-uncertainty.html#cb73-1" aria-hidden="true" tabindex="-1"></a>subset <span class="op">=</span> df[df.sex <span class="op">==</span> <span class="st">&quot;male&quot;</span>]</span>
+<span id="cb73-2"><a href="sampling-uncertainty.html#cb73-2" aria-hidden="true" tabindex="-1"></a>rand_samples_40 <span class="op">=</span> np.random.choice(subset.dbirwt, <span class="dv">40</span>)</span>
+<span id="cb73-3"><a href="sampling-uncertainty.html#cb73-3" aria-hidden="true" tabindex="-1"></a>xBar <span class="op">=</span> np.mean(rand_samples_40)</span>
+<span id="cb73-4"><a href="sampling-uncertainty.html#cb73-4" aria-hidden="true" tabindex="-1"></a>rand_samples_40</span></code></pre></div>
+<pre><code>## array([3798, 3515, 2919, 4110, 3769, 2636, 4172, 3118, 2636, 3600, 3260,
+##        2948, 2749, 3713, 3486, 4280, 4253, 2998, 2863, 3260, 3273, 4409,
+##        3345, 4139, 2352, 3572, 4053, 3515, 3572, 3968, 3260, 4689, 3781,
+##        2948, 2494, 2948, 3430, 2296, 3969, 3883])</code></pre>
+<div class="sourceCode" id="cb75"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb75-1"><a href="sampling-uncertainty.html#cb75-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Take 1,000 bootstrap replicates of the mean: bs_replicates</span></span>
+<span id="cb75-2"><a href="sampling-uncertainty.html#cb75-2" aria-hidden="true" tabindex="-1"></a>bs_replicates <span class="op">=</span> draw_bs_reps(rand_samples_40, np.mean, size<span class="op">=</span><span class="dv">1000</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb76"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb76-1"><a href="sampling-uncertainty.html#cb76-1" aria-hidden="true" tabindex="-1"></a>bs_replicates[<span class="dv">0</span>:<span class="dv">10</span>]</span></code></pre></div>
+<pre><code>## array([3536.425, 3361.85 , 3587.775, 3257.925, 3533.35 , 3520.325,
+##        3520.275, 3314.375, 3389.275, 3520.75 ])</code></pre>
+<div class="sourceCode" id="cb78"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb78-1"><a href="sampling-uncertainty.html#cb78-1" aria-hidden="true" tabindex="-1"></a>fx_40, fy_40 <span class="op">=</span> ecdf(bs_replicates)</span>
+<span id="cb78-2"><a href="sampling-uncertainty.html#cb78-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb78-3"><a href="sampling-uncertainty.html#cb78-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot  ECDF</span></span>
+<span id="cb78-4"><a href="sampling-uncertainty.html#cb78-4" aria-hidden="true" tabindex="-1"></a>_ <span class="op">=</span> plt.plot(fx_40, fy_40, marker <span class="op">=</span> <span class="st">&#39;.&#39;</span>, linestyle <span class="op">=</span> <span class="st">&#39;none&#39;</span>)</span>
+<span id="cb78-5"><a href="sampling-uncertainty.html#cb78-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb78-6"><a href="sampling-uncertainty.html#cb78-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Make nice margins</span></span>
+<span id="cb78-7"><a href="sampling-uncertainty.html#cb78-7" aria-hidden="true" tabindex="-1"></a>plt.margins(<span class="fl">0.02</span>)</span>
+<span id="cb78-8"><a href="sampling-uncertainty.html#cb78-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb78-9"><a href="sampling-uncertainty.html#cb78-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Annotate the plot</span></span>
+<span id="cb78-10"><a href="sampling-uncertainty.html#cb78-10" aria-hidden="true" tabindex="-1"></a>_ <span class="op">=</span> plt.xlabel(<span class="st">&#39;resampled averages of birth weight(g)&#39;</span>)</span>
+<span id="cb78-11"><a href="sampling-uncertainty.html#cb78-11" aria-hidden="true" tabindex="-1"></a>_ <span class="op">=</span> plt.ylabel(<span class="st">&#39;ECDF&#39;</span>)</span>
+<span id="cb78-12"><a href="sampling-uncertainty.html#cb78-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb78-13"><a href="sampling-uncertainty.html#cb78-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the plot</span></span>
+<span id="cb78-14"><a href="sampling-uncertainty.html#cb78-14" aria-hidden="true" tabindex="-1"></a>plt.grid()</span>
+<span id="cb78-15"><a href="sampling-uncertainty.html#cb78-15" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div>
+<p><img src="BIPM_DS_files/figure-html/unnamed-chunk-43-1.png" width="672" /></p>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="statistical-thinking-i.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="testing.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["BIPM_DS.pdf", "BIPM_DS.epub"],
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

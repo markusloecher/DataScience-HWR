@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Lesson 10 Trees | 581092 Data Science</title>
+  <meta name="description" content="Welcome to most important course you’ll ever take: Data Science 🙄" />
+  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Lesson 10 Trees | 581092 Data Science" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="Welcome to most important course you’ll ever take: Data Science 🙄" />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Lesson 10 Trees | 581092 Data Science" />
+  
+  <meta name="twitter:description" content="Welcome to most important course you’ll ever take: Data Science 🙄" />
+  
+
+<meta name="author" content="M Loecher" />
+
+
+<meta name="date" content="2021-09-24" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="regularized-regression.html"/>
+<link rel="next" href="from-trees-to-forests.html"/>
+<script src="libs/header-attrs-2.7/header-attrs.js"></script>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">BIPM Data Science</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a>
+<ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#course-components"><i class="fa fa-check"></i>Course components</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#grading"><i class="fa fa-check"></i>Grading</a>
+<ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#software-and-environments"><i class="fa fa-check"></i>Software and Environments</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="1" data-path="statistical-thinking-i.html"><a href="statistical-thinking-i.html"><i class="fa fa-check"></i><b>1</b> Statistical Thinking I</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="statistical-thinking-i.html"><a href="statistical-thinking-i.html#overview"><i class="fa fa-check"></i><b>1.1</b> Overview</a></li>
+<li class="chapter" data-level="1.2" data-path="statistical-thinking-i.html"><a href="statistical-thinking-i.html#contingency-tables-as-simple-models"><i class="fa fa-check"></i><b>1.2</b> Contingency Tables as simple models</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="sampling-uncertainty.html"><a href="sampling-uncertainty.html"><i class="fa fa-check"></i><b>2</b> Sampling Uncertainty</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="sampling-uncertainty.html"><a href="sampling-uncertainty.html#ab-testing"><i class="fa fa-check"></i><b>2.1</b> A/B Testing</a></li>
+<li class="chapter" data-level="2.2" data-path="sampling-uncertainty.html"><a href="sampling-uncertainty.html#distributions"><i class="fa fa-check"></i><b>2.2</b> Distributions</a></li>
+<li class="chapter" data-level="2.3" data-path="sampling-uncertainty.html"><a href="sampling-uncertainty.html#hacker-statistic"><i class="fa fa-check"></i><b>2.3</b> Hacker Statistic</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="testing.html"><a href="testing.html"><i class="fa fa-check"></i><b>3</b> Testing</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="testing.html"><a href="testing.html#hypothesis-tests"><i class="fa fa-check"></i><b>3.1</b> Hypothesis Tests</a></li>
+<li class="chapter" data-level="3.2" data-path="testing.html"><a href="testing.html#parametric-tests"><i class="fa fa-check"></i><b>3.2</b> Parametric Tests</a></li>
+<li class="chapter" data-level="3.3" data-path="testing.html"><a href="testing.html#non-parametric-tests"><i class="fa fa-check"></i><b>3.3</b> Non parametric Tests</a></li>
+<li class="chapter" data-level="3.4" data-path="testing.html"><a href="testing.html#bootstrap-hypothesis-tests"><i class="fa fa-check"></i><b>3.4</b> Bootstrap Hypothesis Tests</a>
+<ul>
+<li class="chapter" data-level="3.4.1" data-path="testing.html"><a href="testing.html#a-two-sample-bootstrap-hypothesis-test-for-difference-of-means"><i class="fa fa-check"></i><b>3.4.1</b> A two-sample bootstrap hypothesis test for difference of means</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="advanced-tests.html"><a href="advanced-tests.html"><i class="fa fa-check"></i><b>4</b> Advanced Tests</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="advanced-tests.html"><a href="advanced-tests.html#permutation-2-sample-test"><i class="fa fa-check"></i><b>4.1</b> Permutation 2-sample test</a></li>
+<li class="chapter" data-level="4.2" data-path="advanced-tests.html"><a href="advanced-tests.html#sample-t-test"><i class="fa fa-check"></i><b>4.2</b> 2-sample t test</a></li>
+<li class="chapter" data-level="4.3" data-path="advanced-tests.html"><a href="advanced-tests.html#random-walks"><i class="fa fa-check"></i><b>4.3</b> Random Walks</a>
+<ul>
+<li class="chapter" data-level="4.3.1" data-path="advanced-tests.html"><a href="advanced-tests.html#the-sqrtn-law-again"><i class="fa fa-check"></i><b>4.3.1</b> The <span class="math inline">\(\sqrt{n}\)</span> law again !</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="simple-linear-regressio.html"><a href="simple-linear-regressio.html"><i class="fa fa-check"></i><b>5</b> Simple Linear Regressio</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="simple-linear-regressio.html"><a href="simple-linear-regressio.html#loss-functions"><i class="fa fa-check"></i><b>5.1</b> Loss Functions</a></li>
+<li class="chapter" data-level="5.2" data-path="simple-linear-regressio.html"><a href="simple-linear-regressio.html#least-squares"><i class="fa fa-check"></i><b>5.2</b> Least Squares</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html"><i class="fa fa-check"></i><b>6</b> Multiple Linear Regression</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#statsmodels"><i class="fa fa-check"></i><b>6.1</b> Statsmodels</a></li>
+<li class="chapter" data-level="6.2" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#other-considerations-in-the-regression-model"><i class="fa fa-check"></i><b>6.2</b> Other Considerations in the Regression Model</a></li>
+<li class="chapter" data-level="6.3" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#categorical-variables"><i class="fa fa-check"></i><b>6.3</b> Categorical Variables</a></li>
+<li class="chapter" data-level="6.4" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#interactions"><i class="fa fa-check"></i><b>6.4</b> Interactions</a></li>
+<li class="chapter" data-level="6.5" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#non-linear-relationships"><i class="fa fa-check"></i><b>6.5</b> Non-linear relationships</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="advanced-linear-regression.html"><a href="advanced-linear-regression.html"><i class="fa fa-check"></i><b>7</b> Advanced Linear Regression</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="advanced-linear-regression.html"><a href="advanced-linear-regression.html#dummy-coding"><i class="fa fa-check"></i><b>7.1</b> Dummy Coding</a></li>
+<li class="chapter" data-level="7.2" data-path="advanced-linear-regression.html"><a href="advanced-linear-regression.html#overfitting"><i class="fa fa-check"></i><b>7.2</b> Overfitting</a></li>
+<li class="chapter" data-level="7.3" data-path="advanced-linear-regression.html"><a href="advanced-linear-regression.html#cross-validation"><i class="fa fa-check"></i><b>7.3</b> Cross Validation</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="classification.html"><a href="classification.html"><i class="fa fa-check"></i><b>8</b> Classification</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="classification.html"><a href="classification.html#datasets"><i class="fa fa-check"></i><b>8.1</b> Datasets</a></li>
+<li class="chapter" data-level="8.2" data-path="classification.html"><a href="classification.html#logistic-regression"><i class="fa fa-check"></i><b>8.2</b> Logistic Regression</a></li>
+<li class="chapter" data-level="8.3" data-path="classification.html"><a href="classification.html#other-classifiers"><i class="fa fa-check"></i><b>8.3</b> Other Classifiers</a>
+<ul>
+<li class="chapter" data-level="8.3.1" data-path="classification.html"><a href="classification.html#k-nearest-neighbors"><i class="fa fa-check"></i><b>8.3.1</b> K Nearest Neighbors</a></li>
+<li class="chapter" data-level="8.3.2" data-path="classification.html"><a href="classification.html#multinomial-logistic-regression"><i class="fa fa-check"></i><b>8.3.2</b> Multinomial Logistic Regression</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="regularized-regression.html"><a href="regularized-regression.html"><i class="fa fa-check"></i><b>9</b> Regularized Regression</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="regularized-regression.html"><a href="regularized-regression.html#other-classifiers-1"><i class="fa fa-check"></i><b>9.1</b> Other Classifiers</a>
+<ul>
+<li class="chapter" data-level="9.1.1" data-path="regularized-regression.html"><a href="regularized-regression.html#k-nearest-neighbors-knn"><i class="fa fa-check"></i><b>9.1.1</b> K-Nearest Neighbors (KNN)</a></li>
+<li class="chapter" data-level="9.1.2" data-path="regularized-regression.html"><a href="regularized-regression.html#multinomial-logistic-regression-1"><i class="fa fa-check"></i><b>9.1.2</b> Multinomial Logistic Regression</a></li>
+<li class="chapter" data-level="9.1.3" data-path="regularized-regression.html"><a href="regularized-regression.html#roc-curves"><i class="fa fa-check"></i><b>9.1.3</b> ROC Curves</a></li>
+<li class="chapter" data-level="9.1.4" data-path="regularized-regression.html"><a href="regularized-regression.html#regularized-regression-1"><i class="fa fa-check"></i><b>9.1.4</b> Regularized Regression</a></li>
+<li class="chapter" data-level="9.1.5" data-path="regularized-regression.html"><a href="regularized-regression.html#kaggle"><i class="fa fa-check"></i><b>9.1.5</b> Kaggle</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="trees.html"><a href="trees.html"><i class="fa fa-check"></i><b>10</b> Trees</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="trees.html"><a href="trees.html#node-impurity"><i class="fa fa-check"></i><b>10.1</b> Node Impurity</a></li>
+<li class="chapter" data-level="10.2" data-path="trees.html"><a href="trees.html#regression-trees"><i class="fa fa-check"></i><b>10.2</b> Regression Trees</a></li>
+<li class="chapter" data-level="10.3" data-path="trees.html"><a href="trees.html#classification-trees"><i class="fa fa-check"></i><b>10.3</b> Classification Trees</a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="from-trees-to-forests.html"><a href="from-trees-to-forests.html"><i class="fa fa-check"></i><b>11</b> From Trees to Forests</a>
+<ul>
+<li class="chapter" data-level="11.1" data-path="from-trees-to-forests.html"><a href="from-trees-to-forests.html#classification-tree"><i class="fa fa-check"></i><b>11.1</b> Classification Tree</a></li>
+<li class="chapter" data-level="11.2" data-path="from-trees-to-forests.html"><a href="from-trees-to-forests.html#ensembles-of-estimators"><i class="fa fa-check"></i><b>11.2</b> Ensembles of Estimators</a></li>
+<li class="chapter" data-level="11.3" data-path="from-trees-to-forests.html"><a href="from-trees-to-forests.html#bagging"><i class="fa fa-check"></i><b>11.3</b> Bagging</a></li>
+<li class="chapter" data-level="11.4" data-path="from-trees-to-forests.html"><a href="from-trees-to-forests.html#random-forests"><i class="fa fa-check"></i><b>11.4</b> Random Forests</a></li>
+</ul></li>
+<li class="chapter" data-level="12" data-path="explainable-ml.html"><a href="explainable-ml.html"><i class="fa fa-check"></i><b>12</b> Explainable ML</a>
+<ul>
+<li class="chapter" data-level="12.1" data-path="explainable-ml.html"><a href="explainable-ml.html#partial-dependence-plots"><i class="fa fa-check"></i><b>12.1</b> Partial dependence plots</a></li>
+<li class="chapter" data-level="12.2" data-path="explainable-ml.html"><a href="explainable-ml.html#shap-values"><i class="fa fa-check"></i><b>12.2</b> SHAP values</a>
+<ul>
+<li class="chapter" data-level="12.2.1" data-path="explainable-ml.html"><a href="explainable-ml.html#titanic"><i class="fa fa-check"></i><b>12.2.1</b> Titanic</a></li>
+<li class="chapter" data-level="12.2.2" data-path="explainable-ml.html"><a href="explainable-ml.html#force-plots"><i class="fa fa-check"></i><b>12.2.2</b> Force plots</a></li>
+<li class="chapter" data-level="12.2.3" data-path="explainable-ml.html"><a href="explainable-ml.html#tasks-3"><i class="fa fa-check"></i><b>12.2.3</b> Tasks</a></li>
+</ul></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">581092 Data Science</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="trees" class="section level1" number="10">
+<h1><span class="header-section-number">Lesson 10</span> Trees</h1>
+<p><strong>Motivation</strong></p>
+<p>Decision trees are extremely intuitive ways to classify or label objects: you simply ask a series of questions designed to zero-in on the classification.</p>
+<p>The most commonly used binary splitting makes this extremely efficient: in a well-constructed tree, each question will cut the number of options by approximately half, very quickly narrowing the options even among a large number of classes. The trick, of course, comes in deciding which questions to ask at each step. In machine learning implementations of decision trees, the questions generally take the form of axis-aligned splits in the data: that is, each node in the tree splits the data into two groups using a cutoff value within one of the features. Let’s now look at an example of this.</p>
+<p>Consider the following two-dimensional data, which has one of four class labels:</p>
+<div class="sourceCode" id="cb703"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb703-1"><a href="trees.html#cb703-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb703-2"><a href="trees.html#cb703-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb703-3"><a href="trees.html#cb703-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb703-4"><a href="trees.html#cb703-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
+<span id="cb703-5"><a href="trees.html#cb703-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb703-6"><a href="trees.html#cb703-6" aria-hidden="true" tabindex="-1"></a>plt.style.use(<span class="st">&#39;ggplot&#39;</span>)</span>
+<span id="cb703-7"><a href="trees.html#cb703-7" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.datasets <span class="im">import</span> make_blobs</span>
+<span id="cb703-8"><a href="trees.html#cb703-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb703-9"><a href="trees.html#cb703-9" aria-hidden="true" tabindex="-1"></a>X, y <span class="op">=</span> make_blobs(n_samples<span class="op">=</span><span class="dv">300</span>, centers<span class="op">=</span><span class="dv">4</span>,</span>
+<span id="cb703-10"><a href="trees.html#cb703-10" aria-hidden="true" tabindex="-1"></a>                  random_state<span class="op">=</span><span class="dv">0</span>, cluster_std<span class="op">=</span><span class="fl">1.0</span>)</span>
+<span id="cb703-11"><a href="trees.html#cb703-11" aria-hidden="true" tabindex="-1"></a>plt.scatter(X[:, <span class="dv">0</span>], X[:, <span class="dv">1</span>], c<span class="op">=</span>y, s<span class="op">=</span><span class="dv">50</span>, cmap<span class="op">=</span><span class="st">&#39;rainbow&#39;</span>)<span class="op">;</span></span></code></pre></div>
+<p><strong>Side-Note:</strong>
+* From <a href="https://www.geeksforgeeks.org/sys-path-in-python">GeeksforGeeks</a>: “<em>When a module is imported within a Python file, the interpreter first searches for the specified module among its built-in modules. If not found it looks through the list of directories defined by <code>sys.path</code>.</em>”
+* <strong><code>import sys</code></strong>
+* <code>sys.path</code>
+* Add your own module directory to Python with:
+* <code>sys.path.append()</code></p>
+<div class="sourceCode" id="cb704"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb704-1"><a href="trees.html#cb704-1" aria-hidden="true" tabindex="-1"></a><span class="co"># from helpers_05_08 import visualize_tree</span></span>
+<span id="cb704-2"><a href="trees.html#cb704-2" aria-hidden="true" tabindex="-1"></a><span class="co"># from sklearn.tree import DecisionTreeClassifier</span></span>
+<span id="cb704-3"><a href="trees.html#cb704-3" aria-hidden="true" tabindex="-1"></a><span class="co"># from sklearn.datasets import make_blobs</span></span>
+<span id="cb704-4"><a href="trees.html#cb704-4" aria-hidden="true" tabindex="-1"></a><span class="co">#</span></span>
+<span id="cb704-5"><a href="trees.html#cb704-5" aria-hidden="true" tabindex="-1"></a><span class="co">#         </span></span>
+<span id="cb704-6"><a href="trees.html#cb704-6" aria-hidden="true" tabindex="-1"></a><span class="co"># fig, ax = plt.subplots(1, 4, figsize=(16, 3))</span></span>
+<span id="cb704-7"><a href="trees.html#cb704-7" aria-hidden="true" tabindex="-1"></a><span class="co"># fig.subplots_adjust(left=0.02, right=0.98, wspace=0.1)</span></span>
+<span id="cb704-8"><a href="trees.html#cb704-8" aria-hidden="true" tabindex="-1"></a><span class="co">#</span></span>
+<span id="cb704-9"><a href="trees.html#cb704-9" aria-hidden="true" tabindex="-1"></a><span class="co"># X, y = make_blobs(n_samples=300, centers=4,</span></span>
+<span id="cb704-10"><a href="trees.html#cb704-10" aria-hidden="true" tabindex="-1"></a><span class="co">#                   random_state=0, cluster_std=1.0)</span></span>
+<span id="cb704-11"><a href="trees.html#cb704-11" aria-hidden="true" tabindex="-1"></a><span class="co">#</span></span>
+<span id="cb704-12"><a href="trees.html#cb704-12" aria-hidden="true" tabindex="-1"></a><span class="co"># for axi, depth in zip(ax, range(1, 5)):</span></span>
+<span id="cb704-13"><a href="trees.html#cb704-13" aria-hidden="true" tabindex="-1"></a><span class="co">#     model = DecisionTreeClassifier(max_depth=depth)</span></span>
+<span id="cb704-14"><a href="trees.html#cb704-14" aria-hidden="true" tabindex="-1"></a><span class="co">#     visualize_tree(model, X, y, ax=axi)</span></span>
+<span id="cb704-15"><a href="trees.html#cb704-15" aria-hidden="true" tabindex="-1"></a><span class="co">#     axi.set_title(&#39;depth = {0}&#39;.format(depth))</span></span>
+<span id="cb704-16"><a href="trees.html#cb704-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb704-17"><a href="trees.html#cb704-17" aria-hidden="true" tabindex="-1"></a><span class="co"># fig.savefig(&#39;figures/05.08-decision-tree-levels.png&#39;)</span></span></code></pre></div>
+<p><strong>Decision Tree Levels</strong>
+<img src="../figures/05.08-decision-tree-levels.png" width=1000></p>
+<div id="node-impurity" class="section level2" number="10.1">
+<h2><span class="header-section-number">10.1</span> Node Impurity</h2>
+<p>A classification tree is built by the following process: first the single variable
+is found which best splits the data into two groups (<code>best</code> will be defined
+shortly). The data is separated, and then this process is applied
+<em>separately</em> to each sub-group, and so on recursively until the subgroups either reach a minimum size or until no improvement can be made.</p>
+<p>The partitioning method can be applied to many different kinds of
+data. We will start by looking at the classification problem,
+which is one of the more instructive cases (but also has the
+most complex equations).
+The sample population consists of <span class="math inline">\(n\)</span> observations from <span class="math inline">\(K\)</span> classes. A given
+model will break these observations into <span class="math inline">\(k\)</span> terminal groups;
+to each of these groups is assigned a predicted class.</p>
+<p>Most tree algorithms use one of several measures of impurity, or diversity, of a node. Let us denote <span class="math inline">\(\hat{p}_{mk}\)</span> as the proportion of training observations in the <span class="math inline">\(m\)</span>th region that are from the <span class="math inline">\(k\)</span>th class. We then define the <em>Gini index</em> as
+<span class="math display">\[
+G_m = \sum_{i=1}^K { \hat{p}_{mk}(1 - \hat{p}_{mk} ) }
+\]</span>
+Remembering <span class="math inline">\(p (1-p)\)</span> to be the variance of the Bernoulli distribution, the Gini index measures the total variance across the <span class="math inline">\(K\)</span> classes. For nearly “pure” regions (all <span class="math inline">\(\hat{p}_{mk}\)</span> being close to 0 or 1), it takes on a very small value.</p>
+<p>An alternative measure is given by the information index or <em>cross entropy</em>
+<span class="math display">\[
+D_m = - \sum_{i=1}^K { \hat{p}_{mk} \log{ \hat{p}_{mk} } }
+\]</span></p>
+<p>NOTE: The expressions above are general enough for multiple category classification and hence more complicated than the version discussed in class.For binary outcomes <span class="math inline">\((y \in 0,1)\)</span> the Gini index reduces to simply
+<span class="math display">\[
+G_m = 2 \hat{p}_m (1 - \hat{p}_m )
+\]</span></p>
+<p>The two impurity functions are plotted in the figure below,
+along with a rescaled version of the Gini measure.
+For the two class problem the measures differ only slightly, and
+will nearly always choose the same split point.</p>
+<p><img src="../figures/Gini1.png" width=400></p>
+<p>For example, in a two-class problem with 400 observations in each class (denote this by (400, 400)), suppose one split created nodes (300, 100) and (100, 300), while the other created nodes (200, 400) and (200, 0). Compute the misclassification rate and write it down formally.</p>
+<p><strong>Explanations and examples at:</strong></p>
+<p><a href="https://scikit-learn.org/stable/modules/tree.html" class="uri">https://scikit-learn.org/stable/modules/tree.html</a></p>
+<div class="sourceCode" id="cb705"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb705-1"><a href="trees.html#cb705-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pydot</span>
+<span id="cb705-2"><a href="trees.html#cb705-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> IPython.display <span class="im">import</span> Image</span>
+<span id="cb705-3"><a href="trees.html#cb705-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb705-4"><a href="trees.html#cb705-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> train_test_split, cross_val_score</span>
+<span id="cb705-5"><a href="trees.html#cb705-5" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> six <span class="im">import</span> StringIO  </span>
+<span id="cb705-6"><a href="trees.html#cb705-6" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.tree <span class="im">import</span> DecisionTreeRegressor, DecisionTreeClassifier, export_graphviz</span>
+<span id="cb705-7"><a href="trees.html#cb705-7" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.ensemble <span class="im">import</span> BaggingClassifier, RandomForestClassifier, BaggingRegressor, RandomForestRegressor, GradientBoostingRegressor</span>
+<span id="cb705-8"><a href="trees.html#cb705-8" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> mean_squared_error,confusion_matrix, classification_report</span>
+<span id="cb705-9"><a href="trees.html#cb705-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb705-10"><a href="trees.html#cb705-10" aria-hidden="true" tabindex="-1"></a>sns.set_style(<span class="st">&#39;white&#39;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb706"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb706-1"><a href="trees.html#cb706-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.datasets <span class="im">import</span> load_iris</span>
+<span id="cb706-2"><a href="trees.html#cb706-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn <span class="im">import</span> tree</span>
+<span id="cb706-3"><a href="trees.html#cb706-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> graphviz <span class="im">import</span> Source</span>
+<span id="cb706-4"><a href="trees.html#cb706-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> graphviz</span>
+<span id="cb706-5"><a href="trees.html#cb706-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb706-6"><a href="trees.html#cb706-6" aria-hidden="true" tabindex="-1"></a>plt.rcParams[<span class="st">&quot;figure.figsize&quot;</span>]<span class="op">=</span><span class="dv">3</span>,<span class="dv">3</span></span>
+<span id="cb706-7"><a href="trees.html#cb706-7" aria-hidden="true" tabindex="-1"></a>iris <span class="op">=</span> load_iris()</span>
+<span id="cb706-8"><a href="trees.html#cb706-8" aria-hidden="true" tabindex="-1"></a>clf <span class="op">=</span> tree.DecisionTreeClassifier()</span>
+<span id="cb706-9"><a href="trees.html#cb706-9" aria-hidden="true" tabindex="-1"></a>clf <span class="op">=</span> clf.fit(iris.data, iris.target)</span>
+<span id="cb706-10"><a href="trees.html#cb706-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb706-11"><a href="trees.html#cb706-11" aria-hidden="true" tabindex="-1"></a>dot_data <span class="op">=</span> tree.export_graphviz(clf, out_file<span class="op">=</span><span class="va">None</span>,</span>
+<span id="cb706-12"><a href="trees.html#cb706-12" aria-hidden="true" tabindex="-1"></a>                                feature_names<span class="op">=</span>iris.feature_names,</span>
+<span id="cb706-13"><a href="trees.html#cb706-13" aria-hidden="true" tabindex="-1"></a>                                precision <span class="op">=</span> <span class="dv">1</span>,</span>
+<span id="cb706-14"><a href="trees.html#cb706-14" aria-hidden="true" tabindex="-1"></a>                    filled<span class="op">=</span><span class="va">True</span>, rounded<span class="op">=</span><span class="va">True</span>)  </span>
+<span id="cb706-15"><a href="trees.html#cb706-15" aria-hidden="true" tabindex="-1"></a>graph <span class="op">=</span> graphviz.Source(dot_data)  </span>
+<span id="cb706-16"><a href="trees.html#cb706-16" aria-hidden="true" tabindex="-1"></a>graph</span></code></pre></div>
+<pre><code>## &lt;graphviz.files.Source object at 0x7fb1badaff60&gt;</code></pre>
+<div class="sourceCode" id="cb708"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb708-1"><a href="trees.html#cb708-1" aria-hidden="true" tabindex="-1"></a><span class="co"># This function creates images of tree models using pydot</span></span>
+<span id="cb708-2"><a href="trees.html#cb708-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> print_tree(estimator, features, class_names<span class="op">=</span><span class="va">None</span>, filled<span class="op">=</span><span class="va">True</span>):</span>
+<span id="cb708-3"><a href="trees.html#cb708-3" aria-hidden="true" tabindex="-1"></a>    tree <span class="op">=</span> estimator</span>
+<span id="cb708-4"><a href="trees.html#cb708-4" aria-hidden="true" tabindex="-1"></a>    names <span class="op">=</span> features</span>
+<span id="cb708-5"><a href="trees.html#cb708-5" aria-hidden="true" tabindex="-1"></a>    color <span class="op">=</span> filled</span>
+<span id="cb708-6"><a href="trees.html#cb708-6" aria-hidden="true" tabindex="-1"></a>    classn <span class="op">=</span> class_names</span>
+<span id="cb708-7"><a href="trees.html#cb708-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb708-8"><a href="trees.html#cb708-8" aria-hidden="true" tabindex="-1"></a>    dot_data <span class="op">=</span> StringIO()</span>
+<span id="cb708-9"><a href="trees.html#cb708-9" aria-hidden="true" tabindex="-1"></a>    export_graphviz(estimator, out_file<span class="op">=</span>dot_data, feature_names<span class="op">=</span>features, class_names<span class="op">=</span>classn, filled<span class="op">=</span>filled)</span>
+<span id="cb708-10"><a href="trees.html#cb708-10" aria-hidden="true" tabindex="-1"></a>    graph <span class="op">=</span> pydot.graph_from_dot_data(dot_data.getvalue())</span>
+<span id="cb708-11"><a href="trees.html#cb708-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span>(graph)</span></code></pre></div>
+</div>
+<div id="regression-trees" class="section level2" number="10.2">
+<h2><span class="header-section-number">10.2</span> Regression Trees</h2>
+<p>In R, I exported the dataset from package ‘ISLR’ to a csv file.</p>
+<div class="sourceCode" id="cb709"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb709-1"><a href="trees.html#cb709-1" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(<span class="st">&#39;../data/Hitters.csv&#39;</span>).dropna()</span>
+<span id="cb709-2"><a href="trees.html#cb709-2" aria-hidden="true" tabindex="-1"></a>df.info()</span></code></pre></div>
+<pre><code>## &lt;class &#39;pandas.core.frame.DataFrame&#39;&gt;
+## Int64Index: 263 entries, 1 to 321
+## Data columns (total 21 columns):
+##  #   Column      Non-Null Count  Dtype  
+## ---  ------      --------------  -----  
+##  0   Unnamed: 0  263 non-null    object 
+##  1   AtBat       263 non-null    int64  
+##  2   Hits        263 non-null    int64  
+##  3   HmRun       263 non-null    int64  
+##  4   Runs        263 non-null    int64  
+##  5   RBI         263 non-null    int64  
+##  6   Walks       263 non-null    int64  
+##  7   Years       263 non-null    int64  
+##  8   CAtBat      263 non-null    int64  
+##  9   CHits       263 non-null    int64  
+##  10  CHmRun      263 non-null    int64  
+##  11  CRuns       263 non-null    int64  
+##  12  CRBI        263 non-null    int64  
+##  13  CWalks      263 non-null    int64  
+##  14  League      263 non-null    object 
+##  15  Division    263 non-null    object 
+##  16  PutOuts     263 non-null    int64  
+##  17  Assists     263 non-null    int64  
+##  18  Errors      263 non-null    int64  
+##  19  Salary      263 non-null    float64
+##  20  NewLeague   263 non-null    object 
+## dtypes: float64(1), int64(16), object(4)
+## memory usage: 45.2+ KB</code></pre>
+<div class="sourceCode" id="cb711"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb711-1"><a href="trees.html#cb711-1" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> df[[<span class="st">&#39;Years&#39;</span>, <span class="st">&#39;Hits&#39;</span>]].values</span>
+<span id="cb711-2"><a href="trees.html#cb711-2" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> np.log(df.Salary.values)</span>
+<span id="cb711-3"><a href="trees.html#cb711-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb711-4"><a href="trees.html#cb711-4" aria-hidden="true" tabindex="-1"></a>fig, (ax1, ax2) <span class="op">=</span> plt.subplots(<span class="dv">1</span>,<span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">11</span>,<span class="dv">4</span>))</span>
+<span id="cb711-5"><a href="trees.html#cb711-5" aria-hidden="true" tabindex="-1"></a>ax1.hist(df.Salary.values)</span></code></pre></div>
+<pre><code>## (array([108.,  50.,  49.,  27.,  11.,   7.,   2.,   6.,   1.,   2.]), array([  67.5 ,  306.75,  546.  ,  785.25, 1024.5 , 1263.75, 1503.  ,
+##        1742.25, 1981.5 , 2220.75, 2460.  ]), &lt;BarContainer object of 10 artists&gt;)</code></pre>
+<div class="sourceCode" id="cb713"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb713-1"><a href="trees.html#cb713-1" aria-hidden="true" tabindex="-1"></a>ax1.set_xlabel(<span class="st">&#39;Salary&#39;</span>)</span></code></pre></div>
+<pre><code>## Text(0.5, 0, &#39;Salary&#39;)</code></pre>
+<div class="sourceCode" id="cb715"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb715-1"><a href="trees.html#cb715-1" aria-hidden="true" tabindex="-1"></a>ax2.hist(y)</span></code></pre></div>
+<pre><code>## (array([23., 21., 25., 31., 28., 36., 48., 29., 13.,  9.]), array([4.212, 4.572, 4.931, 5.291, 5.65 , 6.01 , 6.37 , 6.729, 7.089,
+##        7.448, 7.808]), &lt;BarContainer object of 10 artists&gt;)</code></pre>
+<div class="sourceCode" id="cb717"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb717-1"><a href="trees.html#cb717-1" aria-hidden="true" tabindex="-1"></a>ax2.set_xlabel(<span class="st">&#39;Log(Salary)&#39;</span>)<span class="op">;</span></span></code></pre></div>
+<div class="sourceCode" id="cb718"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb718-1"><a href="trees.html#cb718-1" aria-hidden="true" tabindex="-1"></a>regr <span class="op">=</span> DecisionTreeRegressor(max_leaf_nodes<span class="op">=</span><span class="dv">3</span>)</span>
+<span id="cb718-2"><a href="trees.html#cb718-2" aria-hidden="true" tabindex="-1"></a>regr.fit(X, y)</span></code></pre></div>
+<pre><code>## DecisionTreeRegressor(max_leaf_nodes=3)</code></pre>
+<div id="figure-8.1" class="section level4 unlisted unnumbered">
+<h4>Figure 8.1</h4>
+<div class="sourceCode" id="cb720"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb720-1"><a href="trees.html#cb720-1" aria-hidden="true" tabindex="-1"></a>dot_data <span class="op">=</span> tree.export_graphviz(regr, out_file<span class="op">=</span><span class="va">None</span>,</span>
+<span id="cb720-2"><a href="trees.html#cb720-2" aria-hidden="true" tabindex="-1"></a>                                feature_names<span class="op">=</span>[<span class="st">&#39;Years&#39;</span>, <span class="st">&#39;Hits&#39;</span>],</span>
+<span id="cb720-3"><a href="trees.html#cb720-3" aria-hidden="true" tabindex="-1"></a>                                precision <span class="op">=</span> <span class="dv">1</span>,</span>
+<span id="cb720-4"><a href="trees.html#cb720-4" aria-hidden="true" tabindex="-1"></a>                    filled<span class="op">=</span><span class="va">True</span>, rounded<span class="op">=</span><span class="va">True</span>)  </span>
+<span id="cb720-5"><a href="trees.html#cb720-5" aria-hidden="true" tabindex="-1"></a>graph <span class="op">=</span> graphviz.Source(dot_data)  </span>
+<span id="cb720-6"><a href="trees.html#cb720-6" aria-hidden="true" tabindex="-1"></a>graph</span></code></pre></div>
+<pre><code>## &lt;graphviz.files.Source object at 0x7fb10d1be358&gt;</code></pre>
+<p><strong>FIGURE 8.1</strong> For the Hitters data, a regression tree for predicting the log
+salary of a baseball player, based on the number of years that he has played in
+the major leagues and the number of hits that he made in the previous year. At a
+given internal node, the label (of the form Xj &lt; tk) indicates the left-hand branch
+emanating from that split, and the right-hand branch corresponds to Xj ≥ tk.
+For instance, the split at the top of the tree results in two large branches. The
+left-hand branch corresponds to Years&lt;4.5, and the right-hand branch corresponds
+to Years&gt;=4.5. The tree has two internal nodes and three terminal nodes, or
+leaves. The number in each leaf is the mean of the response for the observations
+that fall there.</p>
+</div>
+<div id="figure-8.2" class="section level4 unlisted unnumbered">
+<h4>Figure 8.2</h4>
+<div class="sourceCode" id="cb722"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb722-1"><a href="trees.html#cb722-1" aria-hidden="true" tabindex="-1"></a>df.plot(<span class="st">&#39;Years&#39;</span>, <span class="st">&#39;Hits&#39;</span>, kind<span class="op">=</span><span class="st">&#39;scatter&#39;</span>, color<span class="op">=</span><span class="st">&#39;orange&#39;</span>, figsize<span class="op">=</span>(<span class="dv">7</span>,<span class="dv">6</span>))</span></code></pre></div>
+<pre><code>## &lt;AxesSubplot:xlabel=&#39;Years&#39;, ylabel=&#39;Hits&#39;&gt;</code></pre>
+<div class="sourceCode" id="cb724"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb724-1"><a href="trees.html#cb724-1" aria-hidden="true" tabindex="-1"></a>plt.xlim(<span class="dv">0</span>,<span class="dv">25</span>)</span></code></pre></div>
+<pre><code>## (0.0, 25.0)</code></pre>
+<div class="sourceCode" id="cb726"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb726-1"><a href="trees.html#cb726-1" aria-hidden="true" tabindex="-1"></a>plt.ylim(ymin<span class="op">=-</span><span class="dv">5</span>)</span></code></pre></div>
+<pre><code>## (-5.0, 249.85)</code></pre>
+<div class="sourceCode" id="cb728"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb728-1"><a href="trees.html#cb728-1" aria-hidden="true" tabindex="-1"></a>plt.xticks([<span class="dv">1</span>, <span class="fl">4.5</span>, <span class="dv">24</span>])</span></code></pre></div>
+<pre><code>## ([&lt;matplotlib.axis.XTick object at 0x7fb10b682748&gt;, &lt;matplotlib.axis.XTick object at 0x7fb10b682198&gt;, &lt;matplotlib.axis.XTick object at 0x7fb10b44fc50&gt;], [Text(0, 0, &#39;&#39;), Text(0, 0, &#39;&#39;), Text(0, 0, &#39;&#39;)])</code></pre>
+<div class="sourceCode" id="cb730"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb730-1"><a href="trees.html#cb730-1" aria-hidden="true" tabindex="-1"></a>plt.yticks([<span class="dv">1</span>, <span class="fl">117.5</span>, <span class="dv">238</span>])</span></code></pre></div>
+<pre><code>## ([&lt;matplotlib.axis.YTick object at 0x7fb10b682f98&gt;, &lt;matplotlib.axis.YTick object at 0x7fb10b682b70&gt;, &lt;matplotlib.axis.YTick object at 0x7fb10b9db160&gt;], [Text(0, 0, &#39;&#39;), Text(0, 0, &#39;&#39;), Text(0, 0, &#39;&#39;)])</code></pre>
+<div class="sourceCode" id="cb732"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb732-1"><a href="trees.html#cb732-1" aria-hidden="true" tabindex="-1"></a>plt.vlines(<span class="fl">4.5</span>, ymin<span class="op">=-</span><span class="dv">5</span>, ymax<span class="op">=</span><span class="dv">250</span>)</span></code></pre></div>
+<pre><code>## &lt;matplotlib.collections.LineCollection object at 0x7fb10b443b70&gt;</code></pre>
+<div class="sourceCode" id="cb734"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb734-1"><a href="trees.html#cb734-1" aria-hidden="true" tabindex="-1"></a>plt.hlines(<span class="fl">117.5</span>, xmin<span class="op">=</span><span class="fl">4.5</span>, xmax<span class="op">=</span><span class="dv">25</span>)</span></code></pre></div>
+<pre><code>## &lt;matplotlib.collections.LineCollection object at 0x7fb10b443e80&gt;</code></pre>
+<div class="sourceCode" id="cb736"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb736-1"><a href="trees.html#cb736-1" aria-hidden="true" tabindex="-1"></a>plt.annotate(<span class="st">&#39;R1&#39;</span>, xy<span class="op">=</span>(<span class="dv">2</span>,<span class="fl">117.5</span>), fontsize<span class="op">=</span><span class="st">&#39;xx-large&#39;</span>)</span></code></pre></div>
+<pre><code>## Text(2, 117.5, &#39;R1&#39;)</code></pre>
+<div class="sourceCode" id="cb738"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb738-1"><a href="trees.html#cb738-1" aria-hidden="true" tabindex="-1"></a>plt.annotate(<span class="st">&#39;R2&#39;</span>, xy<span class="op">=</span>(<span class="dv">11</span>,<span class="dv">60</span>), fontsize<span class="op">=</span><span class="st">&#39;xx-large&#39;</span>)</span></code></pre></div>
+<pre><code>## Text(11, 60, &#39;R2&#39;)</code></pre>
+<div class="sourceCode" id="cb740"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb740-1"><a href="trees.html#cb740-1" aria-hidden="true" tabindex="-1"></a>plt.annotate(<span class="st">&#39;R3&#39;</span>, xy<span class="op">=</span>(<span class="dv">11</span>,<span class="dv">170</span>), fontsize<span class="op">=</span><span class="st">&#39;xx-large&#39;</span>)<span class="op">;</span></span></code></pre></div>
+</div>
+<div id="pruning" class="section level4 unlisted unnumbered">
+<h4>Pruning</h4>
+<p>This is currently not supported in scikit-learn. See first point under ’disadvantages of decision trees in the <A href='http://scikit-learn.github.io/dev/modules/tree.html#'>documentation</A>. Implementation has been <A href='https://github.com/scikit-learn/scikit-learn/pull/941'>discussed</A> but Random Forests have better predictive qualities than a single pruned tree anyway if I understand correctly.</p>
+</div>
+</div>
+<div id="classification-trees" class="section level2" number="10.3">
+<h2><span class="header-section-number">10.3</span> Classification Trees</h2>
+<p>Dataset available on <a href="http://www-bcf.usc.edu/~gareth/ISL/data.html" class="uri">http://www-bcf.usc.edu/~gareth/ISL/data.html</a></p>
+<div class="sourceCode" id="cb741"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb741-1"><a href="trees.html#cb741-1" aria-hidden="true" tabindex="-1"></a>df2 <span class="op">=</span> pd.read_csv(<span class="st">&#39;../data/Heart.csv&#39;</span>).drop(<span class="st">&#39;Unnamed: 0&#39;</span>, axis<span class="op">=</span><span class="dv">1</span>).dropna()</span>
+<span id="cb741-2"><a href="trees.html#cb741-2" aria-hidden="true" tabindex="-1"></a>df2.info()</span></code></pre></div>
+<pre><code>## &lt;class &#39;pandas.core.frame.DataFrame&#39;&gt;
+## Int64Index: 297 entries, 0 to 301
+## Data columns (total 14 columns):
+##  #   Column     Non-Null Count  Dtype  
+## ---  ------     --------------  -----  
+##  0   Age        297 non-null    int64  
+##  1   Sex        297 non-null    int64  
+##  2   ChestPain  297 non-null    object 
+##  3   RestBP     297 non-null    int64  
+##  4   Chol       297 non-null    int64  
+##  5   Fbs        297 non-null    int64  
+##  6   RestECG    297 non-null    int64  
+##  7   MaxHR      297 non-null    int64  
+##  8   ExAng      297 non-null    int64  
+##  9   Oldpeak    297 non-null    float64
+##  10  Slope      297 non-null    int64  
+##  11  Ca         297 non-null    float64
+##  12  Thal       297 non-null    object 
+##  13  AHD        297 non-null    object 
+## dtypes: float64(2), int64(9), object(3)
+## memory usage: 34.8+ KB</code></pre>
+<div class="sourceCode" id="cb743"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb743-1"><a href="trees.html#cb743-1" aria-hidden="true" tabindex="-1"></a>df2.ChestPain <span class="op">=</span> pd.factorize(df2.ChestPain)[<span class="dv">0</span>]</span>
+<span id="cb743-2"><a href="trees.html#cb743-2" aria-hidden="true" tabindex="-1"></a>df2.Thal <span class="op">=</span> pd.factorize(df2.Thal)[<span class="dv">0</span>]</span></code></pre></div>
+<div class="sourceCode" id="cb744"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb744-1"><a href="trees.html#cb744-1" aria-hidden="true" tabindex="-1"></a>X2 <span class="op">=</span> df2.drop(<span class="st">&#39;AHD&#39;</span>, axis<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb744-2"><a href="trees.html#cb744-2" aria-hidden="true" tabindex="-1"></a>y2 <span class="op">=</span> pd.factorize(df2.AHD)[<span class="dv">0</span>]</span></code></pre></div>
+<div class="sourceCode" id="cb745"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb745-1"><a href="trees.html#cb745-1" aria-hidden="true" tabindex="-1"></a>clf <span class="op">=</span> DecisionTreeClassifier(max_depth<span class="op">=</span><span class="va">None</span>, max_leaf_nodes<span class="op">=</span><span class="dv">6</span>, max_features<span class="op">=</span><span class="dv">3</span>)</span>
+<span id="cb745-2"><a href="trees.html#cb745-2" aria-hidden="true" tabindex="-1"></a>clf.fit(X2,y2)</span></code></pre></div>
+<pre><code>## DecisionTreeClassifier(max_features=3, max_leaf_nodes=6)</code></pre>
+<div class="sourceCode" id="cb747"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb747-1"><a href="trees.html#cb747-1" aria-hidden="true" tabindex="-1"></a>clf.score(X2,y2)</span></code></pre></div>
+<pre><code>## 0.8114478114478114</code></pre>
+<div class="sourceCode" id="cb749"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb749-1"><a href="trees.html#cb749-1" aria-hidden="true" tabindex="-1"></a>graph2, <span class="op">=</span> print_tree(clf, features<span class="op">=</span>X2.columns, class_names<span class="op">=</span>[<span class="st">&#39;No&#39;</span>, <span class="st">&#39;Yes&#39;</span>])</span>
+<span id="cb749-2"><a href="trees.html#cb749-2" aria-hidden="true" tabindex="-1"></a>Image(graph2.create_png())</span></code></pre></div>
+<pre><code>## &lt;IPython.core.display.Image object&gt;</code></pre>
+<div id="dtreeviz" class="section level3 unlisted unnumbered">
+<h3>dtreeviz</h3>
+<p>We are using the wonderful tree visualization library <code>dtreeviz</code> :
+<a href="https://github.com/parrt/dtreeviz" class="uri">https://github.com/parrt/dtreeviz</a></p>
+<div class="sourceCode" id="cb751"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb751-1"><a href="trees.html#cb751-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> dtreeviz.trees <span class="im">import</span> dtreeviz</span>
+<span id="cb751-2"><a href="trees.html#cb751-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb751-3"><a href="trees.html#cb751-3" aria-hidden="true" tabindex="-1"></a>clf1 <span class="op">=</span> DecisionTreeClassifier(max_depth<span class="op">=</span><span class="dv">3</span>)  <span class="co"># limit depth of tree</span></span>
+<span id="cb751-4"><a href="trees.html#cb751-4" aria-hidden="true" tabindex="-1"></a>iris <span class="op">=</span> load_iris()</span>
+<span id="cb751-5"><a href="trees.html#cb751-5" aria-hidden="true" tabindex="-1"></a>clf1.fit(iris.data, iris.target)</span></code></pre></div>
+<pre><code>## DecisionTreeClassifier(max_depth=3)</code></pre>
+<div class="sourceCode" id="cb753"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb753-1"><a href="trees.html#cb753-1" aria-hidden="true" tabindex="-1"></a>dtreeviz(clf1,</span>
+<span id="cb753-2"><a href="trees.html#cb753-2" aria-hidden="true" tabindex="-1"></a>   iris.data,</span>
+<span id="cb753-3"><a href="trees.html#cb753-3" aria-hidden="true" tabindex="-1"></a>   iris.target,</span>
+<span id="cb753-4"><a href="trees.html#cb753-4" aria-hidden="true" tabindex="-1"></a>   target_name<span class="op">=</span><span class="st">&#39;variety&#39;</span>,</span>
+<span id="cb753-5"><a href="trees.html#cb753-5" aria-hidden="true" tabindex="-1"></a>  feature_names<span class="op">=</span>iris.feature_names,</span>
+<span id="cb753-6"><a href="trees.html#cb753-6" aria-hidden="true" tabindex="-1"></a>   class_names<span class="op">=</span>[<span class="st">&quot;setosa&quot;</span>, <span class="st">&quot;versicolor&quot;</span>, <span class="st">&quot;virginica&quot;</span>]  <span class="co"># need class_names for classifier</span></span>
+<span id="cb753-7"><a href="trees.html#cb753-7" aria-hidden="true" tabindex="-1"></a>  )  </span></code></pre></div>
+<pre><code>## &lt;dtreeviz.trees.DTreeViz object at 0x7fb10ad755c0&gt;</code></pre>
+<div id="quiz" class="section level4 unlisted unnumbered">
+<h4>Quiz</h4>
+<ol style="list-style-type: decimal">
+<li>Outliers
+<ul>
+<li>Classification Trees are resistant to outliers</li>
+<li>Regression Trees are resistant to outliers</li>
+</ul></li>
+<li>Is “diversity” good or bad for prediction?</li>
+<li>The regions are disjoint and rectangular</li>
+<li>Interactions need to be explicitly be modeled like in regression.</li>
+<li>All rows with missing values in any column need to be removed</li>
+<li>Nature of trees
+<ul>
+<li>Are trees “local” or “global” models?</li>
+<li>Trees are piecewise constant models</li>
+</ul></li>
+</ol>
+</div>
+</div>
+<div id="lab" class="section level3 unlisted unnumbered">
+<h3>Lab</h3>
+<div id="fitting-classification-trees" class="section level4 unlisted unnumbered">
+<h4>Fitting Classification Trees</h4>
+<p>In R, I exported the dataset from package ‘ISLR’ to a csv file.</p>
+<div class="sourceCode" id="cb755"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb755-1"><a href="trees.html#cb755-1" aria-hidden="true" tabindex="-1"></a>df3 <span class="op">=</span> pd.read_csv(<span class="st">&#39;../data/Carseats.csv&#39;</span>).drop(<span class="st">&#39;Unnamed: 0&#39;</span>, axis<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb755-2"><a href="trees.html#cb755-2" aria-hidden="true" tabindex="-1"></a>df3.head()</span></code></pre></div>
+<pre><code>##    Sales  CompPrice  Income  Advertising  ...  Age  Education Urban   US
+## 0   9.50        138      73           11  ...   42         17   Yes  Yes
+## 1  11.22        111      48           16  ...   65         10   Yes  Yes
+## 2  10.06        113      35           10  ...   59         12   Yes  Yes
+## 3   7.40        117     100            4  ...   55         14   Yes  Yes
+## 4   4.15        141      64            3  ...   38         13   Yes   No
+## 
+## [5 rows x 11 columns]</code></pre>
+<div class="sourceCode" id="cb757"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb757-1"><a href="trees.html#cb757-1" aria-hidden="true" tabindex="-1"></a>df3[<span class="st">&#39;High&#39;</span>] <span class="op">=</span> df3.Sales.<span class="bu">map</span>(<span class="kw">lambda</span> x: <span class="dv">1</span> <span class="cf">if</span> x<span class="op">&gt;</span><span class="dv">8</span> <span class="cf">else</span> <span class="dv">0</span>)</span>
+<span id="cb757-2"><a href="trees.html#cb757-2" aria-hidden="true" tabindex="-1"></a>df3.ShelveLoc <span class="op">=</span> pd.factorize(df3.ShelveLoc)[<span class="dv">0</span>]</span>
+<span id="cb757-3"><a href="trees.html#cb757-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb757-4"><a href="trees.html#cb757-4" aria-hidden="true" tabindex="-1"></a>df3.Urban <span class="op">=</span> df3.Urban.<span class="bu">map</span>({<span class="st">&#39;No&#39;</span>:<span class="dv">0</span>, <span class="st">&#39;Yes&#39;</span>:<span class="dv">1</span>})</span>
+<span id="cb757-5"><a href="trees.html#cb757-5" aria-hidden="true" tabindex="-1"></a>df3.US <span class="op">=</span> df3.US.<span class="bu">map</span>({<span class="st">&#39;No&#39;</span>:<span class="dv">0</span>, <span class="st">&#39;Yes&#39;</span>:<span class="dv">1</span>})</span>
+<span id="cb757-6"><a href="trees.html#cb757-6" aria-hidden="true" tabindex="-1"></a>df3.info()</span></code></pre></div>
+<pre><code>## &lt;class &#39;pandas.core.frame.DataFrame&#39;&gt;
+## RangeIndex: 400 entries, 0 to 399
+## Data columns (total 12 columns):
+##  #   Column       Non-Null Count  Dtype  
+## ---  ------       --------------  -----  
+##  0   Sales        400 non-null    float64
+##  1   CompPrice    400 non-null    int64  
+##  2   Income       400 non-null    int64  
+##  3   Advertising  400 non-null    int64  
+##  4   Population   400 non-null    int64  
+##  5   Price        400 non-null    int64  
+##  6   ShelveLoc    400 non-null    int64  
+##  7   Age          400 non-null    int64  
+##  8   Education    400 non-null    int64  
+##  9   Urban        400 non-null    int64  
+##  10  US           400 non-null    int64  
+##  11  High         400 non-null    int64  
+## dtypes: float64(1), int64(11)
+## memory usage: 37.6 KB</code></pre>
+<div class="sourceCode" id="cb759"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb759-1"><a href="trees.html#cb759-1" aria-hidden="true" tabindex="-1"></a>df3.head(<span class="dv">5</span>)</span></code></pre></div>
+<pre><code>##    Sales  CompPrice  Income  Advertising  ...  Education  Urban  US  High
+## 0   9.50        138      73           11  ...         17      1   1     1
+## 1  11.22        111      48           16  ...         10      1   1     1
+## 2  10.06        113      35           10  ...         12      1   1     1
+## 3   7.40        117     100            4  ...         14      1   1     0
+## 4   4.15        141      64            3  ...         13      1   0     0
+## 
+## [5 rows x 12 columns]</code></pre>
+<div class="sourceCode" id="cb761"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb761-1"><a href="trees.html#cb761-1" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> df3.drop([<span class="st">&#39;Sales&#39;</span>, <span class="st">&#39;High&#39;</span>], axis<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb761-2"><a href="trees.html#cb761-2" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> df3.High</span>
+<span id="cb761-3"><a href="trees.html#cb761-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb761-4"><a href="trees.html#cb761-4" aria-hidden="true" tabindex="-1"></a>X_train, X_test, y_train, y_test <span class="op">=</span> train_test_split(X, y, test_size<span class="op">=</span><span class="fl">0.5</span>, random_state<span class="op">=</span><span class="dv">0</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb762"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb762-1"><a href="trees.html#cb762-1" aria-hidden="true" tabindex="-1"></a>clf <span class="op">=</span> DecisionTreeClassifier(max_depth<span class="op">=</span><span class="dv">6</span>)</span>
+<span id="cb762-2"><a href="trees.html#cb762-2" aria-hidden="true" tabindex="-1"></a>clf.fit(X, y)</span></code></pre></div>
+<pre><code>## DecisionTreeClassifier(max_depth=6)</code></pre>
+<div class="sourceCode" id="cb764"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb764-1"><a href="trees.html#cb764-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(classification_report(y, clf.predict(X)))</span></code></pre></div>
+<pre><code>##               precision    recall  f1-score   support
+## 
+##            0       0.89      0.99      0.93       236
+##            1       0.98      0.82      0.89       164
+## 
+##     accuracy                           0.92       400
+##    macro avg       0.93      0.90      0.91       400
+## weighted avg       0.92      0.92      0.92       400</code></pre>
+<div class="sourceCode" id="cb766"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb766-1"><a href="trees.html#cb766-1" aria-hidden="true" tabindex="-1"></a><span class="co">#graph3, = print_tree(clf, features=X.columns, class_names=[&#39;No&#39;, &#39;Yes&#39;])</span></span>
+<span id="cb766-2"><a href="trees.html#cb766-2" aria-hidden="true" tabindex="-1"></a><span class="co">#Image(graph3.create_png())</span></span></code></pre></div>
+<div class="sourceCode" id="cb767"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb767-1"><a href="trees.html#cb767-1" aria-hidden="true" tabindex="-1"></a>clf.fit(X_train, y_train)</span></code></pre></div>
+<pre><code>## DecisionTreeClassifier(max_depth=6)</code></pre>
+<div class="sourceCode" id="cb769"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb769-1"><a href="trees.html#cb769-1" aria-hidden="true" tabindex="-1"></a>pred <span class="op">=</span> clf.predict(X_test)</span></code></pre></div>
+<div class="sourceCode" id="cb770"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb770-1"><a href="trees.html#cb770-1" aria-hidden="true" tabindex="-1"></a>cm <span class="op">=</span> pd.DataFrame(confusion_matrix(y_test, pred).T, index<span class="op">=</span>[<span class="st">&#39;No&#39;</span>, <span class="st">&#39;Yes&#39;</span>], columns<span class="op">=</span>[<span class="st">&#39;No&#39;</span>, <span class="st">&#39;Yes&#39;</span>])</span>
+<span id="cb770-2"><a href="trees.html#cb770-2" aria-hidden="true" tabindex="-1"></a>cm.index.name <span class="op">=</span> <span class="st">&#39;Predicted&#39;</span></span>
+<span id="cb770-3"><a href="trees.html#cb770-3" aria-hidden="true" tabindex="-1"></a>cm.columns.name <span class="op">=</span> <span class="st">&#39;True&#39;</span></span>
+<span id="cb770-4"><a href="trees.html#cb770-4" aria-hidden="true" tabindex="-1"></a>cm</span></code></pre></div>
+<pre><code>## True       No  Yes
+## Predicted         
+## No         99   32
+## Yes        19   50</code></pre>
+<div class="sourceCode" id="cb772"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb772-1"><a href="trees.html#cb772-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Precision of the model using test data is 74%</span></span>
+<span id="cb772-2"><a href="trees.html#cb772-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(classification_report(y_test, pred))</span></code></pre></div>
+<pre><code>##               precision    recall  f1-score   support
+## 
+##            0       0.76      0.84      0.80       118
+##            1       0.72      0.61      0.66        82
+## 
+##     accuracy                           0.74       200
+##    macro avg       0.74      0.72      0.73       200
+## weighted avg       0.74      0.74      0.74       200</code></pre>
+<p>Pruning not implemented in scikit-learn.</p>
+</div>
+<div id="fitting-regression-trees" class="section level4 unlisted unnumbered">
+<h4>Fitting Regression Trees</h4>
+<p>In R, I exported the dataset from package ‘MASS’ to a csv file.</p>
+<div class="sourceCode" id="cb774"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb774-1"><a href="trees.html#cb774-1" aria-hidden="true" tabindex="-1"></a>boston_df <span class="op">=</span> pd.read_csv(<span class="st">&#39;../data/Boston.csv&#39;</span>)</span>
+<span id="cb774-2"><a href="trees.html#cb774-2" aria-hidden="true" tabindex="-1"></a>boston_df.info()</span></code></pre></div>
+<pre><code>## &lt;class &#39;pandas.core.frame.DataFrame&#39;&gt;
+## RangeIndex: 506 entries, 0 to 505
+## Data columns (total 14 columns):
+##  #   Column   Non-Null Count  Dtype  
+## ---  ------   --------------  -----  
+##  0   crim     506 non-null    float64
+##  1   zn       506 non-null    float64
+##  2   indus    506 non-null    float64
+##  3   chas     506 non-null    int64  
+##  4   nox      506 non-null    float64
+##  5   rm       506 non-null    float64
+##  6   age      506 non-null    float64
+##  7   dis      506 non-null    float64
+##  8   rad      506 non-null    int64  
+##  9   tax      506 non-null    int64  
+##  10  ptratio  506 non-null    float64
+##  11  black    506 non-null    float64
+##  12  lstat    506 non-null    float64
+##  13  medv     506 non-null    float64
+## dtypes: float64(11), int64(3)
+## memory usage: 55.5 KB</code></pre>
+<div class="sourceCode" id="cb776"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb776-1"><a href="trees.html#cb776-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.datasets <span class="im">import</span> <span class="op">*</span></span>
+<span id="cb776-2"><a href="trees.html#cb776-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb776-3"><a href="trees.html#cb776-3" aria-hidden="true" tabindex="-1"></a>regr <span class="op">=</span> tree.DecisionTreeRegressor(max_depth<span class="op">=</span><span class="dv">3</span>)</span>
+<span id="cb776-4"><a href="trees.html#cb776-4" aria-hidden="true" tabindex="-1"></a>boston <span class="op">=</span> load_boston()</span>
+<span id="cb776-5"><a href="trees.html#cb776-5" aria-hidden="true" tabindex="-1"></a>regr.fit(boston.data, boston.target)</span></code></pre></div>
+<pre><code>## DecisionTreeRegressor(max_depth=3)</code></pre>
+<div class="sourceCode" id="cb778"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb778-1"><a href="trees.html#cb778-1" aria-hidden="true" tabindex="-1"></a>viz <span class="op">=</span> dtreeviz(regr,</span>
+<span id="cb778-2"><a href="trees.html#cb778-2" aria-hidden="true" tabindex="-1"></a>               boston.data,</span>
+<span id="cb778-3"><a href="trees.html#cb778-3" aria-hidden="true" tabindex="-1"></a>               boston.target,</span>
+<span id="cb778-4"><a href="trees.html#cb778-4" aria-hidden="true" tabindex="-1"></a>               target_name<span class="op">=</span><span class="st">&#39;price&#39;</span>,</span>
+<span id="cb778-5"><a href="trees.html#cb778-5" aria-hidden="true" tabindex="-1"></a>               feature_names<span class="op">=</span>boston.feature_names)</span>
+<span id="cb778-6"><a href="trees.html#cb778-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb778-7"><a href="trees.html#cb778-7" aria-hidden="true" tabindex="-1"></a><span class="co">#viz.view()    </span></span>
+<span id="cb778-8"><a href="trees.html#cb778-8" aria-hidden="true" tabindex="-1"></a>viz</span></code></pre></div>
+<pre><code>## &lt;dtreeviz.trees.DTreeViz object at 0x7fb10a9b5fd0&gt;</code></pre>
+
+</div>
+</div>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="regularized-regression.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="from-trees-to-forests.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["BIPM_DS.pdf", "BIPM_DS.epub"],
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

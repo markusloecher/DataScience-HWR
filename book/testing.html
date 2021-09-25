@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Lesson 3 Testing | 581092 Data Science</title>
+  <meta name="description" content="Welcome to most important course you’ll ever take: Data Science 🙄" />
+  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Lesson 3 Testing | 581092 Data Science" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="Welcome to most important course you’ll ever take: Data Science 🙄" />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Lesson 3 Testing | 581092 Data Science" />
+  
+  <meta name="twitter:description" content="Welcome to most important course you’ll ever take: Data Science 🙄" />
+  
+
+<meta name="author" content="M Loecher" />
+
+
+<meta name="date" content="2021-09-24" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="sampling-uncertainty.html"/>
+<link rel="next" href="advanced-tests.html"/>
+<script src="libs/header-attrs-2.7/header-attrs.js"></script>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">BIPM Data Science</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a>
+<ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#course-components"><i class="fa fa-check"></i>Course components</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#grading"><i class="fa fa-check"></i>Grading</a>
+<ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#software-and-environments"><i class="fa fa-check"></i>Software and Environments</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="1" data-path="statistical-thinking-i.html"><a href="statistical-thinking-i.html"><i class="fa fa-check"></i><b>1</b> Statistical Thinking I</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="statistical-thinking-i.html"><a href="statistical-thinking-i.html#overview"><i class="fa fa-check"></i><b>1.1</b> Overview</a></li>
+<li class="chapter" data-level="1.2" data-path="statistical-thinking-i.html"><a href="statistical-thinking-i.html#contingency-tables-as-simple-models"><i class="fa fa-check"></i><b>1.2</b> Contingency Tables as simple models</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="sampling-uncertainty.html"><a href="sampling-uncertainty.html"><i class="fa fa-check"></i><b>2</b> Sampling Uncertainty</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="sampling-uncertainty.html"><a href="sampling-uncertainty.html#ab-testing"><i class="fa fa-check"></i><b>2.1</b> A/B Testing</a></li>
+<li class="chapter" data-level="2.2" data-path="sampling-uncertainty.html"><a href="sampling-uncertainty.html#distributions"><i class="fa fa-check"></i><b>2.2</b> Distributions</a></li>
+<li class="chapter" data-level="2.3" data-path="sampling-uncertainty.html"><a href="sampling-uncertainty.html#hacker-statistic"><i class="fa fa-check"></i><b>2.3</b> Hacker Statistic</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="testing.html"><a href="testing.html"><i class="fa fa-check"></i><b>3</b> Testing</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="testing.html"><a href="testing.html#hypothesis-tests"><i class="fa fa-check"></i><b>3.1</b> Hypothesis Tests</a></li>
+<li class="chapter" data-level="3.2" data-path="testing.html"><a href="testing.html#parametric-tests"><i class="fa fa-check"></i><b>3.2</b> Parametric Tests</a></li>
+<li class="chapter" data-level="3.3" data-path="testing.html"><a href="testing.html#non-parametric-tests"><i class="fa fa-check"></i><b>3.3</b> Non parametric Tests</a></li>
+<li class="chapter" data-level="3.4" data-path="testing.html"><a href="testing.html#bootstrap-hypothesis-tests"><i class="fa fa-check"></i><b>3.4</b> Bootstrap Hypothesis Tests</a>
+<ul>
+<li class="chapter" data-level="3.4.1" data-path="testing.html"><a href="testing.html#a-two-sample-bootstrap-hypothesis-test-for-difference-of-means"><i class="fa fa-check"></i><b>3.4.1</b> A two-sample bootstrap hypothesis test for difference of means</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="advanced-tests.html"><a href="advanced-tests.html"><i class="fa fa-check"></i><b>4</b> Advanced Tests</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="advanced-tests.html"><a href="advanced-tests.html#permutation-2-sample-test"><i class="fa fa-check"></i><b>4.1</b> Permutation 2-sample test</a></li>
+<li class="chapter" data-level="4.2" data-path="advanced-tests.html"><a href="advanced-tests.html#sample-t-test"><i class="fa fa-check"></i><b>4.2</b> 2-sample t test</a></li>
+<li class="chapter" data-level="4.3" data-path="advanced-tests.html"><a href="advanced-tests.html#random-walks"><i class="fa fa-check"></i><b>4.3</b> Random Walks</a>
+<ul>
+<li class="chapter" data-level="4.3.1" data-path="advanced-tests.html"><a href="advanced-tests.html#the-sqrtn-law-again"><i class="fa fa-check"></i><b>4.3.1</b> The <span class="math inline">\(\sqrt{n}\)</span> law again !</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="simple-linear-regressio.html"><a href="simple-linear-regressio.html"><i class="fa fa-check"></i><b>5</b> Simple Linear Regressio</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="simple-linear-regressio.html"><a href="simple-linear-regressio.html#loss-functions"><i class="fa fa-check"></i><b>5.1</b> Loss Functions</a></li>
+<li class="chapter" data-level="5.2" data-path="simple-linear-regressio.html"><a href="simple-linear-regressio.html#least-squares"><i class="fa fa-check"></i><b>5.2</b> Least Squares</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html"><i class="fa fa-check"></i><b>6</b> Multiple Linear Regression</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#statsmodels"><i class="fa fa-check"></i><b>6.1</b> Statsmodels</a></li>
+<li class="chapter" data-level="6.2" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#other-considerations-in-the-regression-model"><i class="fa fa-check"></i><b>6.2</b> Other Considerations in the Regression Model</a></li>
+<li class="chapter" data-level="6.3" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#categorical-variables"><i class="fa fa-check"></i><b>6.3</b> Categorical Variables</a></li>
+<li class="chapter" data-level="6.4" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#interactions"><i class="fa fa-check"></i><b>6.4</b> Interactions</a></li>
+<li class="chapter" data-level="6.5" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#non-linear-relationships"><i class="fa fa-check"></i><b>6.5</b> Non-linear relationships</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="advanced-linear-regression.html"><a href="advanced-linear-regression.html"><i class="fa fa-check"></i><b>7</b> Advanced Linear Regression</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="advanced-linear-regression.html"><a href="advanced-linear-regression.html#dummy-coding"><i class="fa fa-check"></i><b>7.1</b> Dummy Coding</a></li>
+<li class="chapter" data-level="7.2" data-path="advanced-linear-regression.html"><a href="advanced-linear-regression.html#overfitting"><i class="fa fa-check"></i><b>7.2</b> Overfitting</a></li>
+<li class="chapter" data-level="7.3" data-path="advanced-linear-regression.html"><a href="advanced-linear-regression.html#cross-validation"><i class="fa fa-check"></i><b>7.3</b> Cross Validation</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="classification.html"><a href="classification.html"><i class="fa fa-check"></i><b>8</b> Classification</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="classification.html"><a href="classification.html#datasets"><i class="fa fa-check"></i><b>8.1</b> Datasets</a></li>
+<li class="chapter" data-level="8.2" data-path="classification.html"><a href="classification.html#logistic-regression"><i class="fa fa-check"></i><b>8.2</b> Logistic Regression</a></li>
+<li class="chapter" data-level="8.3" data-path="classification.html"><a href="classification.html#other-classifiers"><i class="fa fa-check"></i><b>8.3</b> Other Classifiers</a>
+<ul>
+<li class="chapter" data-level="8.3.1" data-path="classification.html"><a href="classification.html#k-nearest-neighbors"><i class="fa fa-check"></i><b>8.3.1</b> K Nearest Neighbors</a></li>
+<li class="chapter" data-level="8.3.2" data-path="classification.html"><a href="classification.html#multinomial-logistic-regression"><i class="fa fa-check"></i><b>8.3.2</b> Multinomial Logistic Regression</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="regularized-regression.html"><a href="regularized-regression.html"><i class="fa fa-check"></i><b>9</b> Regularized Regression</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="regularized-regression.html"><a href="regularized-regression.html#other-classifiers-1"><i class="fa fa-check"></i><b>9.1</b> Other Classifiers</a>
+<ul>
+<li class="chapter" data-level="9.1.1" data-path="regularized-regression.html"><a href="regularized-regression.html#k-nearest-neighbors-knn"><i class="fa fa-check"></i><b>9.1.1</b> K-Nearest Neighbors (KNN)</a></li>
+<li class="chapter" data-level="9.1.2" data-path="regularized-regression.html"><a href="regularized-regression.html#multinomial-logistic-regression-1"><i class="fa fa-check"></i><b>9.1.2</b> Multinomial Logistic Regression</a></li>
+<li class="chapter" data-level="9.1.3" data-path="regularized-regression.html"><a href="regularized-regression.html#roc-curves"><i class="fa fa-check"></i><b>9.1.3</b> ROC Curves</a></li>
+<li class="chapter" data-level="9.1.4" data-path="regularized-regression.html"><a href="regularized-regression.html#regularized-regression-1"><i class="fa fa-check"></i><b>9.1.4</b> Regularized Regression</a></li>
+<li class="chapter" data-level="9.1.5" data-path="regularized-regression.html"><a href="regularized-regression.html#kaggle"><i class="fa fa-check"></i><b>9.1.5</b> Kaggle</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="trees.html"><a href="trees.html"><i class="fa fa-check"></i><b>10</b> Trees</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="trees.html"><a href="trees.html#node-impurity"><i class="fa fa-check"></i><b>10.1</b> Node Impurity</a></li>
+<li class="chapter" data-level="10.2" data-path="trees.html"><a href="trees.html#regression-trees"><i class="fa fa-check"></i><b>10.2</b> Regression Trees</a></li>
+<li class="chapter" data-level="10.3" data-path="trees.html"><a href="trees.html#classification-trees"><i class="fa fa-check"></i><b>10.3</b> Classification Trees</a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="from-trees-to-forests.html"><a href="from-trees-to-forests.html"><i class="fa fa-check"></i><b>11</b> From Trees to Forests</a>
+<ul>
+<li class="chapter" data-level="11.1" data-path="from-trees-to-forests.html"><a href="from-trees-to-forests.html#classification-tree"><i class="fa fa-check"></i><b>11.1</b> Classification Tree</a></li>
+<li class="chapter" data-level="11.2" data-path="from-trees-to-forests.html"><a href="from-trees-to-forests.html#ensembles-of-estimators"><i class="fa fa-check"></i><b>11.2</b> Ensembles of Estimators</a></li>
+<li class="chapter" data-level="11.3" data-path="from-trees-to-forests.html"><a href="from-trees-to-forests.html#bagging"><i class="fa fa-check"></i><b>11.3</b> Bagging</a></li>
+<li class="chapter" data-level="11.4" data-path="from-trees-to-forests.html"><a href="from-trees-to-forests.html#random-forests"><i class="fa fa-check"></i><b>11.4</b> Random Forests</a></li>
+</ul></li>
+<li class="chapter" data-level="12" data-path="explainable-ml.html"><a href="explainable-ml.html"><i class="fa fa-check"></i><b>12</b> Explainable ML</a>
+<ul>
+<li class="chapter" data-level="12.1" data-path="explainable-ml.html"><a href="explainable-ml.html#partial-dependence-plots"><i class="fa fa-check"></i><b>12.1</b> Partial dependence plots</a></li>
+<li class="chapter" data-level="12.2" data-path="explainable-ml.html"><a href="explainable-ml.html#shap-values"><i class="fa fa-check"></i><b>12.2</b> SHAP values</a>
+<ul>
+<li class="chapter" data-level="12.2.1" data-path="explainable-ml.html"><a href="explainable-ml.html#titanic"><i class="fa fa-check"></i><b>12.2.1</b> Titanic</a></li>
+<li class="chapter" data-level="12.2.2" data-path="explainable-ml.html"><a href="explainable-ml.html#force-plots"><i class="fa fa-check"></i><b>12.2.2</b> Force plots</a></li>
+<li class="chapter" data-level="12.2.3" data-path="explainable-ml.html"><a href="explainable-ml.html#tasks-3"><i class="fa fa-check"></i><b>12.2.3</b> Tasks</a></li>
+</ul></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">581092 Data Science</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="testing" class="section level1" number="3">
+<h1><span class="header-section-number">Lesson 3</span> Testing</h1>
+<p><strong>Overview</strong></p>
+<ol style="list-style-type: decimal">
+<li>Hypothesis Tests
+<ul>
+<li>1-sample</li>
+<li>2-sample</li>
+</ul></li>
+<li>Permutation Tests</li>
+</ol>
+<div id="warmupreview-exercises" class="section level2 unlisted unnumbered">
+<h2>WarmUp/Review Exercises</h2>
+<p>Load the <em>Auto.csv</em> data (into a dataframe <em>cars</em>) for the following tasks and create a scatter plot <code>mpg ~ weight</code>.
+Take a look at row with index <span class="math inline">\(25\)</span> (i.e. row 26); we will refer to that data point as <span class="math inline">\(x_{25}\)</span> from now on.</p>
+<ul>
+<li>Compute the standard score for
+<ul>
+<li><span class="math inline">\(x_{25}\)</span>[“mpg”]</li>
+<li><span class="math inline">\(x_{25}\)</span>[“weight”]</li>
+</ul></li>
+<li>Compute the product of these standard scores (call it <span class="math inline">\(p_{25}\)</span>).</li>
+<li>If you repeated this process for all rows of the <em>cars</em> dataframe and averaged all products <span class="math inline">\(p_{i}\)</span>, what would the resulting number tell you ? (What is it called?)</li>
+<li>Take a bootstrap sample from cars.mpg and compute the mean</li>
+</ul>
+<p><strong>Importing Standard Libraries</strong></p>
+<div class="sourceCode" id="cb79"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb79-1"><a href="testing.html#cb79-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb79-2"><a href="testing.html#cb79-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb79-3"><a href="testing.html#cb79-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb79-4"><a href="testing.html#cb79-4" aria-hidden="true" tabindex="-1"></a>pd.options.mode.chained_assignment <span class="op">=</span> <span class="va">None</span> <span class="co"># disable chained assignment warning</span></span>
+<span id="cb79-5"><a href="testing.html#cb79-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
+<span id="cb79-6"><a href="testing.html#cb79-6" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> BIPMDS <span class="im">import</span> <span class="op">*</span></span></code></pre></div>
+<p><strong>Loading our Functions</strong></p>
+<div class="sourceCode" id="cb80"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb80-1"><a href="testing.html#cb80-1" aria-hidden="true" tabindex="-1"></a><span class="co"># %run ../ourFunctions.py</span></span>
+<span id="cb80-2"><a href="testing.html#cb80-2" aria-hidden="true" tabindex="-1"></a><span class="co"># %precision 3</span></span></code></pre></div>
+<p><strong>Read in the Cars DF</strong></p>
+<div class="sourceCode" id="cb81"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb81-1"><a href="testing.html#cb81-1" aria-hidden="true" tabindex="-1"></a>cars <span class="op">=</span> pd.read_csv(<span class="st">&#39;../data/Auto.csv&#39;</span>)</span>
+<span id="cb81-2"><a href="testing.html#cb81-2" aria-hidden="true" tabindex="-1"></a>cars.shape</span></code></pre></div>
+<pre><code>## (392, 10)</code></pre>
+<div class="sourceCode" id="cb83"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb83-1"><a href="testing.html#cb83-1" aria-hidden="true" tabindex="-1"></a>cars.head()</span></code></pre></div>
+<pre><code>##     mpg  cylinders  ...                       name  Manufacturer
+## 0  18.0          8  ...  chevrolet chevelle malibu     chevrolet
+## 1  15.0          8  ...          buick skylark 320         buick
+## 2  18.0          8  ...         plymouth satellite      plymouth
+## 3  16.0          8  ...              amc rebel sst           amc
+## 4  17.0          8  ...                ford torino          ford
+## 
+## [5 rows x 10 columns]</code></pre>
+<div class="sourceCode" id="cb85"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb85-1"><a href="testing.html#cb85-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(cars.iloc[<span class="dv">25</span>,])</span></code></pre></div>
+<pre><code>## mpg                    10
+## cylinders               8
+## displacement          360
+## horsepower            215
+## weight               4615
+## acceleration           14
+## year                   70
+## origin                  1
+## name            ford f250
+## Manufacturer         ford
+## Name: 25, dtype: object</code></pre>
+<div class="sourceCode" id="cb87"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb87-1"><a href="testing.html#cb87-1" aria-hidden="true" tabindex="-1"></a>plt.scatter(<span class="st">&quot;weight&quot;</span>, <span class="st">&quot;mpg&quot;</span>,data<span class="op">=</span>cars)</span></code></pre></div>
+<pre><code>## &lt;matplotlib.collections.PathCollection object at 0x7fb1be28a518&gt;</code></pre>
+<div class="sourceCode" id="cb89"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb89-1"><a href="testing.html#cb89-1" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">&quot;weight&quot;</span>)</span></code></pre></div>
+<pre><code>## Text(0.5, 0, &#39;weight&#39;)</code></pre>
+<div class="sourceCode" id="cb91"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb91-1"><a href="testing.html#cb91-1" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">&quot;mpg&quot;</span>)</span></code></pre></div>
+<pre><code>## Text(0, 0.5, &#39;mpg&#39;)</code></pre>
+<div class="sourceCode" id="cb93"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb93-1"><a href="testing.html#cb93-1" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div>
+<p><img src="BIPM_DS_files/figure-html/unnamed-chunk-50-1.png" width="672" /></p>
+<!-- #region -->
+</div>
+<div id="hypothesis-tests" class="section level2" number="3.1">
+<h2><span class="header-section-number">3.1</span> Hypothesis Tests</h2>
+<p>We have learned about the <strong>bootstrap</strong> as a slick way of resampling your data to obtain sampling distributions of various measures of interest,
+Without having to learn highly specific distributions (such as the <span class="math inline">\(\chi^2\)</span>, Poisson, Binomial or F-distribution) the bootstrap enables us to</p>
+<ol style="list-style-type: decimal">
+<li>get <strong>confidence intervals</strong></li>
+<li>perform <strong>one-sample tests</strong></li>
+<li>perform <strong>two-sample tests</strong></li>
+</ol>
+<p>Imagine the EPA requiring the average mpg for 4-cylinder cars to be at least <span class="math inline">\(\mu_0 = 30\)</span> and needs to decide -based on this sample only- whether the manufacturers need to implement some improvements.
+In statistical jargon: can the EPA <strong>reject the claim</strong> that the <strong>true mean</strong> is at least 30 ?
+<!-- #endregion --></p>
+<div class="sourceCode" id="cb94"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb94-1"><a href="testing.html#cb94-1" aria-hidden="true" tabindex="-1"></a>cars4<span class="op">=</span>cars[cars[<span class="st">&quot;cylinders&quot;</span>]<span class="op">==</span><span class="dv">4</span>]</span>
+<span id="cb94-2"><a href="testing.html#cb94-2" aria-hidden="true" tabindex="-1"></a>empirical_mean <span class="op">=</span> np.mean(cars4.mpg)</span>
+<span id="cb94-3"><a href="testing.html#cb94-3" aria-hidden="true" tabindex="-1"></a>empirical_mean</span></code></pre></div>
+<pre><code>## 29.28391959798995</code></pre>
+<!-- #region -->
+<p><strong>There, we have it, the empirical mean is in fact below 30.</strong>
+Is this sufficient evidence for the EPA to demand improvements ?
+Does <span class="math inline">\(\bar{x} &lt; \mu_0\)</span> “prove” that <span class="math inline">\(\mu &lt; \mu_0\)</span> ??</p>
+<p>Think about an experiment which tries to establish whether a pair of dice in a casino is biased (“gezinkt” in German). You toss the dice <span class="math inline">\(50\)</span> times and observe an average number of pips of <span class="math inline">\(\bar{x} = 3.8\)</span> which is clearly “way above” the required value of <span class="math inline">\(\mu_0 = 3.5\)</span> for a clean pair of dice. Should you go to the authorities and file a complaint ? Since no one really knows the true value of <span class="math inline">\(\mu\)</span> for these dice, how would a court decide whether they are unbiased ?</p>
+<ol style="list-style-type: decimal">
+<li><strong>Innocent until proven guilty</strong>: Always assume the opposite of what you want to illustrate ! That way you can gather evidence against this <strong>Null hypothesis</strong>, e.g. <span class="math inline">\(H_0: \mu = 3.5 (\equiv \mu_0)\)</span>.</li>
+<li>Define a <strong>test statistic</strong> which is pertinent to the question you are seeking to answer (computed entirely from your sample). In this case, your test statistics could be e.g. the (scaled?) difference between the observed sample mean and the claim: <span class="math inline">\(\bar{x} - \mu_0\)</span>.</li>
+<li>We define the <strong>p-value</strong> as the probability of observing a test statistic equally or more extreme than the one observed, given that <span class="math inline">\(H_0\)</span> is true.</li>
+<li>If the observed value of your test statistic seems very unlikely under <span class="math inline">\(H_0\)</span> we would favor the <strong>alternative hypothesis</strong> which is usually complementary, e.g. <span class="math inline">\(H_A: \mu \neq 3.5\)</span></li>
+</ol>
+<p>Notice that we used vague expressions such as <em>unlikely</em> in the procedure above. In a legal context, we would want to make statements such as “beyond a reasonable doubt.” Well, in statistics we ry to quantifiy that notion by limiting the type-I error probability <span class="math inline">\(\alpha\)</span> to be at most e.g. <span class="math inline">\(0.01\)</span> or <span class="math inline">\(0.05\)</span>. So none our decisions are ever “proofs” or free of error.</p>
+<p>It also means that you, the person conducting the hypothesis test, need to specify a value of <span class="math inline">\(\alpha\)</span>, which clearly introduces a certain amount of subjectivity. Later on, we will discuss the inherent tradeoffs between type-I and type-II errors: only then will one fully understand the non-arbitrary choice of <span class="math inline">\(\alpha\)</span>.
+<!-- #endregion --></p>
+</div>
+<div id="parametric-tests" class="section level2" number="3.2">
+<h2><span class="header-section-number">3.2</span> Parametric Tests</h2>
+<ol style="list-style-type: decimal">
+<li>From the sample, compute <span class="math inline">\(\bar{x}\)</span> and <span class="math inline">\(\hat{\sigma}\)</span>.</li>
+<li>Compute the test statistic
+<span class="math display">\[t = \frac{\bar{x} - \mu_0}{\hat{\sigma}/\sqrt{n}}\]</span></li>
+<li>Reject <span class="math inline">\(H_0\)</span>
+<ul>
+<li>Two-sided test: if <span class="math inline">\(|t| &gt; t_{n-1, 1-\alpha/2}\)</span></li>
+<li>Left-sided test: if <span class="math inline">\(t &lt; t_{n-1, \alpha}\)</span></li>
+<li>Right-sided test: if <span class="math inline">\(t &gt; t_{n-1, 1-\alpha}\)</span></li>
+<li>If <span class="math inline">\(n&gt;50\)</span> one may replace the t distribution with the normal</li>
+</ul></li>
+<li>Define the p-value as twice the tail area of a t distribution</li>
+<li>Alternatively one rejects the Null if p-val <span class="math inline">\(&lt; \alpha\)</span>.</li>
+</ol>
+<p>Back to the casino example, assume the following empirical data:</p>
+<p><span class="math inline">\(\bar{x} = 3.8, n = 100, \hat{\sigma} = 1.7\)</span></p>
+<p><span class="math inline">\(H_0: \mu = 3.5\)</span>, <span class="math inline">\(H_A: \mu \neq 3.5\)</span>, <span class="math inline">\(\alpha = 0.01\)</span></p>
+<div class="sourceCode" id="cb96"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb96-1"><a href="testing.html#cb96-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.stats <span class="im">import</span> norm</span>
+<span id="cb96-2"><a href="testing.html#cb96-2" aria-hidden="true" tabindex="-1"></a><span class="co"># that is the critical value that we compare our test statistic with</span></span>
+<span id="cb96-3"><a href="testing.html#cb96-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&#39;two-sided cv: &#39;</span>,norm.ppf(<span class="dv">1</span><span class="op">-</span><span class="fl">0.01</span><span class="op">/</span><span class="dv">2</span>)) <span class="co"># returns the norm score</span></span></code></pre></div>
+<pre><code>## two-sided cv:  2.5758293035489004</code></pre>
+<div class="sourceCode" id="cb98"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb98-1"><a href="testing.html#cb98-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&#39;one-sided cv: &#39;</span>,norm.ppf(<span class="dv">1</span><span class="op">-</span><span class="fl">0.01</span>))</span></code></pre></div>
+<pre><code>## one-sided cv:  2.3263478740408408</code></pre>
+<p><strong>Two sided test!</strong></p>
+<div class="sourceCode" id="cb100"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb100-1"><a href="testing.html#cb100-1" aria-hidden="true" tabindex="-1"></a><span class="co"># We care about both sides since we do not know how the casino is using the biased dice.</span></span>
+<span id="cb100-2"><a href="testing.html#cb100-2" aria-hidden="true" tabindex="-1"></a>a<span class="op">=</span><span class="fl">0.01</span></span>
+<span id="cb100-3"><a href="testing.html#cb100-3" aria-hidden="true" tabindex="-1"></a>n<span class="op">=</span><span class="dv">200</span></span>
+<span id="cb100-4"><a href="testing.html#cb100-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb100-5"><a href="testing.html#cb100-5" aria-hidden="true" tabindex="-1"></a>critValue <span class="op">=</span> norm.ppf(<span class="dv">1</span><span class="op">-</span>a<span class="op">/</span><span class="dv">2</span>)</span>
+<span id="cb100-6"><a href="testing.html#cb100-6" aria-hidden="true" tabindex="-1"></a>z <span class="op">=</span> np.<span class="bu">abs</span>((<span class="fl">3.8</span><span class="op">-</span><span class="fl">3.5</span>)<span class="op">/</span>(<span class="fl">1.7</span><span class="op">/</span>np.sqrt(n)))</span>
+<span id="cb100-7"><a href="testing.html#cb100-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb100-8"><a href="testing.html#cb100-8" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (z <span class="op">&lt;</span> critValue):</span>
+<span id="cb100-9"><a href="testing.html#cb100-9" aria-hidden="true" tabindex="-1"></a>    s <span class="op">=</span> <span class="st">&quot;not&quot;</span></span>
+<span id="cb100-10"><a href="testing.html#cb100-10" aria-hidden="true" tabindex="-1"></a>    s2 <span class="op">=</span> <span class="st">&quot;fail to&quot;</span></span>
+<span id="cb100-11"><a href="testing.html#cb100-11" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span>:</span>
+<span id="cb100-12"><a href="testing.html#cb100-12" aria-hidden="true" tabindex="-1"></a>    s <span class="op">=</span> <span class="st">&quot;&quot;</span>   </span>
+<span id="cb100-13"><a href="testing.html#cb100-13" aria-hidden="true" tabindex="-1"></a>    s2 <span class="op">=</span> <span class="st">&quot;&quot;</span></span>
+<span id="cb100-14"><a href="testing.html#cb100-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb100-15"><a href="testing.html#cb100-15" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;The test statistic t =&quot;</span>, np.<span class="bu">round</span>(z,<span class="dv">3</span>), <span class="st">&quot;is&quot;</span>, s ,<span class="st">&quot;larger than the critical value&quot;</span>,np.<span class="bu">round</span>(critValue,<span class="dv">3</span>), <span class="st">&quot;so we&quot;</span>,s2,<span class="st">&quot;reject the Null&quot;</span> )</span></code></pre></div>
+<pre><code>## The test statistic t = 2.496 is not larger than the critical value 2.576 so we fail to reject the Null</code></pre>
+<div class="sourceCode" id="cb102"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb102-1"><a href="testing.html#cb102-1" aria-hidden="true" tabindex="-1"></a>norm.cdf(<span class="dv">1</span><span class="op">-</span>a<span class="op">/</span><span class="dv">2</span>)</span></code></pre></div>
+<pre><code>## 0.840131867824506</code></pre>
+<p><strong>One sided test!</strong></p>
+<div class="sourceCode" id="cb104"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb104-1"><a href="testing.html#cb104-1" aria-hidden="true" tabindex="-1"></a><span class="co"># We care only about one side since we do know that the casino makes</span></span>
+<span id="cb104-2"><a href="testing.html#cb104-2" aria-hidden="true" tabindex="-1"></a><span class="co"># money off upward biased dice.</span></span>
+<span id="cb104-3"><a href="testing.html#cb104-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb104-4"><a href="testing.html#cb104-4" aria-hidden="true" tabindex="-1"></a>critValue <span class="op">=</span> norm.ppf(<span class="dv">1</span><span class="op">-</span>a)</span>
+<span id="cb104-5"><a href="testing.html#cb104-5" aria-hidden="true" tabindex="-1"></a>z <span class="op">=</span> (<span class="fl">3.8</span><span class="op">-</span><span class="fl">3.5</span>)<span class="op">/</span>(<span class="fl">1.7</span><span class="op">/</span>np.sqrt(n))</span>
+<span id="cb104-6"><a href="testing.html#cb104-6" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (z <span class="op">&lt;</span> critValue):</span>
+<span id="cb104-7"><a href="testing.html#cb104-7" aria-hidden="true" tabindex="-1"></a>    s <span class="op">=</span> <span class="st">&quot;not&quot;</span></span>
+<span id="cb104-8"><a href="testing.html#cb104-8" aria-hidden="true" tabindex="-1"></a>    s2 <span class="op">=</span> <span class="st">&quot;fail to&quot;</span></span>
+<span id="cb104-9"><a href="testing.html#cb104-9" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span>:</span>
+<span id="cb104-10"><a href="testing.html#cb104-10" aria-hidden="true" tabindex="-1"></a>    s <span class="op">=</span> <span class="st">&quot;&quot;</span>   </span>
+<span id="cb104-11"><a href="testing.html#cb104-11" aria-hidden="true" tabindex="-1"></a>    s2 <span class="op">=</span> <span class="st">&quot;&quot;</span></span>
+<span id="cb104-12"><a href="testing.html#cb104-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb104-13"><a href="testing.html#cb104-13" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;The test statistic t =&quot;</span>, np.<span class="bu">round</span>(z,<span class="dv">3</span>), <span class="st">&quot;is&quot;</span>, s ,<span class="st">&quot;larger than the critical value&quot;</span>,np.<span class="bu">round</span>(critValue,<span class="dv">3</span>), <span class="st">&quot;so we&quot;</span>,s2,<span class="st">&quot;reject the Null&quot;</span> )</span>
+<span id="cb104-14"><a href="testing.html#cb104-14" aria-hidden="true" tabindex="-1"></a><span class="co">#norm.cdf(1-a)</span></span></code></pre></div>
+<pre><code>## The test statistic t = 2.496 is  larger than the critical value 2.326 so we  reject the Null</code></pre>
+<p><strong>p-value</strong></p>
+<div class="sourceCode" id="cb106"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb106-1"><a href="testing.html#cb106-1" aria-hidden="true" tabindex="-1"></a><span class="co">#p-value is the right tail probability of values equal or larger than your test statistic</span></span>
+<span id="cb106-2"><a href="testing.html#cb106-2" aria-hidden="true" tabindex="-1"></a>pVal <span class="op">=</span> <span class="dv">1</span><span class="op">-</span>norm.cdf(z)</span>
+<span id="cb106-3"><a href="testing.html#cb106-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;The p value &quot;</span>, np.<span class="bu">round</span>(pVal,<span class="dv">3</span>), <span class="st">&quot;is less than alpha&quot;</span>, a, <span class="st">&quot;so we reject the Null&quot;</span>)</span></code></pre></div>
+<pre><code>## The p value  0.006 is less than alpha 0.01 so we reject the Null</code></pre>
+</div>
+<div id="non-parametric-tests" class="section level2" number="3.3">
+<h2><span class="header-section-number">3.3</span> Non parametric Tests</h2>
+<p>Parametric Tests require many assumptions, that may not always be true, and are also a bit abstract. It often helps (i) robustness and (ii) the understanding of the testing process to use simulations instead.
+We now learn about two different ways of such simulations, each following the basic “pipeline”:</p>
+<ol style="list-style-type: decimal">
+<li>Clearly define the Null hypothesis.</li>
+<li>Define the test statistic.</li>
+<li>Generate many sets of simulated data (bootstrap replicates) <strong>assuming the null hypothesis is true</strong></li>
+<li>Compute the test statistic for each simulated data set</li>
+<li>The p-value is the fraction of your simulated data sets for which the test statistic is at least as extreme as for the real data</li>
+</ol>
+</div>
+<div id="bootstrap-hypothesis-tests" class="section level2" number="3.4">
+<h2><span class="header-section-number">3.4</span> Bootstrap Hypothesis Tests</h2>
+<p>Besides computing confidence intervals we can also use the bootstrap to perform hypothesis test.
+We need to “fake” the process of drawing new samples again and again under the Null hypothesis, which might appear impossible since our one sample likely will have a sample mean not equal to <span class="math inline">\(\mu_0\)</span>.</p>
+<p>The trick is to “shift” our data such that <span class="math inline">\(\bar{x} = \mu_0\)</span>!
+As a test statistic we use the difference of the mean of the bootstrap value minus <span class="math inline">\(\mu_0\)</span>. Notice that there is no need to scale this difference!</p>
+<p>We illustrate this with our casino example.</p>
+<div class="sourceCode" id="cb108"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb108-1"><a href="testing.html#cb108-1" aria-hidden="true" tabindex="-1"></a>np.random.choice(<span class="dv">6</span>,<span class="dv">20</span>)<span class="op">+</span><span class="dv">1</span></span></code></pre></div>
+<pre><code>## array([3, 4, 6, 4, 2, 1, 2, 5, 5, 1, 5, 2, 3, 5, 5, 6, 4, 6, 5, 4])</code></pre>
+<div class="sourceCode" id="cb110"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb110-1"><a href="testing.html#cb110-1" aria-hidden="true" tabindex="-1"></a>np.random.seed(<span class="dv">123</span>)</span>
+<span id="cb110-2"><a href="testing.html#cb110-2" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> np.random.choice(<span class="dv">6</span>,n,p<span class="op">=</span>[<span class="fl">0.14</span>,<span class="fl">0.14</span>,<span class="fl">0.15</span>,<span class="fl">0.18</span>,<span class="fl">0.19</span>,<span class="fl">0.20</span>])<span class="op">+</span><span class="dv">1</span> <span class="co">#add a bias</span></span>
+<span id="cb110-3"><a href="testing.html#cb110-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb110-4"><a href="testing.html#cb110-4" aria-hidden="true" tabindex="-1"></a>a<span class="op">=</span><span class="fl">0.01</span></span>
+<span id="cb110-5"><a href="testing.html#cb110-5" aria-hidden="true" tabindex="-1"></a>n<span class="op">=</span><span class="dv">400</span></span>
+<span id="cb110-6"><a href="testing.html#cb110-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb110-7"><a href="testing.html#cb110-7" aria-hidden="true" tabindex="-1"></a>mu0<span class="op">=</span><span class="fl">3.5</span></span>
+<span id="cb110-8"><a href="testing.html#cb110-8" aria-hidden="true" tabindex="-1"></a>xBar <span class="op">=</span> np.<span class="bu">round</span>(np.mean(x),<span class="dv">2</span>)</span>
+<span id="cb110-9"><a href="testing.html#cb110-9" aria-hidden="true" tabindex="-1"></a>obsDiff <span class="op">=</span> np.<span class="bu">round</span>(mu0<span class="op">-</span>xBar,<span class="dv">2</span>)</span>
+<span id="cb110-10"><a href="testing.html#cb110-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;The sample mean is&quot;</span>, xBar, <span class="st">&quot;, so we shift our data by&quot;</span>, obsDiff)</span></code></pre></div>
+<pre><code>## The sample mean is 3.78 , so we shift our data by -0.28</code></pre>
+<div class="sourceCode" id="cb112"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb112-1"><a href="testing.html#cb112-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Alternatively, if we had not shifted our data</span></span>
+<span id="cb112-2"><a href="testing.html#cb112-2" aria-hidden="true" tabindex="-1"></a><span class="co">#TS = bs_mean_dice-xBar</span></span>
+<span id="cb112-3"><a href="testing.html#cb112-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb112-4"><a href="testing.html#cb112-4" aria-hidden="true" tabindex="-1"></a><span class="co">#The test statistic</span></span>
+<span id="cb112-5"><a href="testing.html#cb112-5" aria-hidden="true" tabindex="-1"></a>bs_mean_dice <span class="op">=</span> draw_bs_reps(x<span class="op">+</span>obsDiff,np.mean,<span class="dv">10000</span>)</span>
+<span id="cb112-6"><a href="testing.html#cb112-6" aria-hidden="true" tabindex="-1"></a>TS <span class="op">=</span> bs_mean_dice<span class="op">-</span>mu0</span>
+<span id="cb112-7"><a href="testing.html#cb112-7" aria-hidden="true" tabindex="-1"></a>plt.hist(TS)<span class="op">;</span></span></code></pre></div>
+<div class="sourceCode" id="cb113"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb113-1"><a href="testing.html#cb113-1" aria-hidden="true" tabindex="-1"></a><span class="co">#two sided p value</span></span>
+<span id="cb113-2"><a href="testing.html#cb113-2" aria-hidden="true" tabindex="-1"></a>pVal <span class="op">=</span> np.mean( <span class="bu">abs</span>(TS) <span class="op">&gt;</span> <span class="fl">0.3</span>)</span>
+<span id="cb113-3"><a href="testing.html#cb113-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;The two sided p value of&quot;</span>, np.<span class="bu">round</span>(pVal,<span class="dv">3</span>), <span class="st">&quot;is not smaller than alpha=&quot;</span>,a,<span class="st">&quot;so we fail to reject the Null.&quot;</span> )</span></code></pre></div>
+<pre><code>## The two sided p value of 0.007 is not smaller than alpha= 0.01 so we fail to reject the Null.</code></pre>
+<p><strong>Tasks</strong>
+- Test <span class="math inline">\(H_0: \mu \geq 30, H_A: \mu &lt; 30\)</span> for the mean mpg of 4-cylinder cars
+* using bootstrap replicates
+* via standard testing theory.
+- Compute the corresponding <strong>p-values</strong>.</p>
+<div class="sourceCode" id="cb115"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb115-1"><a href="testing.html#cb115-1" aria-hidden="true" tabindex="-1"></a>mu0<span class="op">=</span><span class="dv">30</span></span>
+<span id="cb115-2"><a href="testing.html#cb115-2" aria-hidden="true" tabindex="-1"></a>empirical_mean <span class="op">=</span> np.mean(cars4.mpg)</span></code></pre></div>
+<div class="sourceCode" id="cb116"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb116-1"><a href="testing.html#cb116-1" aria-hidden="true" tabindex="-1"></a><span class="co">#assume the claim is true !!</span></span>
+<span id="cb116-2"><a href="testing.html#cb116-2" aria-hidden="true" tabindex="-1"></a>shift <span class="op">=</span> mu0<span class="op">-</span>empirical_mean</span>
+<span id="cb116-3"><a href="testing.html#cb116-3" aria-hidden="true" tabindex="-1"></a>cars4Shifted<span class="op">=</span> cars4.mpg<span class="op">+</span>shift</span>
+<span id="cb116-4"><a href="testing.html#cb116-4" aria-hidden="true" tabindex="-1"></a>bs_mean_mpg <span class="op">=</span> draw_bs_reps(cars4Shifted,np.mean,<span class="dv">10000</span>)</span>
+<span id="cb116-5"><a href="testing.html#cb116-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb116-6"><a href="testing.html#cb116-6" aria-hidden="true" tabindex="-1"></a><span class="co">#The test statistic</span></span>
+<span id="cb116-7"><a href="testing.html#cb116-7" aria-hidden="true" tabindex="-1"></a>TS <span class="op">=</span> bs_mean_mpg<span class="op">-</span>mu0</span>
+<span id="cb116-8"><a href="testing.html#cb116-8" aria-hidden="true" tabindex="-1"></a>pVal <span class="op">=</span> np.mean( TS <span class="op">&lt;</span> <span class="op">-</span>shift)</span></code></pre></div>
+<div class="sourceCode" id="cb117"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb117-1"><a href="testing.html#cb117-1" aria-hidden="true" tabindex="-1"></a><span class="co">#assume the claim is true !!</span></span>
+<span id="cb117-2"><a href="testing.html#cb117-2" aria-hidden="true" tabindex="-1"></a>shift <span class="op">=</span> mu0<span class="op">-</span>empirical_mean</span>
+<span id="cb117-3"><a href="testing.html#cb117-3" aria-hidden="true" tabindex="-1"></a>cars4Shifted<span class="op">=</span> cars4.mpg<span class="op">+</span>shift</span>
+<span id="cb117-4"><a href="testing.html#cb117-4" aria-hidden="true" tabindex="-1"></a>bs_mean_mpg <span class="op">=</span> draw_bs_reps(cars4Shifted,np.mean,<span class="dv">10000</span>)</span>
+<span id="cb117-5"><a href="testing.html#cb117-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb117-6"><a href="testing.html#cb117-6" aria-hidden="true" tabindex="-1"></a><span class="co">#The test statistic</span></span>
+<span id="cb117-7"><a href="testing.html#cb117-7" aria-hidden="true" tabindex="-1"></a>TS <span class="op">=</span> bs_mean_mpg<span class="op">-</span>mu0</span>
+<span id="cb117-8"><a href="testing.html#cb117-8" aria-hidden="true" tabindex="-1"></a>pVal <span class="op">=</span> np.mean( TS <span class="op">&lt;</span> <span class="op">-</span>shift)</span>
+<span id="cb117-9"><a href="testing.html#cb117-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb117-10"><a href="testing.html#cb117-10" aria-hidden="true" tabindex="-1"></a>plt.hist(TS)<span class="op">;</span></span>
+<span id="cb117-11"><a href="testing.html#cb117-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb117-12"><a href="testing.html#cb117-12" aria-hidden="true" tabindex="-1"></a><span class="co">#np.percentile(bs_mean_mpg,5)</span></span>
+<span id="cb117-13"><a href="testing.html#cb117-13" aria-hidden="true" tabindex="-1"></a><span class="co">#p value is simply the left tail beyond xBar</span></span>
+<span id="cb117-14"><a href="testing.html#cb117-14" aria-hidden="true" tabindex="-1"></a><span class="co">#np.mean(bs_mean_mpg &lt; empirical_mean)</span></span></code></pre></div>
+<pre><code>## (array([  11.,   95.,  537., 1691., 2960., 2731., 1435.,  442.,   90.,
+##           8.]), array([-1.54321608, -1.22994975, -0.91668342, -0.60341709, -0.29015075,
+##         0.02311558,  0.33638191,  0.64964824,  0.96291457,  1.2761809 ,
+##         1.58944724]), &lt;BarContainer object of 10 artists&gt;)</code></pre>
+<div class="sourceCode" id="cb119"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb119-1"><a href="testing.html#cb119-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&#39;shift =&#39;</span>,shift)</span></code></pre></div>
+<pre><code>## shift = 0.71608040201005</code></pre>
+<div class="sourceCode" id="cb121"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb121-1"><a href="testing.html#cb121-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;pValue =&quot;</span>, pVal)</span></code></pre></div>
+<pre><code>## pValue = 0.0375</code></pre>
+<div id="from-one-sample-to-2-samples" class="section level3 unlisted unnumbered">
+<h3>From one sample to 2 samples</h3>
+<p>From Auto to birth weights</p>
+<div class="sourceCode" id="cb123"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb123-1"><a href="testing.html#cb123-1" aria-hidden="true" tabindex="-1"></a>preg<span class="op">=</span>pd.read_hdf(<span class="st">&#39;../data/pregNSFG.h5&#39;</span>, <span class="st">&#39;df&#39;</span>)</span>
+<span id="cb123-2"><a href="testing.html#cb123-2" aria-hidden="true" tabindex="-1"></a><span class="co">#only look at live births</span></span>
+<span id="cb123-3"><a href="testing.html#cb123-3" aria-hidden="true" tabindex="-1"></a>firsts <span class="op">=</span> preg[(preg.outcome <span class="op">==</span> <span class="dv">1</span>) <span class="op">&amp;</span> (preg.birthord <span class="op">==</span> <span class="dv">1</span>)]</span>
+<span id="cb123-4"><a href="testing.html#cb123-4" aria-hidden="true" tabindex="-1"></a><span class="co">#live[live.babysex == 1].babysex = &quot;male&quot;</span></span>
+<span id="cb123-5"><a href="testing.html#cb123-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb123-6"><a href="testing.html#cb123-6" aria-hidden="true" tabindex="-1"></a><span class="co">#we reduce the sample size further by conditioning on</span></span>
+<span id="cb123-7"><a href="testing.html#cb123-7" aria-hidden="true" tabindex="-1"></a><span class="co">#the mother&#39;s age at the end of pregnancy</span></span>
+<span id="cb123-8"><a href="testing.html#cb123-8" aria-hidden="true" tabindex="-1"></a>firsts <span class="op">=</span> firsts[(firsts.agepreg <span class="op">&lt;</span> <span class="dv">30</span>) <span class="op">&amp;</span> (firsts.prglngth <span class="op">&gt;=</span> <span class="dv">30</span>)]</span>
+<span id="cb123-9"><a href="testing.html#cb123-9" aria-hidden="true" tabindex="-1"></a>bwt <span class="op">=</span> firsts[[<span class="st">&quot;babysex&quot;</span>,<span class="st">&quot;totalwgt_lb&quot;</span>]]</span>
+<span id="cb123-10"><a href="testing.html#cb123-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb123-11"><a href="testing.html#cb123-11" aria-hidden="true" tabindex="-1"></a>bwt.babysex.replace([<span class="fl">1.0</span>],<span class="st">&quot;male&quot;</span>,inplace<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb123-12"><a href="testing.html#cb123-12" aria-hidden="true" tabindex="-1"></a>bwt.babysex.replace([<span class="fl">2.0</span>],<span class="st">&quot;female&quot;</span>,inplace<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb123-13"><a href="testing.html#cb123-13" aria-hidden="true" tabindex="-1"></a>bwt <span class="op">=</span> bwt.dropna()</span></code></pre></div>
+<div class="sourceCode" id="cb124"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb124-1"><a href="testing.html#cb124-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&#39;shape:&#39;</span>,bwt.shape)</span></code></pre></div>
+<pre><code>## shape: (3758, 2)</code></pre>
+<div class="sourceCode" id="cb126"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb126-1"><a href="testing.html#cb126-1" aria-hidden="true" tabindex="-1"></a>bwt.head()</span></code></pre></div>
+<pre><code>##    babysex  totalwgt_lb
+## 2     male       9.1250
+## 5     male       8.5625
+## 8     male       7.5625
+## 10    male       7.8125
+## 11  female       7.0000</code></pre>
+<div class="sourceCode" id="cb128"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb128-1"><a href="testing.html#cb128-1" aria-hidden="true" tabindex="-1"></a>grouped <span class="op">=</span> bwt[<span class="st">&quot;totalwgt_lb&quot;</span>].groupby(bwt[<span class="st">&quot;babysex&quot;</span>])</span>
+<span id="cb128-2"><a href="testing.html#cb128-2" aria-hidden="true" tabindex="-1"></a>grouped.mean()</span></code></pre></div>
+<pre><code>## babysex
+## female    7.103830
+## male      7.378682
+## Name: totalwgt_lb, dtype: float64</code></pre>
+<div class="sourceCode" id="cb130"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb130-1"><a href="testing.html#cb130-1" aria-hidden="true" tabindex="-1"></a>tmp<span class="op">=</span>grouped.plot(kind<span class="op">=</span><span class="st">&#39;density&#39;</span>, legend<span class="op">=</span><span class="va">True</span>)<span class="op">;</span></span></code></pre></div>
+</div>
+<div id="a-two-sample-bootstrap-hypothesis-test-for-difference-of-means" class="section level3" number="3.4.1">
+<h3><span class="header-section-number">3.4.1</span> A two-sample bootstrap hypothesis test for difference of means</h3>
+<p>A one sample test compares a data set to one fixed number !</p>
+<p>We now want to compare two sets of data, both of which are samples! In particular test the hypothesis that male and female babies have the same biological weight (but not necessarily the same distribution).</p>
+<p><span class="math inline">\(H_0: \mu_m = \mu_f, H_A: \mu_m \neq \mu_f\)</span></p>
+<p>To do the two-sample bootstrap test, we shift both arrays to have the same mean, since we are simulating the hypothesis that their means are, in fact, equal (<strong>equal to what value ??</strong>). We then draw bootstrap samples out of the shifted arrays and compute the difference in means. This constitutes a bootstrap replicate, and we generate many of them. The p-value is the fraction of replicates with a difference in means greater than or equal to what was observed.</p>
+<div class="sourceCode" id="cb131"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb131-1"><a href="testing.html#cb131-1" aria-hidden="true" tabindex="-1"></a>meanNull <span class="op">=</span> np.mean(bwt.totalwgt_lb)<span class="co"># pooled mean</span></span>
+<span id="cb131-2"><a href="testing.html#cb131-2" aria-hidden="true" tabindex="-1"></a>w_m <span class="op">=</span> bwt[bwt[<span class="st">&quot;babysex&quot;</span>]<span class="op">==</span><span class="st">&quot;male&quot;</span>].totalwgt_lb</span>
+<span id="cb131-3"><a href="testing.html#cb131-3" aria-hidden="true" tabindex="-1"></a>w_f <span class="op">=</span> bwt[bwt[<span class="st">&quot;babysex&quot;</span>]<span class="op">==</span><span class="st">&quot;female&quot;</span>].totalwgt_lb</span>
+<span id="cb131-4"><a href="testing.html#cb131-4" aria-hidden="true" tabindex="-1"></a>empirical_diff_means <span class="op">=</span> np.mean(w_m)<span class="op">-</span>np.mean(w_f)</span>
+<span id="cb131-5"><a href="testing.html#cb131-5" aria-hidden="true" tabindex="-1"></a><span class="co">#shift:</span></span>
+<span id="cb131-6"><a href="testing.html#cb131-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb131-7"><a href="testing.html#cb131-7" aria-hidden="true" tabindex="-1"></a>w_m_shifted <span class="op">=</span> w_m <span class="op">-</span> np.mean(w_m) <span class="op">+</span> meanNull</span>
+<span id="cb131-8"><a href="testing.html#cb131-8" aria-hidden="true" tabindex="-1"></a>w_f_shifted <span class="op">=</span> w_f <span class="op">-</span> np.mean(w_f) <span class="op">+</span> meanNull</span>
+<span id="cb131-9"><a href="testing.html#cb131-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb131-10"><a href="testing.html#cb131-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb131-11"><a href="testing.html#cb131-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute 10,000 bootstrap replicates from shifted arrays</span></span>
+<span id="cb131-12"><a href="testing.html#cb131-12" aria-hidden="true" tabindex="-1"></a>M<span class="op">=</span><span class="dv">1000</span></span>
+<span id="cb131-13"><a href="testing.html#cb131-13" aria-hidden="true" tabindex="-1"></a>bs_replicates_m <span class="op">=</span> draw_bs_reps(w_m_shifted, np.mean, M)</span>
+<span id="cb131-14"><a href="testing.html#cb131-14" aria-hidden="true" tabindex="-1"></a>bs_replicates_f <span class="op">=</span> draw_bs_reps(w_f_shifted, np.mean, M)</span>
+<span id="cb131-15"><a href="testing.html#cb131-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb131-16"><a href="testing.html#cb131-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Get replicates of difference of means: bs_replicates</span></span>
+<span id="cb131-17"><a href="testing.html#cb131-17" aria-hidden="true" tabindex="-1"></a>bs_replicates <span class="op">=</span> bs_replicates_m <span class="op">-</span> bs_replicates_f</span>
+<span id="cb131-18"><a href="testing.html#cb131-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb131-19"><a href="testing.html#cb131-19" aria-hidden="true" tabindex="-1"></a>tmp<span class="op">=</span>plt.hist(bs_replicates)</span>
+<span id="cb131-20"><a href="testing.html#cb131-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute and print p-value: p</span></span></code></pre></div>
+<div class="sourceCode" id="cb132"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb132-1"><a href="testing.html#cb132-1" aria-hidden="true" tabindex="-1"></a><span class="co">#debugging:</span></span>
+<span id="cb132-2"><a href="testing.html#cb132-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="dv">0</span>:</span>
+<span id="cb132-3"><a href="testing.html#cb132-3" aria-hidden="true" tabindex="-1"></a>    meanNull</span>
+<span id="cb132-4"><a href="testing.html#cb132-4" aria-hidden="true" tabindex="-1"></a>    <span class="co">#plt.hist(w_f_shifted)</span></span>
+<span id="cb132-5"><a href="testing.html#cb132-5" aria-hidden="true" tabindex="-1"></a>    <span class="co">#plt.hist(bs_replicates_m)</span></span>
+<span id="cb132-6"><a href="testing.html#cb132-6" aria-hidden="true" tabindex="-1"></a>    <span class="co">#bs_replicates_m</span></span>
+<span id="cb132-7"><a href="testing.html#cb132-7" aria-hidden="true" tabindex="-1"></a>    w_m_bs <span class="op">=</span> np.random.choice(w_m, size<span class="op">=</span><span class="bu">len</span>(w_m))</span>
+<span id="cb132-8"><a href="testing.html#cb132-8" aria-hidden="true" tabindex="-1"></a>    np.nanmean(w_m_bs)</span>
+<span id="cb132-9"><a href="testing.html#cb132-9" aria-hidden="true" tabindex="-1"></a>    np.argwhere(np.isnan(w_m_bs))</span>
+<span id="cb132-10"><a href="testing.html#cb132-10" aria-hidden="true" tabindex="-1"></a>    np.argwhere(np.isnan(w_m))</span>
+<span id="cb132-11"><a href="testing.html#cb132-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb132-12"><a href="testing.html#cb132-12" aria-hidden="true" tabindex="-1"></a><span class="co">#p-value (one-sided):</span></span>
+<span id="cb132-13"><a href="testing.html#cb132-13" aria-hidden="true" tabindex="-1"></a>pVal <span class="op">=</span> np.mean(bs_replicates<span class="op">&gt;</span> empirical_diff_means)</span>
+<span id="cb132-14"><a href="testing.html#cb132-14" aria-hidden="true" tabindex="-1"></a><span class="co">#cutoff right tail</span></span>
+<span id="cb132-15"><a href="testing.html#cb132-15" aria-hidden="true" tabindex="-1"></a><span class="co">#np.percentile(bs_replicates, 95)</span></span>
+<span id="cb132-16"><a href="testing.html#cb132-16" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;The one sided p value of&quot;</span>, np.<span class="bu">round</span>(pVal,<span class="dv">3</span>), <span class="st">&quot;is much smaller than alpha=&quot;</span>,a,<span class="st">&quot;, so we fail to reject the Null&quot;</span> )</span></code></pre></div>
+<pre><code>## The one sided p value of 0.0 is much smaller than alpha= 0.01 , so we fail to reject the Null</code></pre>
+<div class="sourceCode" id="cb134"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb134-1"><a href="testing.html#cb134-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;-&gt; The observed difference of &quot;</span>, np.<span class="bu">round</span>(empirical_diff_means,<span class="dv">3</span>), <span class="st">&quot;is exremely unlikely to have occurred by chance alone&quot;</span>)</span></code></pre></div>
+<pre><code>## -&gt; The observed difference of  0.275 is exremely unlikely to have occurred by chance alone</code></pre>
+
+</div>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="sampling-uncertainty.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="advanced-tests.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["BIPM_DS.pdf", "BIPM_DS.epub"],
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

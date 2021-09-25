@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Lesson 6 Multiple Linear Regression | 581092 Data Science</title>
+  <meta name="description" content="Welcome to most important course you’ll ever take: Data Science 🙄" />
+  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Lesson 6 Multiple Linear Regression | 581092 Data Science" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="Welcome to most important course you’ll ever take: Data Science 🙄" />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Lesson 6 Multiple Linear Regression | 581092 Data Science" />
+  
+  <meta name="twitter:description" content="Welcome to most important course you’ll ever take: Data Science 🙄" />
+  
+
+<meta name="author" content="M Loecher" />
+
+
+<meta name="date" content="2021-09-24" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="simple-linear-regressio.html"/>
+<link rel="next" href="advanced-linear-regression.html"/>
+<script src="libs/header-attrs-2.7/header-attrs.js"></script>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">BIPM Data Science</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a>
+<ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#course-components"><i class="fa fa-check"></i>Course components</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#grading"><i class="fa fa-check"></i>Grading</a>
+<ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#software-and-environments"><i class="fa fa-check"></i>Software and Environments</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="1" data-path="statistical-thinking-i.html"><a href="statistical-thinking-i.html"><i class="fa fa-check"></i><b>1</b> Statistical Thinking I</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="statistical-thinking-i.html"><a href="statistical-thinking-i.html#overview"><i class="fa fa-check"></i><b>1.1</b> Overview</a></li>
+<li class="chapter" data-level="1.2" data-path="statistical-thinking-i.html"><a href="statistical-thinking-i.html#contingency-tables-as-simple-models"><i class="fa fa-check"></i><b>1.2</b> Contingency Tables as simple models</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="sampling-uncertainty.html"><a href="sampling-uncertainty.html"><i class="fa fa-check"></i><b>2</b> Sampling Uncertainty</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="sampling-uncertainty.html"><a href="sampling-uncertainty.html#ab-testing"><i class="fa fa-check"></i><b>2.1</b> A/B Testing</a></li>
+<li class="chapter" data-level="2.2" data-path="sampling-uncertainty.html"><a href="sampling-uncertainty.html#distributions"><i class="fa fa-check"></i><b>2.2</b> Distributions</a></li>
+<li class="chapter" data-level="2.3" data-path="sampling-uncertainty.html"><a href="sampling-uncertainty.html#hacker-statistic"><i class="fa fa-check"></i><b>2.3</b> Hacker Statistic</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="testing.html"><a href="testing.html"><i class="fa fa-check"></i><b>3</b> Testing</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="testing.html"><a href="testing.html#hypothesis-tests"><i class="fa fa-check"></i><b>3.1</b> Hypothesis Tests</a></li>
+<li class="chapter" data-level="3.2" data-path="testing.html"><a href="testing.html#parametric-tests"><i class="fa fa-check"></i><b>3.2</b> Parametric Tests</a></li>
+<li class="chapter" data-level="3.3" data-path="testing.html"><a href="testing.html#non-parametric-tests"><i class="fa fa-check"></i><b>3.3</b> Non parametric Tests</a></li>
+<li class="chapter" data-level="3.4" data-path="testing.html"><a href="testing.html#bootstrap-hypothesis-tests"><i class="fa fa-check"></i><b>3.4</b> Bootstrap Hypothesis Tests</a>
+<ul>
+<li class="chapter" data-level="3.4.1" data-path="testing.html"><a href="testing.html#a-two-sample-bootstrap-hypothesis-test-for-difference-of-means"><i class="fa fa-check"></i><b>3.4.1</b> A two-sample bootstrap hypothesis test for difference of means</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="advanced-tests.html"><a href="advanced-tests.html"><i class="fa fa-check"></i><b>4</b> Advanced Tests</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="advanced-tests.html"><a href="advanced-tests.html#permutation-2-sample-test"><i class="fa fa-check"></i><b>4.1</b> Permutation 2-sample test</a></li>
+<li class="chapter" data-level="4.2" data-path="advanced-tests.html"><a href="advanced-tests.html#sample-t-test"><i class="fa fa-check"></i><b>4.2</b> 2-sample t test</a></li>
+<li class="chapter" data-level="4.3" data-path="advanced-tests.html"><a href="advanced-tests.html#random-walks"><i class="fa fa-check"></i><b>4.3</b> Random Walks</a>
+<ul>
+<li class="chapter" data-level="4.3.1" data-path="advanced-tests.html"><a href="advanced-tests.html#the-sqrtn-law-again"><i class="fa fa-check"></i><b>4.3.1</b> The <span class="math inline">\(\sqrt{n}\)</span> law again !</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="simple-linear-regressio.html"><a href="simple-linear-regressio.html"><i class="fa fa-check"></i><b>5</b> Simple Linear Regressio</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="simple-linear-regressio.html"><a href="simple-linear-regressio.html#loss-functions"><i class="fa fa-check"></i><b>5.1</b> Loss Functions</a></li>
+<li class="chapter" data-level="5.2" data-path="simple-linear-regressio.html"><a href="simple-linear-regressio.html#least-squares"><i class="fa fa-check"></i><b>5.2</b> Least Squares</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html"><i class="fa fa-check"></i><b>6</b> Multiple Linear Regression</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#statsmodels"><i class="fa fa-check"></i><b>6.1</b> Statsmodels</a></li>
+<li class="chapter" data-level="6.2" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#other-considerations-in-the-regression-model"><i class="fa fa-check"></i><b>6.2</b> Other Considerations in the Regression Model</a></li>
+<li class="chapter" data-level="6.3" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#categorical-variables"><i class="fa fa-check"></i><b>6.3</b> Categorical Variables</a></li>
+<li class="chapter" data-level="6.4" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#interactions"><i class="fa fa-check"></i><b>6.4</b> Interactions</a></li>
+<li class="chapter" data-level="6.5" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#non-linear-relationships"><i class="fa fa-check"></i><b>6.5</b> Non-linear relationships</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="advanced-linear-regression.html"><a href="advanced-linear-regression.html"><i class="fa fa-check"></i><b>7</b> Advanced Linear Regression</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="advanced-linear-regression.html"><a href="advanced-linear-regression.html#dummy-coding"><i class="fa fa-check"></i><b>7.1</b> Dummy Coding</a></li>
+<li class="chapter" data-level="7.2" data-path="advanced-linear-regression.html"><a href="advanced-linear-regression.html#overfitting"><i class="fa fa-check"></i><b>7.2</b> Overfitting</a></li>
+<li class="chapter" data-level="7.3" data-path="advanced-linear-regression.html"><a href="advanced-linear-regression.html#cross-validation"><i class="fa fa-check"></i><b>7.3</b> Cross Validation</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="classification.html"><a href="classification.html"><i class="fa fa-check"></i><b>8</b> Classification</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="classification.html"><a href="classification.html#datasets"><i class="fa fa-check"></i><b>8.1</b> Datasets</a></li>
+<li class="chapter" data-level="8.2" data-path="classification.html"><a href="classification.html#logistic-regression"><i class="fa fa-check"></i><b>8.2</b> Logistic Regression</a></li>
+<li class="chapter" data-level="8.3" data-path="classification.html"><a href="classification.html#other-classifiers"><i class="fa fa-check"></i><b>8.3</b> Other Classifiers</a>
+<ul>
+<li class="chapter" data-level="8.3.1" data-path="classification.html"><a href="classification.html#k-nearest-neighbors"><i class="fa fa-check"></i><b>8.3.1</b> K Nearest Neighbors</a></li>
+<li class="chapter" data-level="8.3.2" data-path="classification.html"><a href="classification.html#multinomial-logistic-regression"><i class="fa fa-check"></i><b>8.3.2</b> Multinomial Logistic Regression</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="regularized-regression.html"><a href="regularized-regression.html"><i class="fa fa-check"></i><b>9</b> Regularized Regression</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="regularized-regression.html"><a href="regularized-regression.html#other-classifiers-1"><i class="fa fa-check"></i><b>9.1</b> Other Classifiers</a>
+<ul>
+<li class="chapter" data-level="9.1.1" data-path="regularized-regression.html"><a href="regularized-regression.html#k-nearest-neighbors-knn"><i class="fa fa-check"></i><b>9.1.1</b> K-Nearest Neighbors (KNN)</a></li>
+<li class="chapter" data-level="9.1.2" data-path="regularized-regression.html"><a href="regularized-regression.html#multinomial-logistic-regression-1"><i class="fa fa-check"></i><b>9.1.2</b> Multinomial Logistic Regression</a></li>
+<li class="chapter" data-level="9.1.3" data-path="regularized-regression.html"><a href="regularized-regression.html#roc-curves"><i class="fa fa-check"></i><b>9.1.3</b> ROC Curves</a></li>
+<li class="chapter" data-level="9.1.4" data-path="regularized-regression.html"><a href="regularized-regression.html#regularized-regression-1"><i class="fa fa-check"></i><b>9.1.4</b> Regularized Regression</a></li>
+<li class="chapter" data-level="9.1.5" data-path="regularized-regression.html"><a href="regularized-regression.html#kaggle"><i class="fa fa-check"></i><b>9.1.5</b> Kaggle</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="trees.html"><a href="trees.html"><i class="fa fa-check"></i><b>10</b> Trees</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="trees.html"><a href="trees.html#node-impurity"><i class="fa fa-check"></i><b>10.1</b> Node Impurity</a></li>
+<li class="chapter" data-level="10.2" data-path="trees.html"><a href="trees.html#regression-trees"><i class="fa fa-check"></i><b>10.2</b> Regression Trees</a></li>
+<li class="chapter" data-level="10.3" data-path="trees.html"><a href="trees.html#classification-trees"><i class="fa fa-check"></i><b>10.3</b> Classification Trees</a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="from-trees-to-forests.html"><a href="from-trees-to-forests.html"><i class="fa fa-check"></i><b>11</b> From Trees to Forests</a>
+<ul>
+<li class="chapter" data-level="11.1" data-path="from-trees-to-forests.html"><a href="from-trees-to-forests.html#classification-tree"><i class="fa fa-check"></i><b>11.1</b> Classification Tree</a></li>
+<li class="chapter" data-level="11.2" data-path="from-trees-to-forests.html"><a href="from-trees-to-forests.html#ensembles-of-estimators"><i class="fa fa-check"></i><b>11.2</b> Ensembles of Estimators</a></li>
+<li class="chapter" data-level="11.3" data-path="from-trees-to-forests.html"><a href="from-trees-to-forests.html#bagging"><i class="fa fa-check"></i><b>11.3</b> Bagging</a></li>
+<li class="chapter" data-level="11.4" data-path="from-trees-to-forests.html"><a href="from-trees-to-forests.html#random-forests"><i class="fa fa-check"></i><b>11.4</b> Random Forests</a></li>
+</ul></li>
+<li class="chapter" data-level="12" data-path="explainable-ml.html"><a href="explainable-ml.html"><i class="fa fa-check"></i><b>12</b> Explainable ML</a>
+<ul>
+<li class="chapter" data-level="12.1" data-path="explainable-ml.html"><a href="explainable-ml.html#partial-dependence-plots"><i class="fa fa-check"></i><b>12.1</b> Partial dependence plots</a></li>
+<li class="chapter" data-level="12.2" data-path="explainable-ml.html"><a href="explainable-ml.html#shap-values"><i class="fa fa-check"></i><b>12.2</b> SHAP values</a>
+<ul>
+<li class="chapter" data-level="12.2.1" data-path="explainable-ml.html"><a href="explainable-ml.html#titanic"><i class="fa fa-check"></i><b>12.2.1</b> Titanic</a></li>
+<li class="chapter" data-level="12.2.2" data-path="explainable-ml.html"><a href="explainable-ml.html#force-plots"><i class="fa fa-check"></i><b>12.2.2</b> Force plots</a></li>
+<li class="chapter" data-level="12.2.3" data-path="explainable-ml.html"><a href="explainable-ml.html#tasks-3"><i class="fa fa-check"></i><b>12.2.3</b> Tasks</a></li>
+</ul></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">581092 Data Science</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="multiple-linear-regression" class="section level1" number="6">
+<h1><span class="header-section-number">Lesson 6</span> Multiple Linear Regression</h1>
+<p>How can we extend our analysis of the advertising data in order
+to accommodate these two additional predictors?
+One option is to run three separate simple linear regressions, each of
+which uses a different advertising medium as a predictor.</p>
+<p>However, the approach of fitting a separate simple linear regressionmodel
+for each predictor is not entirely satisfactory. First of all, it is unclear how to
+make a single prediction of sales given levels of the three advertising media
+budgets, since each of the budgets is associated with a separate regression
+equation. Second, each of the three regression equations ignores the other
+two media in forming estimates for the regression coefficients. We will see
+shortly that if the media budgets are correlated with each other in the 200
+markets that constitute our data set, then this can lead to very misleading
+estimates of the individual media effects on sales.
+Instead of fitting a separate simple linear regression model for each predictor,
+a better approach is to extend the simple linear regression model
+(3.5) so that it can directly accommodate multiple predictors. We can do
+this by giving each predictor a separate slope coefficient in a single model.
+In general, suppose that we have p distinct predictors. Then the multiple
+linear regression model takes the form
+<span class="math display">\[
+Y = \beta_0 + \beta_1 X_1 + \ldots + \beta_p X_p + \epsilon
+\]</span></p>
+<p>We interpret <span class="math inline">\(\beta_j\)</span> as the average effect on Y of a one unit increase in <span class="math inline">\(X_j\)</span>, <strong>holding all other predictors fixed</strong>.</p>
+<p><strong>Importing Standard Libs</strong></p>
+<div class="sourceCode" id="cb282"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb282-1"><a href="multiple-linear-regression.html#cb282-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb282-2"><a href="multiple-linear-regression.html#cb282-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb282-3"><a href="multiple-linear-regression.html#cb282-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb282-4"><a href="multiple-linear-regression.html#cb282-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> mpl_toolkits.mplot3d <span class="im">import</span> axes3d</span>
+<span id="cb282-5"><a href="multiple-linear-regression.html#cb282-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
+<span id="cb282-6"><a href="multiple-linear-regression.html#cb282-6" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> scipy</span>
+<span id="cb282-7"><a href="multiple-linear-regression.html#cb282-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb282-8"><a href="multiple-linear-regression.html#cb282-8" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> scale</span>
+<span id="cb282-9"><a href="multiple-linear-regression.html#cb282-9" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> sklearn.linear_model <span class="im">as</span> skl_lm</span>
+<span id="cb282-10"><a href="multiple-linear-regression.html#cb282-10" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> mean_squared_error, r2_score</span>
+<span id="cb282-11"><a href="multiple-linear-regression.html#cb282-11" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> statsmodels.api <span class="im">as</span> sm</span>
+<span id="cb282-12"><a href="multiple-linear-regression.html#cb282-12" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> statsmodels.formula.api <span class="im">as</span> smf</span>
+<span id="cb282-13"><a href="multiple-linear-regression.html#cb282-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb282-14"><a href="multiple-linear-regression.html#cb282-14" aria-hidden="true" tabindex="-1"></a><span class="co"># %matplotlib inline</span></span>
+<span id="cb282-15"><a href="multiple-linear-regression.html#cb282-15" aria-hidden="true" tabindex="-1"></a>sns.set_style(<span class="st">&#39;white&#39;</span>)</span></code></pre></div>
+<div id="statsmodels" class="section level2" number="6.1">
+<h2><span class="header-section-number">6.1</span> Statsmodels</h2>
+<div id="table-3.3---statsmodels" class="section level3 unlisted unnumbered">
+<h3>Table 3.3 - Statsmodels</h3>
+<div class="sourceCode" id="cb283"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb283-1"><a href="multiple-linear-regression.html#cb283-1" aria-hidden="true" tabindex="-1"></a>advertising <span class="op">=</span> pd.read_csv(<span class="st">&#39;../data/Advertising.csv&#39;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb284"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb284-1"><a href="multiple-linear-regression.html#cb284-1" aria-hidden="true" tabindex="-1"></a>est <span class="op">=</span> smf.ols(<span class="st">&#39;Sales ~ Radio&#39;</span>, advertising).fit()</span>
+<span id="cb284-2"><a href="multiple-linear-regression.html#cb284-2" aria-hidden="true" tabindex="-1"></a>est.summary().tables[<span class="dv">1</span>]</span></code></pre></div>
+<pre><code>## &lt;class &#39;statsmodels.iolib.table.SimpleTable&#39;&gt;</code></pre>
+<div class="sourceCode" id="cb286"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb286-1"><a href="multiple-linear-regression.html#cb286-1" aria-hidden="true" tabindex="-1"></a>est <span class="op">=</span> smf.ols(<span class="st">&#39;Sales ~ Newspaper&#39;</span>, advertising).fit()</span>
+<span id="cb286-2"><a href="multiple-linear-regression.html#cb286-2" aria-hidden="true" tabindex="-1"></a>est.summary().tables[<span class="dv">1</span>]</span></code></pre></div>
+<pre><code>## &lt;class &#39;statsmodels.iolib.table.SimpleTable&#39;&gt;</code></pre>
+<div class="sourceCode" id="cb288"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb288-1"><a href="multiple-linear-regression.html#cb288-1" aria-hidden="true" tabindex="-1"></a>est <span class="op">=</span> smf.ols(<span class="st">&#39;Sales ~ TV&#39;</span>, advertising).fit()</span>
+<span id="cb288-2"><a href="multiple-linear-regression.html#cb288-2" aria-hidden="true" tabindex="-1"></a>est.summary().tables[<span class="dv">1</span>]</span></code></pre></div>
+<pre><code>## &lt;class &#39;statsmodels.iolib.table.SimpleTable&#39;&gt;</code></pre>
+</div>
+<div id="table-3.4-3.6---statsmodels" class="section level3 unlisted unnumbered">
+<h3>Table 3.4 &amp; 3.6 - Statsmodels</h3>
+<p>We interpret these results as follows: for a given
+amount of TV and newspaper advertising, spending an additional $1,000
+on radio advertising leads to an increase in sales by approximately 189
+units. Comparing these coefficient estimates to those displayed in Tables 3.1
+and 3.3, we notice that the multiple regression coefficient estimates for
+TV and radio are pretty similar to the simple linear regression coefficient
+estimates. However, while the newspaper regression coefficient estimate in
+Table 3.3 was significantly non-zero, the coefficient estimate for newspaper
+in the multiple regression model is close to zero, and the corresponding
+p-value is no longer significant, with a value around 0.86. This illustrates that the simple and multiple regression coefficients can be quite different.
+This difference stems from the fact that in the simple regression case, the
+slope term represents the average effect of a 1,000 increase in newspaper
+advertising, ignoring other predictors such as TV and radio. In contrast, in
+the multiple regression setting, the coefficient for newspaper represents the
+average effect of increasing newspaper spending by 1,000 <strong>while holding TV and radio fixed</strong>.</p>
+<div class="sourceCode" id="cb290"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb290-1"><a href="multiple-linear-regression.html#cb290-1" aria-hidden="true" tabindex="-1"></a>est <span class="op">=</span> smf.ols(<span class="st">&#39;Sales ~ TV + Radio + Newspaper&#39;</span>, advertising).fit()</span>
+<span id="cb290-2"><a href="multiple-linear-regression.html#cb290-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(est.summary())</span></code></pre></div>
+<pre><code>##                             OLS Regression Results                            
+## ==============================================================================
+## Dep. Variable:                  Sales   R-squared:                       0.897
+## Model:                            OLS   Adj. R-squared:                  0.896
+## Method:                 Least Squares   F-statistic:                     570.3
+## Date:                Fri, 24 Sep 2021   Prob (F-statistic):           1.58e-96
+## Time:                        17:41:23   Log-Likelihood:                -386.18
+## No. Observations:                 200   AIC:                             780.4
+## Df Residuals:                     196   BIC:                             793.6
+## Df Model:                           3                                         
+## Covariance Type:            nonrobust                                         
+## ==============================================================================
+##                  coef    std err          t      P&gt;|t|      [0.025      0.975]
+## ------------------------------------------------------------------------------
+## Intercept      2.9389      0.312      9.422      0.000       2.324       3.554
+## TV             0.0458      0.001     32.809      0.000       0.043       0.049
+## Radio          0.1885      0.009     21.893      0.000       0.172       0.206
+## Newspaper     -0.0010      0.006     -0.177      0.860      -0.013       0.011
+## ==============================================================================
+## Omnibus:                       60.414   Durbin-Watson:                   2.084
+## Prob(Omnibus):                  0.000   Jarque-Bera (JB):              151.241
+## Skew:                          -1.327   Prob(JB):                     1.44e-33
+## Kurtosis:                       6.332   Cond. No.                         454.
+## ==============================================================================
+## 
+## Notes:
+## [1] Standard Errors assume that the covariance matrix of the errors is correctly specified.</code></pre>
+</div>
+<div id="table-3.5---correlation-matrix" class="section level3 unlisted unnumbered">
+<h3>Table 3.5 - Correlation Matrix</h3>
+<p>Does it make sense for the multiple regression to suggest no relationship
+between sales and newspaper while the simple linear regression implies the
+opposite? In fact it does. Consider the correlation matrix for the three
+predictor variables and response variable, displayed in Table 3.5. Notice
+that the correlation between radio and newspaper is 0.35. This reveals a
+tendency to spend more on newspaper advertising in markets where more
+is spent on radio advertising. Now suppose that the multiple regression is
+correct and newspaper advertising has no direct impact on sales, but radio
+advertising does increase sales. Then in markets where we spend more
+on radio our sales will tend to be higher, and as our correlation matrix
+shows, we also tend to spend more on newspaper advertising in those same
+markets. Hence, in a simple linear regression which only examines sales
+versus newspaper, we will observe that higher values of newspaper tend to be
+associated with higher values of sales, even though newspaper advertising
+does not actually affect sales. So newspaper sales are a surrogate for radio
+advertising; newspaper gets “credit” for the effect of radio on sales.
+This slightly counterintuitive result is very common in many real life
+situations. Consider an absurd example to illustrate the point. Running
+a regression of shark attacks versus ice cream sales for data collected at
+a given beach community over a period of time would show a positive
+relationship, similar to that seen between sales and newspaper. Of course
+no one (yet) has suggested that ice creams should be banned at beaches
+to reduce shark attacks. In reality, higher temperatures cause more people
+to visit the beach, which in turn results in more ice cream sales and more
+shark attacks. A multiple regression of attacks versus ice cream sales and
+temperature reveals that, as intuition implies, the former predictor is no
+longer significant after adjusting for temperature.</p>
+<div class="sourceCode" id="cb292"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb292-1"><a href="multiple-linear-regression.html#cb292-1" aria-hidden="true" tabindex="-1"></a>advertising.corr()</span></code></pre></div>
+<pre><code>##             Unnamed: 0      TV   Radio  Newspaper   Sales
+## Unnamed: 0      1.0000  0.0177 -0.1107    -0.1549 -0.0516
+## TV              0.0177  1.0000  0.0548     0.0566  0.7822
+## Radio          -0.1107  0.0548  1.0000     0.3541  0.5762
+## Newspaper      -0.1549  0.0566  0.3541     1.0000  0.2283
+## Sales          -0.0516  0.7822  0.5762     0.2283  1.0000</code></pre>
+</div>
+<div id="figure-3.5---multiple-linear-regression" class="section level3 unlisted unnumbered">
+<h3>Figure 3.5 - Multiple Linear Regression</h3>
+<p><img src="../figures/ISLR-Fig3.5.png" width=600></p>
+<div class="sourceCode" id="cb294"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb294-1"><a href="multiple-linear-regression.html#cb294-1" aria-hidden="true" tabindex="-1"></a>regr <span class="op">=</span> skl_lm.LinearRegression()</span>
+<span id="cb294-2"><a href="multiple-linear-regression.html#cb294-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb294-3"><a href="multiple-linear-regression.html#cb294-3" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> advertising[[<span class="st">&#39;Radio&#39;</span>, <span class="st">&#39;TV&#39;</span>]].values</span>
+<span id="cb294-4"><a href="multiple-linear-regression.html#cb294-4" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> advertising.Sales</span>
+<span id="cb294-5"><a href="multiple-linear-regression.html#cb294-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb294-6"><a href="multiple-linear-regression.html#cb294-6" aria-hidden="true" tabindex="-1"></a>regr.fit(X,y)</span></code></pre></div>
+<pre><code>## LinearRegression()</code></pre>
+<div class="sourceCode" id="cb296"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb296-1"><a href="multiple-linear-regression.html#cb296-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(regr.coef_)</span></code></pre></div>
+<pre><code>## [0.18799423 0.04575482]</code></pre>
+<div class="sourceCode" id="cb298"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb298-1"><a href="multiple-linear-regression.html#cb298-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(regr.intercept_)</span></code></pre></div>
+<pre><code>## 2.9210999124051398</code></pre>
+<div class="sourceCode" id="cb300"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb300-1"><a href="multiple-linear-regression.html#cb300-1" aria-hidden="true" tabindex="-1"></a><span class="co"># What are the min/max values of Radio &amp; TV?</span></span>
+<span id="cb300-2"><a href="multiple-linear-regression.html#cb300-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Use these values to set up the grid for plotting.</span></span>
+<span id="cb300-3"><a href="multiple-linear-regression.html#cb300-3" aria-hidden="true" tabindex="-1"></a>advertising[[<span class="st">&#39;Radio&#39;</span>, <span class="st">&#39;TV&#39;</span>]].describe()</span></code></pre></div>
+<pre><code>##           Radio        TV
+## count  200.0000  200.0000
+## mean    23.2640  147.0425
+## std     14.8468   85.8542
+## min      0.0000    0.7000
+## 25%      9.9750   74.3750
+## 50%     22.9000  149.7500
+## 75%     36.5250  218.8250
+## max     49.6000  296.4000</code></pre>
+<div class="sourceCode" id="cb302"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb302-1"><a href="multiple-linear-regression.html#cb302-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a coordinate grid</span></span>
+<span id="cb302-2"><a href="multiple-linear-regression.html#cb302-2" aria-hidden="true" tabindex="-1"></a>Radio <span class="op">=</span> np.arange(<span class="dv">0</span>,<span class="dv">50</span>)</span>
+<span id="cb302-3"><a href="multiple-linear-regression.html#cb302-3" aria-hidden="true" tabindex="-1"></a>TV <span class="op">=</span> np.arange(<span class="dv">0</span>,<span class="dv">300</span>)</span>
+<span id="cb302-4"><a href="multiple-linear-regression.html#cb302-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb302-5"><a href="multiple-linear-regression.html#cb302-5" aria-hidden="true" tabindex="-1"></a>B1, B2 <span class="op">=</span> np.meshgrid(Radio, TV, indexing<span class="op">=</span><span class="st">&#39;xy&#39;</span>)</span>
+<span id="cb302-6"><a href="multiple-linear-regression.html#cb302-6" aria-hidden="true" tabindex="-1"></a>Z <span class="op">=</span> np.zeros((TV.size, Radio.size))</span>
+<span id="cb302-7"><a href="multiple-linear-regression.html#cb302-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb302-8"><a href="multiple-linear-regression.html#cb302-8" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i,j),v <span class="kw">in</span> np.ndenumerate(Z):</span>
+<span id="cb302-9"><a href="multiple-linear-regression.html#cb302-9" aria-hidden="true" tabindex="-1"></a>        Z[i,j] <span class="op">=</span>(regr.intercept_ <span class="op">+</span> B1[i,j]<span class="op">*</span>regr.coef_[<span class="dv">0</span>] <span class="op">+</span> B2[i,j]<span class="op">*</span>regr.coef_[<span class="dv">1</span>])</span></code></pre></div>
+<div class="sourceCode" id="cb303"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb303-1"><a href="multiple-linear-regression.html#cb303-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create plot</span></span>
+<span id="cb303-2"><a href="multiple-linear-regression.html#cb303-2" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> plt.figure(figsize<span class="op">=</span>(<span class="dv">10</span>,<span class="dv">6</span>))</span>
+<span id="cb303-3"><a href="multiple-linear-regression.html#cb303-3" aria-hidden="true" tabindex="-1"></a>fig.suptitle(<span class="st">&#39;Regression: Sales ~ Radio + TV Advertising&#39;</span>, fontsize<span class="op">=</span><span class="dv">20</span>)</span></code></pre></div>
+<pre><code>## Text(0.5, 0.98, &#39;Regression: Sales ~ Radio + TV Advertising&#39;)</code></pre>
+<div class="sourceCode" id="cb305"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb305-1"><a href="multiple-linear-regression.html#cb305-1" aria-hidden="true" tabindex="-1"></a>ax <span class="op">=</span> axes3d.Axes3D(fig)</span>
+<span id="cb305-2"><a href="multiple-linear-regression.html#cb305-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb305-3"><a href="multiple-linear-regression.html#cb305-3" aria-hidden="true" tabindex="-1"></a>ax.plot_surface(B1, B2, Z, rstride<span class="op">=</span><span class="dv">10</span>, cstride<span class="op">=</span><span class="dv">5</span>, alpha<span class="op">=</span><span class="fl">0.4</span>)</span></code></pre></div>
+<pre><code>## &lt;mpl_toolkits.mplot3d.art3d.Poly3DCollection object at 0x7fb109b1d7f0&gt;</code></pre>
+<div class="sourceCode" id="cb307"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb307-1"><a href="multiple-linear-regression.html#cb307-1" aria-hidden="true" tabindex="-1"></a>ax.scatter3D(advertising.Radio, advertising.TV, advertising.Sales, c<span class="op">=</span><span class="st">&#39;r&#39;</span>)</span></code></pre></div>
+<pre><code>## &lt;mpl_toolkits.mplot3d.art3d.Path3DCollection object at 0x7fb109b1dac8&gt;</code></pre>
+<div class="sourceCode" id="cb309"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb309-1"><a href="multiple-linear-regression.html#cb309-1" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">&#39;Radio&#39;</span>)</span></code></pre></div>
+<pre><code>## Text(0.5, 0, &#39;Radio&#39;)</code></pre>
+<div class="sourceCode" id="cb311"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb311-1"><a href="multiple-linear-regression.html#cb311-1" aria-hidden="true" tabindex="-1"></a>ax.set_xlim(<span class="dv">0</span>,<span class="dv">50</span>)</span></code></pre></div>
+<pre><code>## (0.0, 50.0)</code></pre>
+<div class="sourceCode" id="cb313"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb313-1"><a href="multiple-linear-regression.html#cb313-1" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">&#39;TV&#39;</span>)</span></code></pre></div>
+<pre><code>## Text(0.5, 0, &#39;TV&#39;)</code></pre>
+<div class="sourceCode" id="cb315"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb315-1"><a href="multiple-linear-regression.html#cb315-1" aria-hidden="true" tabindex="-1"></a>ax.set_ylim(ymin<span class="op">=</span><span class="dv">0</span>)</span></code></pre></div>
+<pre><code>## (0.0, 313.95)</code></pre>
+<div class="sourceCode" id="cb317"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb317-1"><a href="multiple-linear-regression.html#cb317-1" aria-hidden="true" tabindex="-1"></a>ax.set_zlabel(<span class="st">&#39;Sales&#39;</span>)<span class="op">;</span></span></code></pre></div>
+</div>
+</div>
+<div id="other-considerations-in-the-regression-model" class="section level2" number="6.2">
+<h2><span class="header-section-number">6.2</span> Other Considerations in the Regression Model</h2>
+<div id="collinearity" class="section level3 unlisted unnumbered">
+<h3>Collinearity</h3>
+<!-- #region -->
+<div id="exact-collinearity" class="section level4 unlisted unnumbered">
+<h4>“Exact Collinearity”</h4>
+<p><strong>Tasks</strong></p>
+<ol style="list-style-type: decimal">
+<li><p>You try to impress your investors with the number of advertising channels that you have investigated. So you make a copy of the TV column, call it <em>facebook</em> and refit the linear multiple regression.</p></li>
+<li><p><strong>Multi-Collinearity</strong>: You have learned from your foolish mistakes and are more ambitiously creating <em>fake data</em>: You create a new column <em>instagram</em> by adding TV and Radio and subtracting 3 times Newspaper. Now, refit the linear multiple regression.
+<!-- #endregion --></p></li>
+</ol>
+<div class="sourceCode" id="cb318"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb318-1"><a href="multiple-linear-regression.html#cb318-1" aria-hidden="true" tabindex="-1"></a>advertising[<span class="st">&quot;facebook&quot;</span>] <span class="op">=</span> advertising.TV</span>
+<span id="cb318-2"><a href="multiple-linear-regression.html#cb318-2" aria-hidden="true" tabindex="-1"></a><span class="co">#advertising.info()</span></span>
+<span id="cb318-3"><a href="multiple-linear-regression.html#cb318-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb318-4"><a href="multiple-linear-regression.html#cb318-4" aria-hidden="true" tabindex="-1"></a>est <span class="op">=</span> smf.ols(<span class="st">&#39;Sales ~ TV + Radio + Newspaper + facebook&#39;</span>, advertising).fit()</span>
+<span id="cb318-5"><a href="multiple-linear-regression.html#cb318-5" aria-hidden="true" tabindex="-1"></a>es <span class="op">=</span> est.summary()</span>
+<span id="cb318-6"><a href="multiple-linear-regression.html#cb318-6" aria-hidden="true" tabindex="-1"></a>es.tables[<span class="dv">1</span>]</span></code></pre></div>
+<pre><code>## &lt;class &#39;statsmodels.iolib.table.SimpleTable&#39;&gt;</code></pre>
+<p>Multicollinearity is treated VERY differently in statsmodels than in R as discussed in this
+<a href="https://medium.com/@docintangible/multicollinearity-in-pythons-statsmodels-ols-vs-r-s-lm-6fc9a994154c">post on medium</a> as well on <a href="https://stackoverflow.com/questions/25676145/capturing-high-multi-collinearity-in-statsmodels">stackoverflow</a>.
+Worthwhile to inspect the <a href="https://en.wikipedia.org/wiki/Condition_number#Matrices">condition number</a>:</p>
+<div class="sourceCode" id="cb320"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb320-1"><a href="multiple-linear-regression.html#cb320-1" aria-hidden="true" tabindex="-1"></a>es.tables[<span class="dv">2</span>]</span></code></pre></div>
+<pre><code>## &lt;class &#39;statsmodels.iolib.table.SimpleTable&#39;&gt;</code></pre>
+<div class="sourceCode" id="cb322"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb322-1"><a href="multiple-linear-regression.html#cb322-1" aria-hidden="true" tabindex="-1"></a>advertising[<span class="st">&quot;instagram&quot;</span>] <span class="op">=</span> advertising.TV <span class="op">+</span>advertising.Radio <span class="op">-</span> <span class="dv">3</span><span class="op">*</span>advertising.Newspaper</span>
+<span id="cb322-2"><a href="multiple-linear-regression.html#cb322-2" aria-hidden="true" tabindex="-1"></a><span class="co">#advertising.info()</span></span>
+<span id="cb322-3"><a href="multiple-linear-regression.html#cb322-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb322-4"><a href="multiple-linear-regression.html#cb322-4" aria-hidden="true" tabindex="-1"></a>est <span class="op">=</span> smf.ols(<span class="st">&#39;Sales ~ TV + Radio + Newspaper + instagram&#39;</span>, advertising).fit()</span>
+<span id="cb322-5"><a href="multiple-linear-regression.html#cb322-5" aria-hidden="true" tabindex="-1"></a>es <span class="op">=</span> est.summary()</span>
+<span id="cb322-6"><a href="multiple-linear-regression.html#cb322-6" aria-hidden="true" tabindex="-1"></a>es.tables[<span class="dv">1</span>]</span></code></pre></div>
+<pre><code>## &lt;class &#39;statsmodels.iolib.table.SimpleTable&#39;&gt;</code></pre>
+<div class="sourceCode" id="cb324"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb324-1"><a href="multiple-linear-regression.html#cb324-1" aria-hidden="true" tabindex="-1"></a>es.tables[<span class="dv">2</span>]</span></code></pre></div>
+<pre><code>## &lt;class &#39;statsmodels.iolib.table.SimpleTable&#39;&gt;</code></pre>
+<p><strong>Figure 3.6</strong></p>
+<p>What about non-exact collinearities?</p>
+<div class="sourceCode" id="cb326"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb326-1"><a href="multiple-linear-regression.html#cb326-1" aria-hidden="true" tabindex="-1"></a>credit <span class="op">=</span> pd.read_csv(<span class="st">&#39;../data/Credit.csv&#39;</span>, usecols<span class="op">=</span><span class="bu">list</span>(<span class="bu">range</span>(<span class="dv">1</span>,<span class="dv">12</span>)))</span>
+<span id="cb326-2"><a href="multiple-linear-regression.html#cb326-2" aria-hidden="true" tabindex="-1"></a>credit[<span class="st">&#39;Student2&#39;</span>] <span class="op">=</span> credit.Student.<span class="bu">map</span>({<span class="st">&#39;No&#39;</span>:<span class="dv">0</span>, <span class="st">&#39;Yes&#39;</span>:<span class="dv">1</span>})</span>
+<span id="cb326-3"><a href="multiple-linear-regression.html#cb326-3" aria-hidden="true" tabindex="-1"></a>credit.head()</span></code></pre></div>
+<pre><code>##     Income  Limit  Rating  Cards  ...  Married  Ethnicity Balance Student2
+## 0   14.891   3606     283      2  ...      Yes  Caucasian     333        0
+## 1  106.025   6645     483      3  ...      Yes      Asian     903        1
+## 2  104.593   7075     514      4  ...       No      Asian     580        0
+## 3  148.924   9504     681      3  ...       No      Asian     964        0
+## 4   55.882   4897     357      2  ...      Yes  Caucasian     331        0
+## 
+## [5 rows x 12 columns]</code></pre>
+<div class="sourceCode" id="cb328"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb328-1"><a href="multiple-linear-regression.html#cb328-1" aria-hidden="true" tabindex="-1"></a>sns.pairplot(credit[[<span class="st">&#39;Balance&#39;</span>,<span class="st">&#39;Age&#39;</span>,<span class="st">&#39;Cards&#39;</span>,<span class="st">&#39;Education&#39;</span>,<span class="st">&#39;Income&#39;</span>,<span class="st">&#39;Limit&#39;</span>,<span class="st">&#39;Rating&#39;</span>]])<span class="op">;</span></span></code></pre></div>
+<p><strong>Figure 3.14</strong></p>
+<div class="sourceCode" id="cb329"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb329-1"><a href="multiple-linear-regression.html#cb329-1" aria-hidden="true" tabindex="-1"></a>fig, (ax1,ax2) <span class="op">=</span> plt.subplots(<span class="dv">1</span>,<span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">12</span>,<span class="dv">5</span>))</span>
+<span id="cb329-2"><a href="multiple-linear-regression.html#cb329-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb329-3"><a href="multiple-linear-regression.html#cb329-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Left plot</span></span>
+<span id="cb329-4"><a href="multiple-linear-regression.html#cb329-4" aria-hidden="true" tabindex="-1"></a>ax1.scatter(credit.Limit, credit.Age, facecolor<span class="op">=</span><span class="st">&#39;None&#39;</span>, edgecolor<span class="op">=</span><span class="st">&#39;r&#39;</span>)</span></code></pre></div>
+<pre><code>## &lt;matplotlib.collections.PathCollection object at 0x7fb10bad8278&gt;</code></pre>
+<div class="sourceCode" id="cb331"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb331-1"><a href="multiple-linear-regression.html#cb331-1" aria-hidden="true" tabindex="-1"></a>ax1.set_ylabel(<span class="st">&#39;Age&#39;</span>)</span>
+<span id="cb331-2"><a href="multiple-linear-regression.html#cb331-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb331-3"><a href="multiple-linear-regression.html#cb331-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Right plot</span></span></code></pre></div>
+<pre><code>## Text(0, 0.5, &#39;Age&#39;)</code></pre>
+<div class="sourceCode" id="cb333"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb333-1"><a href="multiple-linear-regression.html#cb333-1" aria-hidden="true" tabindex="-1"></a>ax2.scatter(credit.Limit, credit.Rating, facecolor<span class="op">=</span><span class="st">&#39;None&#39;</span>, edgecolor<span class="op">=</span><span class="st">&#39;r&#39;</span>)</span></code></pre></div>
+<pre><code>## &lt;matplotlib.collections.PathCollection object at 0x7fb1bedf4438&gt;</code></pre>
+<div class="sourceCode" id="cb335"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb335-1"><a href="multiple-linear-regression.html#cb335-1" aria-hidden="true" tabindex="-1"></a>ax2.set_ylabel(<span class="st">&#39;Rating&#39;</span>)</span></code></pre></div>
+<pre><code>## Text(0, 0.5, &#39;Rating&#39;)</code></pre>
+<div class="sourceCode" id="cb337"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb337-1"><a href="multiple-linear-regression.html#cb337-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> ax <span class="kw">in</span> fig.axes:</span>
+<span id="cb337-2"><a href="multiple-linear-regression.html#cb337-2" aria-hidden="true" tabindex="-1"></a>    ax.set_xlabel(<span class="st">&#39;Limit&#39;</span>)</span>
+<span id="cb337-3"><a href="multiple-linear-regression.html#cb337-3" aria-hidden="true" tabindex="-1"></a>    ax.set_xticks([<span class="dv">2000</span>,<span class="dv">4000</span>,<span class="dv">6000</span>,<span class="dv">8000</span>,<span class="dv">12000</span>])</span></code></pre></div>
+<pre><code>## Text(0.5, 0, &#39;Limit&#39;)
+## [&lt;matplotlib.axis.XTick object at 0x7fb10ba87748&gt;, &lt;matplotlib.axis.XTick object at 0x7fb10ba872e8&gt;, &lt;matplotlib.axis.XTick object at 0x7fb10ba80f28&gt;, &lt;matplotlib.axis.XTick object at 0x7fb10bae7860&gt;, &lt;matplotlib.axis.XTick object at 0x7fb10bae7d30&gt;]
+## Text(0.5, 0, &#39;Limit&#39;)
+## [&lt;matplotlib.axis.XTick object at 0x7fb10bab4c18&gt;, &lt;matplotlib.axis.XTick object at 0x7fb10bab47b8&gt;, &lt;matplotlib.axis.XTick object at 0x7fb10bab4438&gt;, &lt;matplotlib.axis.XTick object at 0x7fb10baf2358&gt;, &lt;matplotlib.axis.XTick object at 0x7fb10baf27f0&gt;]</code></pre>
+</div>
+<div id="high-collinearity" class="section level4 unlisted unnumbered">
+<h4>“High Collinearity”</h4>
+<p><em>Collinearity</em> refers to the situation in which two or more predictor variables are closely related to one another. The concept of collinearity is illustrated in Figure 3.14 using the Credit data set. In the left-hand panel of Figure 3.14, the two predictors limit and age appear to have no obvious relationship.
+In contrast, in the right-hand panel of Figure 3.14, the predictors
+limit and rating are very highly correlated with each other, and we say
+that they are <strong>collinear</strong>. The presence of collinearity can pose problems in the regression context, since it can be difficult to separate out the individual effects of collinear variables on the response. In other words, since limit and rating tend to increase or decrease together, it can be difficult to determine how each one separately is associated with the response, <em>balance</em>.</p>
+<p><strong>Figure 3.15</strong></p>
+<div class="sourceCode" id="cb339"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb339-1"><a href="multiple-linear-regression.html#cb339-1" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> credit.Balance</span>
+<span id="cb339-2"><a href="multiple-linear-regression.html#cb339-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb339-3"><a href="multiple-linear-regression.html#cb339-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Regression for left plot</span></span>
+<span id="cb339-4"><a href="multiple-linear-regression.html#cb339-4" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> credit[[<span class="st">&#39;Age&#39;</span>, <span class="st">&#39;Limit&#39;</span>]].values</span>
+<span id="cb339-5"><a href="multiple-linear-regression.html#cb339-5" aria-hidden="true" tabindex="-1"></a>regr1 <span class="op">=</span> skl_lm.LinearRegression()</span>
+<span id="cb339-6"><a href="multiple-linear-regression.html#cb339-6" aria-hidden="true" tabindex="-1"></a>regr1.fit(scale(X.astype(<span class="st">&#39;float&#39;</span>), with_std<span class="op">=</span><span class="va">False</span>), y)</span></code></pre></div>
+<pre><code>## LinearRegression()</code></pre>
+<div class="sourceCode" id="cb341"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb341-1"><a href="multiple-linear-regression.html#cb341-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&#39;Age/Limit</span><span class="ch">\n</span><span class="st">&#39;</span>,regr1.intercept_)</span></code></pre></div>
+<pre><code>## Age/Limit
+##  520.0150000000001</code></pre>
+<div class="sourceCode" id="cb343"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb343-1"><a href="multiple-linear-regression.html#cb343-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(regr1.coef_)</span>
+<span id="cb343-2"><a href="multiple-linear-regression.html#cb343-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb343-3"><a href="multiple-linear-regression.html#cb343-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Regression for right plot</span></span></code></pre></div>
+<pre><code>## [-2.29148553  0.17336497]</code></pre>
+<div class="sourceCode" id="cb345"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb345-1"><a href="multiple-linear-regression.html#cb345-1" aria-hidden="true" tabindex="-1"></a>X2 <span class="op">=</span> credit[[<span class="st">&#39;Rating&#39;</span>, <span class="st">&#39;Limit&#39;</span>]].values</span>
+<span id="cb345-2"><a href="multiple-linear-regression.html#cb345-2" aria-hidden="true" tabindex="-1"></a>regr2 <span class="op">=</span> skl_lm.LinearRegression()</span>
+<span id="cb345-3"><a href="multiple-linear-regression.html#cb345-3" aria-hidden="true" tabindex="-1"></a>regr2.fit(scale(X2.astype(<span class="st">&#39;float&#39;</span>), with_std<span class="op">=</span><span class="va">False</span>), y)</span></code></pre></div>
+<pre><code>## LinearRegression()</code></pre>
+<div class="sourceCode" id="cb347"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb347-1"><a href="multiple-linear-regression.html#cb347-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&#39;</span><span class="ch">\n</span><span class="st">Rating/Limit</span><span class="ch">\n</span><span class="st">&#39;</span>,regr2.intercept_)</span></code></pre></div>
+<pre><code>## 
+## Rating/Limit
+##  520.015</code></pre>
+<div class="sourceCode" id="cb349"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb349-1"><a href="multiple-linear-regression.html#cb349-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(regr2.coef_)</span></code></pre></div>
+<pre><code>## [2.20167217 0.02451438]</code></pre>
+<div class="sourceCode" id="cb351"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb351-1"><a href="multiple-linear-regression.html#cb351-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create grid coordinates for plotting</span></span>
+<span id="cb351-2"><a href="multiple-linear-regression.html#cb351-2" aria-hidden="true" tabindex="-1"></a>B_Age <span class="op">=</span> np.linspace(regr1.coef_[<span class="dv">0</span>]<span class="op">-</span><span class="dv">3</span>, regr1.coef_[<span class="dv">0</span>]<span class="op">+</span><span class="dv">3</span>, <span class="dv">100</span>)</span>
+<span id="cb351-3"><a href="multiple-linear-regression.html#cb351-3" aria-hidden="true" tabindex="-1"></a>B_Limit <span class="op">=</span> np.linspace(regr1.coef_[<span class="dv">1</span>]<span class="op">-</span><span class="fl">0.02</span>, regr1.coef_[<span class="dv">1</span>]<span class="op">+</span><span class="fl">0.02</span>, <span class="dv">100</span>)</span>
+<span id="cb351-4"><a href="multiple-linear-regression.html#cb351-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb351-5"><a href="multiple-linear-regression.html#cb351-5" aria-hidden="true" tabindex="-1"></a>B_Rating <span class="op">=</span> np.linspace(regr2.coef_[<span class="dv">0</span>]<span class="op">-</span><span class="dv">3</span>, regr2.coef_[<span class="dv">0</span>]<span class="op">+</span><span class="dv">3</span>, <span class="dv">100</span>)</span>
+<span id="cb351-6"><a href="multiple-linear-regression.html#cb351-6" aria-hidden="true" tabindex="-1"></a>B_Limit2 <span class="op">=</span> np.linspace(regr2.coef_[<span class="dv">1</span>]<span class="op">-</span><span class="fl">0.2</span>, regr2.coef_[<span class="dv">1</span>]<span class="op">+</span><span class="fl">0.2</span>, <span class="dv">100</span>)</span>
+<span id="cb351-7"><a href="multiple-linear-regression.html#cb351-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb351-8"><a href="multiple-linear-regression.html#cb351-8" aria-hidden="true" tabindex="-1"></a>X1, Y1 <span class="op">=</span> np.meshgrid(B_Limit, B_Age, indexing<span class="op">=</span><span class="st">&#39;xy&#39;</span>)</span>
+<span id="cb351-9"><a href="multiple-linear-regression.html#cb351-9" aria-hidden="true" tabindex="-1"></a>X2, Y2 <span class="op">=</span> np.meshgrid(B_Limit2, B_Rating, indexing<span class="op">=</span><span class="st">&#39;xy&#39;</span>)</span>
+<span id="cb351-10"><a href="multiple-linear-regression.html#cb351-10" aria-hidden="true" tabindex="-1"></a>Z1 <span class="op">=</span> np.zeros((B_Age.size,B_Limit.size))</span>
+<span id="cb351-11"><a href="multiple-linear-regression.html#cb351-11" aria-hidden="true" tabindex="-1"></a>Z2 <span class="op">=</span> np.zeros((B_Rating.size,B_Limit2.size))</span>
+<span id="cb351-12"><a href="multiple-linear-regression.html#cb351-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb351-13"><a href="multiple-linear-regression.html#cb351-13" aria-hidden="true" tabindex="-1"></a>Limit_scaled <span class="op">=</span> scale(credit.Limit.astype(<span class="st">&#39;float&#39;</span>), with_std<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb351-14"><a href="multiple-linear-regression.html#cb351-14" aria-hidden="true" tabindex="-1"></a>Age_scaled <span class="op">=</span> scale(credit.Age.astype(<span class="st">&#39;float&#39;</span>), with_std<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb351-15"><a href="multiple-linear-regression.html#cb351-15" aria-hidden="true" tabindex="-1"></a>Rating_scaled <span class="op">=</span> scale(credit.Rating.astype(<span class="st">&#39;float&#39;</span>), with_std<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb351-16"><a href="multiple-linear-regression.html#cb351-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb351-17"><a href="multiple-linear-regression.html#cb351-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate Z-values (RSS) based on grid of coefficients</span></span>
+<span id="cb351-18"><a href="multiple-linear-regression.html#cb351-18" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i,j),v <span class="kw">in</span> np.ndenumerate(Z1):</span>
+<span id="cb351-19"><a href="multiple-linear-regression.html#cb351-19" aria-hidden="true" tabindex="-1"></a>    Z1[i,j] <span class="op">=</span>((y <span class="op">-</span> (regr1.intercept_ <span class="op">+</span> X1[i,j]<span class="op">*</span>Limit_scaled <span class="op">+</span></span>
+<span id="cb351-20"><a href="multiple-linear-regression.html#cb351-20" aria-hidden="true" tabindex="-1"></a>                    Y1[i,j]<span class="op">*</span>Age_scaled))<span class="op">**</span><span class="dv">2</span>).<span class="bu">sum</span>()<span class="op">/</span><span class="dv">1000000</span></span>
+<span id="cb351-21"><a href="multiple-linear-regression.html#cb351-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb351-22"><a href="multiple-linear-regression.html#cb351-22" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i,j),v <span class="kw">in</span> np.ndenumerate(Z2):</span>
+<span id="cb351-23"><a href="multiple-linear-regression.html#cb351-23" aria-hidden="true" tabindex="-1"></a>    Z2[i,j] <span class="op">=</span>((y <span class="op">-</span> (regr2.intercept_ <span class="op">+</span> X2[i,j]<span class="op">*</span>Limit_scaled <span class="op">+</span></span>
+<span id="cb351-24"><a href="multiple-linear-regression.html#cb351-24" aria-hidden="true" tabindex="-1"></a>                    Y2[i,j]<span class="op">*</span>Rating_scaled))<span class="op">**</span><span class="dv">2</span>).<span class="bu">sum</span>()<span class="op">/</span><span class="dv">1000000</span></span></code></pre></div>
+<div class="sourceCode" id="cb352"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb352-1"><a href="multiple-linear-regression.html#cb352-1" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> plt.figure(figsize<span class="op">=</span>(<span class="dv">12</span>,<span class="dv">5</span>))</span>
+<span id="cb352-2"><a href="multiple-linear-regression.html#cb352-2" aria-hidden="true" tabindex="-1"></a>fig.suptitle(<span class="st">&#39;RSS - Regression coefficients&#39;</span>, fontsize<span class="op">=</span><span class="dv">20</span>)</span></code></pre></div>
+<pre><code>## Text(0.5, 0.98, &#39;RSS - Regression coefficients&#39;)</code></pre>
+<div class="sourceCode" id="cb354"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb354-1"><a href="multiple-linear-regression.html#cb354-1" aria-hidden="true" tabindex="-1"></a>ax1 <span class="op">=</span> fig.add_subplot(<span class="dv">121</span>)</span>
+<span id="cb354-2"><a href="multiple-linear-regression.html#cb354-2" aria-hidden="true" tabindex="-1"></a>ax2 <span class="op">=</span> fig.add_subplot(<span class="dv">122</span>)</span>
+<span id="cb354-3"><a href="multiple-linear-regression.html#cb354-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb354-4"><a href="multiple-linear-regression.html#cb354-4" aria-hidden="true" tabindex="-1"></a>min_RSS <span class="op">=</span> <span class="vs">r&#39;$\beta_0$, $\beta_1$ for minimized RSS&#39;</span></span>
+<span id="cb354-5"><a href="multiple-linear-regression.html#cb354-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb354-6"><a href="multiple-linear-regression.html#cb354-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Left plot</span></span>
+<span id="cb354-7"><a href="multiple-linear-regression.html#cb354-7" aria-hidden="true" tabindex="-1"></a>CS <span class="op">=</span> ax1.contour(X1, Y1, Z1, cmap<span class="op">=</span>plt.cm.Set1, levels<span class="op">=</span>[<span class="fl">21.25</span>, <span class="fl">21.5</span>, <span class="fl">21.8</span>])</span>
+<span id="cb354-8"><a href="multiple-linear-regression.html#cb354-8" aria-hidden="true" tabindex="-1"></a>ax1.scatter(regr1.coef_[<span class="dv">1</span>], regr1.coef_[<span class="dv">0</span>], c<span class="op">=</span><span class="st">&#39;r&#39;</span>, label<span class="op">=</span>min_RSS)</span></code></pre></div>
+<pre><code>## &lt;matplotlib.collections.PathCollection object at 0x7fb10bc71ac8&gt;</code></pre>
+<div class="sourceCode" id="cb356"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb356-1"><a href="multiple-linear-regression.html#cb356-1" aria-hidden="true" tabindex="-1"></a>ax1.clabel(CS, inline<span class="op">=</span><span class="va">True</span>, fontsize<span class="op">=</span><span class="dv">10</span>, fmt<span class="op">=</span><span class="st">&#39;</span><span class="sc">%1.1f</span><span class="st">&#39;</span>)</span></code></pre></div>
+<pre><code>## &lt;a list of 3 text.Text objects&gt;</code></pre>
+<div class="sourceCode" id="cb358"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb358-1"><a href="multiple-linear-regression.html#cb358-1" aria-hidden="true" tabindex="-1"></a>ax1.set_ylabel(<span class="vs">r&#39;$\beta_</span><span class="sc">{Age}</span><span class="vs">$&#39;</span>, fontsize<span class="op">=</span><span class="dv">17</span>)</span>
+<span id="cb358-2"><a href="multiple-linear-regression.html#cb358-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb358-3"><a href="multiple-linear-regression.html#cb358-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Right plot</span></span></code></pre></div>
+<pre><code>## Text(0, 0.5, &#39;$\\beta_{Age}$&#39;)</code></pre>
+<div class="sourceCode" id="cb360"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb360-1"><a href="multiple-linear-regression.html#cb360-1" aria-hidden="true" tabindex="-1"></a>CS <span class="op">=</span> ax2.contour(X2, Y2, Z2, cmap<span class="op">=</span>plt.cm.Set1, levels<span class="op">=</span>[<span class="fl">21.5</span>, <span class="fl">21.8</span>])</span>
+<span id="cb360-2"><a href="multiple-linear-regression.html#cb360-2" aria-hidden="true" tabindex="-1"></a>ax2.scatter(regr2.coef_[<span class="dv">1</span>], regr2.coef_[<span class="dv">0</span>], c<span class="op">=</span><span class="st">&#39;r&#39;</span>, label<span class="op">=</span>min_RSS)</span></code></pre></div>
+<pre><code>## &lt;matplotlib.collections.PathCollection object at 0x7fb10bc84828&gt;</code></pre>
+<div class="sourceCode" id="cb362"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb362-1"><a href="multiple-linear-regression.html#cb362-1" aria-hidden="true" tabindex="-1"></a>ax2.clabel(CS, inline<span class="op">=</span><span class="va">True</span>, fontsize<span class="op">=</span><span class="dv">10</span>, fmt<span class="op">=</span><span class="st">&#39;</span><span class="sc">%1.1f</span><span class="st">&#39;</span>)</span></code></pre></div>
+<pre><code>## &lt;a list of 2 text.Text objects&gt;</code></pre>
+<div class="sourceCode" id="cb364"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb364-1"><a href="multiple-linear-regression.html#cb364-1" aria-hidden="true" tabindex="-1"></a>ax2.set_ylabel(<span class="vs">r&#39;$\beta_</span><span class="sc">{Rating}</span><span class="vs">$&#39;</span>, fontsize<span class="op">=</span><span class="dv">17</span>)</span></code></pre></div>
+<pre><code>## Text(0, 0.5, &#39;$\\beta_{Rating}$&#39;)</code></pre>
+<div class="sourceCode" id="cb366"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb366-1"><a href="multiple-linear-regression.html#cb366-1" aria-hidden="true" tabindex="-1"></a>ax2.set_xticks([<span class="op">-</span><span class="fl">0.1</span>, <span class="dv">0</span>, <span class="fl">0.1</span>, <span class="fl">0.2</span>])</span></code></pre></div>
+<pre><code>## [&lt;matplotlib.axis.XTick object at 0x7fb10bc4e8d0&gt;, &lt;matplotlib.axis.XTick object at 0x7fb10bc4e470&gt;, &lt;matplotlib.axis.XTick object at 0x7fb10bc4e0f0&gt;, &lt;matplotlib.axis.XTick object at 0x7fb10bca64a8&gt;]</code></pre>
+<div class="sourceCode" id="cb368"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb368-1"><a href="multiple-linear-regression.html#cb368-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> ax <span class="kw">in</span> fig.axes:</span>
+<span id="cb368-2"><a href="multiple-linear-regression.html#cb368-2" aria-hidden="true" tabindex="-1"></a>    ax.set_xlabel(<span class="vs">r&#39;$\beta_</span><span class="sc">{Limit}</span><span class="vs">$&#39;</span>, fontsize<span class="op">=</span><span class="dv">17</span>)</span>
+<span id="cb368-3"><a href="multiple-linear-regression.html#cb368-3" aria-hidden="true" tabindex="-1"></a>    ax.legend()</span></code></pre></div>
+<pre><code>## Text(0.5, 0, &#39;$\\beta_{Limit}$&#39;)
+## &lt;matplotlib.legend.Legend object at 0x7fb10bca6a90&gt;
+## Text(0.5, 0, &#39;$\\beta_{Limit}$&#39;)
+## &lt;matplotlib.legend.Legend object at 0x7fb10bca6c18&gt;</code></pre>
+<p><strong>Figure 3.15</strong>
+Figure 3.15 illustrates some of the difficulties that can result from collinearity.
+The left-hand panel of Figure 3.15 is a contour plot of the RSS (3.22)
+associated with different possible coefficient estimates for the regression
+of balance on limit and age. Each ellipse represents a set of coefficients
+that correspond to the same RSS, with ellipses nearest to the center taking
+on the lowest values of RSS. The dots and associated dashed lines represent the coefficient estimates that result in the smallest possible
+RSS—in other words, these are the least squares estimates. The axes for
+limit and age have been scaled so that the plot includes possible coefficient
+estimates that are up to four standard errors on either side of the
+least squares estimates. Thus the plot includes all plausible values for the
+coefficients. For example, we see that the true limit coefficient is almost
+certainly somewhere between 0.15 and 0.20.
+In contrast, the right-hand panel of Figure 3.15 displays contour plots
+of the RSS associated with possible coefficient estimates for the regression
+of balance onto limit and rating, which we know to be highly collinear.
+Now the contours run along a narrow valley; there is a broad range of
+values for the coefficient estimates that result in equal values for RSS.
+Hence a small change in the data could cause the pair of coefficient values
+that yield the smallest RSS—that is, the least squares estimates—to move
+anywhere along this valley. This results in a great deal of uncertainty in the
+coefficient estimates. Notice that the scale for the limit coefficient now runs
+from roughly −0.2 to 0.2; this is an eight-fold increase over the plausible
+range of the limit coefficient in the regression with age.</p>
+<p><img src="../figures/ISLR-Table3-11.png" width=500></p>
+<p><strong>Table 3.11</strong> compares the coefficient estimates obtained from two separate multiple regression models. The first is a regression of balance on age and limit, and the second is a regression of balance on rating and limit. In the first regression, both age and limit are highly significant with very small pvalues.
+In the second, the collinearity between limit and rating has caused
+the standard error for the limit coefficient estimate to increase by a factor of 12 and the p-value to increase to 0.701. In other words, the importance of the limit variable has been masked due to the presence of collinearity.
+To avoid such a situation, it is desirable to identify and address potential collinearity problems while fitting the model.</p>
+</div>
+</div>
+</div>
+<div id="categorical-variables" class="section level2" number="6.3">
+<h2><span class="header-section-number">6.3</span> Categorical Variables</h2>
+<ul>
+<li>Dummy Coding</li>
+<li>Interpretation of coefficients</li>
+</ul>
+<p><strong>Table 3.7</strong></p>
+<p><img src="../figures/ISLR-Table3-7.png" width=500></p>
+<div class="sourceCode" id="cb370"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb370-1"><a href="multiple-linear-regression.html#cb370-1" aria-hidden="true" tabindex="-1"></a>est <span class="op">=</span> smf.ols(<span class="st">&#39;Balance ~ Gender &#39;</span>, credit).fit()</span>
+<span id="cb370-2"><a href="multiple-linear-regression.html#cb370-2" aria-hidden="true" tabindex="-1"></a>est.summary().tables[<span class="dv">1</span>]</span></code></pre></div>
+<pre><code>## &lt;class &#39;statsmodels.iolib.table.SimpleTable&#39;&gt;</code></pre>
+<p><strong>Table 3.8</strong></p>
+<div class="sourceCode" id="cb372"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb372-1"><a href="multiple-linear-regression.html#cb372-1" aria-hidden="true" tabindex="-1"></a>np.unique(credit[<span class="st">&quot;Ethnicity&quot;</span>])</span></code></pre></div>
+<pre><code>## array([&#39;African American&#39;, &#39;Asian&#39;, &#39;Caucasian&#39;], dtype=object)</code></pre>
+<div class="sourceCode" id="cb374"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb374-1"><a href="multiple-linear-regression.html#cb374-1" aria-hidden="true" tabindex="-1"></a>credit.groupby(<span class="st">&quot;Ethnicity&quot;</span>)[<span class="st">&quot;Balance&quot;</span>].mean()</span></code></pre></div>
+<pre><code>## Ethnicity
+## African American    531.0000
+## Asian               512.3137
+## Caucasian           518.4975
+## Name: Balance, dtype: float64</code></pre>
+<div class="sourceCode" id="cb376"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb376-1"><a href="multiple-linear-regression.html#cb376-1" aria-hidden="true" tabindex="-1"></a>est <span class="op">=</span> smf.ols(<span class="st">&#39;Balance ~ Ethnicity&#39;</span>, credit).fit()</span>
+<span id="cb376-2"><a href="multiple-linear-regression.html#cb376-2" aria-hidden="true" tabindex="-1"></a>est.summary().tables[<span class="dv">1</span>]</span></code></pre></div>
+<pre><code>## &lt;class &#39;statsmodels.iolib.table.SimpleTable&#39;&gt;</code></pre>
+</div>
+<div id="interactions" class="section level2" number="6.4">
+<h2><span class="header-section-number">6.4</span> Interactions</h2>
+<p><strong>Table 3.9</strong></p>
+<div class="sourceCode" id="cb378"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb378-1"><a href="multiple-linear-regression.html#cb378-1" aria-hidden="true" tabindex="-1"></a>est <span class="op">=</span> smf.ols(<span class="st">&#39;Sales ~ TV + Radio + TV*Radio&#39;</span>, advertising).fit()</span>
+<span id="cb378-2"><a href="multiple-linear-regression.html#cb378-2" aria-hidden="true" tabindex="-1"></a>est.summary().tables[<span class="dv">1</span>]</span></code></pre></div>
+<pre><code>## &lt;class &#39;statsmodels.iolib.table.SimpleTable&#39;&gt;</code></pre>
+<div id="interaction-between-qualitative-and-quantitative-variables" class="section level3 unlisted unnumbered">
+<h3>Interaction between qualitative and quantitative variables</h3>
+<div class="sourceCode" id="cb380"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb380-1"><a href="multiple-linear-regression.html#cb380-1" aria-hidden="true" tabindex="-1"></a>credit[<span class="st">&quot;Income2&quot;</span>] <span class="op">=</span> credit[<span class="st">&quot;Income&quot;</span>] <span class="op">+</span> scipy.stats.norm.rvs(<span class="dv">400</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb381"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb381-1"><a href="multiple-linear-regression.html#cb381-1" aria-hidden="true" tabindex="-1"></a>est1 <span class="op">=</span> smf.ols(<span class="st">&#39;Balance ~ Income + Income2 + C(Student)&#39;</span>, credit).fit()</span>
+<span id="cb381-2"><a href="multiple-linear-regression.html#cb381-2" aria-hidden="true" tabindex="-1"></a>regr1 <span class="op">=</span> est1.params</span>
+<span id="cb381-3"><a href="multiple-linear-regression.html#cb381-3" aria-hidden="true" tabindex="-1"></a>est2 <span class="op">=</span> smf.ols(<span class="st">&#39;Balance ~ Income + Income*C(Student)&#39;</span>, credit).fit()</span>
+<span id="cb381-4"><a href="multiple-linear-regression.html#cb381-4" aria-hidden="true" tabindex="-1"></a>regr2 <span class="op">=</span> est2.params</span>
+<span id="cb381-5"><a href="multiple-linear-regression.html#cb381-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb381-6"><a href="multiple-linear-regression.html#cb381-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&#39;Regression 1 - without interaction term&#39;</span>)</span></code></pre></div>
+<pre><code>## Regression 1 - without interaction term</code></pre>
+<div class="sourceCode" id="cb383"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb383-1"><a href="multiple-linear-regression.html#cb383-1" aria-hidden="true" tabindex="-1"></a>est1.summary().tables[<span class="dv">1</span>]</span></code></pre></div>
+<pre><code>## &lt;class &#39;statsmodels.iolib.table.SimpleTable&#39;&gt;</code></pre>
+<div class="sourceCode" id="cb385"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb385-1"><a href="multiple-linear-regression.html#cb385-1" aria-hidden="true" tabindex="-1"></a>np.mean(credit[<span class="st">&quot;Income&quot;</span>])</span></code></pre></div>
+<pre><code>## 45.21888499999999</code></pre>
+<div class="sourceCode" id="cb387"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb387-1"><a href="multiple-linear-regression.html#cb387-1" aria-hidden="true" tabindex="-1"></a>est2 <span class="op">=</span> smf.ols(<span class="st">&#39;Balance ~ Income + Income*C(Ethnicity)*C(Student)&#39;</span>, credit).fit()</span>
+<span id="cb387-2"><a href="multiple-linear-regression.html#cb387-2" aria-hidden="true" tabindex="-1"></a>est2.summary().tables[<span class="dv">1</span>]</span></code></pre></div>
+<pre><code>## &lt;class &#39;statsmodels.iolib.table.SimpleTable&#39;&gt;</code></pre>
+<div class="sourceCode" id="cb389"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb389-1"><a href="multiple-linear-regression.html#cb389-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&#39;</span><span class="ch">\n</span><span class="st">Regression 2 - with interaction term&#39;</span>)</span></code></pre></div>
+<pre><code>## 
+## Regression 2 - with interaction term</code></pre>
+<div class="sourceCode" id="cb391"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb391-1"><a href="multiple-linear-regression.html#cb391-1" aria-hidden="true" tabindex="-1"></a>est2.summary().tables[<span class="dv">1</span>]</span></code></pre></div>
+<pre><code>## &lt;class &#39;statsmodels.iolib.table.SimpleTable&#39;&gt;</code></pre>
+<div class="sourceCode" id="cb393"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb393-1"><a href="multiple-linear-regression.html#cb393-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Income (x-axis)</span></span>
+<span id="cb393-2"><a href="multiple-linear-regression.html#cb393-2" aria-hidden="true" tabindex="-1"></a>income <span class="op">=</span> np.linspace(<span class="dv">0</span>,<span class="dv">150</span>)</span>
+<span id="cb393-3"><a href="multiple-linear-regression.html#cb393-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb393-4"><a href="multiple-linear-regression.html#cb393-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Balance without interaction term (y-axis)</span></span>
+<span id="cb393-5"><a href="multiple-linear-regression.html#cb393-5" aria-hidden="true" tabindex="-1"></a>student1 <span class="op">=</span> np.linspace(regr1[<span class="st">&#39;Intercept&#39;</span>]<span class="op">+</span>regr1[<span class="st">&#39;C(Student)[T.Yes]&#39;</span>],</span>
+<span id="cb393-6"><a href="multiple-linear-regression.html#cb393-6" aria-hidden="true" tabindex="-1"></a>                       regr1[<span class="st">&#39;Intercept&#39;</span>]<span class="op">+</span>regr1[<span class="st">&#39;C(Student)[T.Yes]&#39;</span>]<span class="op">+</span><span class="dv">150</span><span class="op">*</span>regr1[<span class="st">&#39;Income&#39;</span>])</span>
+<span id="cb393-7"><a href="multiple-linear-regression.html#cb393-7" aria-hidden="true" tabindex="-1"></a>non_student1 <span class="op">=</span>  np.linspace(regr1[<span class="st">&#39;Intercept&#39;</span>], regr1[<span class="st">&#39;Intercept&#39;</span>]<span class="op">+</span><span class="dv">150</span><span class="op">*</span>regr1[<span class="st">&#39;Income&#39;</span>])</span>
+<span id="cb393-8"><a href="multiple-linear-regression.html#cb393-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb393-9"><a href="multiple-linear-regression.html#cb393-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Balance with iteraction term (y-axis)</span></span>
+<span id="cb393-10"><a href="multiple-linear-regression.html#cb393-10" aria-hidden="true" tabindex="-1"></a>student2 <span class="op">=</span> np.linspace(regr2[<span class="st">&#39;Intercept&#39;</span>]<span class="op">+</span>regr2[<span class="st">&#39;C(Student)[T.Yes]&#39;</span>],</span>
+<span id="cb393-11"><a href="multiple-linear-regression.html#cb393-11" aria-hidden="true" tabindex="-1"></a>                       regr2[<span class="st">&#39;Intercept&#39;</span>]<span class="op">+</span>regr2[<span class="st">&#39;C(Student)[T.Yes]&#39;</span>]<span class="op">+</span></span>
+<span id="cb393-12"><a href="multiple-linear-regression.html#cb393-12" aria-hidden="true" tabindex="-1"></a>                       <span class="dv">150</span><span class="op">*</span>(regr2[<span class="st">&#39;Income&#39;</span>]<span class="op">+</span>regr2[<span class="st">&#39;Income:C(Student)[T.Yes]&#39;</span>]))</span>
+<span id="cb393-13"><a href="multiple-linear-regression.html#cb393-13" aria-hidden="true" tabindex="-1"></a>non_student2 <span class="op">=</span>  np.linspace(regr2[<span class="st">&#39;Intercept&#39;</span>], regr2[<span class="st">&#39;Intercept&#39;</span>]<span class="op">+</span><span class="dv">150</span><span class="op">*</span>regr2[<span class="st">&#39;Income&#39;</span>])</span>
+<span id="cb393-14"><a href="multiple-linear-regression.html#cb393-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb393-15"><a href="multiple-linear-regression.html#cb393-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Create plot</span></span>
+<span id="cb393-16"><a href="multiple-linear-regression.html#cb393-16" aria-hidden="true" tabindex="-1"></a>fig, (ax1,ax2) <span class="op">=</span> plt.subplots(<span class="dv">1</span>,<span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">12</span>,<span class="dv">5</span>))</span>
+<span id="cb393-17"><a href="multiple-linear-regression.html#cb393-17" aria-hidden="true" tabindex="-1"></a>ax1.plot(income, student1, <span class="st">&#39;r&#39;</span>, income, non_student1, <span class="st">&#39;k&#39;</span>)</span></code></pre></div>
+<pre><code>## [&lt;matplotlib.lines.Line2D object at 0x7fb10be5a8d0&gt;, &lt;matplotlib.lines.Line2D object at 0x7fb10be69358&gt;]</code></pre>
+<div class="sourceCode" id="cb395"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb395-1"><a href="multiple-linear-regression.html#cb395-1" aria-hidden="true" tabindex="-1"></a>ax2.plot(income, student2, <span class="st">&#39;r&#39;</span>, income, non_student2, <span class="st">&#39;k&#39;</span>)</span></code></pre></div>
+<pre><code>## [&lt;matplotlib.lines.Line2D object at 0x7fb10be694a8&gt;, &lt;matplotlib.lines.Line2D object at 0x7fb10be69978&gt;]</code></pre>
+<div class="sourceCode" id="cb397"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb397-1"><a href="multiple-linear-regression.html#cb397-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> ax <span class="kw">in</span> fig.axes:</span>
+<span id="cb397-2"><a href="multiple-linear-regression.html#cb397-2" aria-hidden="true" tabindex="-1"></a>    ax.legend([<span class="st">&#39;student&#39;</span>, <span class="st">&#39;non-student&#39;</span>], loc<span class="op">=</span><span class="dv">2</span>)</span>
+<span id="cb397-3"><a href="multiple-linear-regression.html#cb397-3" aria-hidden="true" tabindex="-1"></a>    ax.set_xlabel(<span class="st">&#39;Income&#39;</span>)</span>
+<span id="cb397-4"><a href="multiple-linear-regression.html#cb397-4" aria-hidden="true" tabindex="-1"></a>    ax.set_ylabel(<span class="st">&#39;Balance&#39;</span>)</span>
+<span id="cb397-5"><a href="multiple-linear-regression.html#cb397-5" aria-hidden="true" tabindex="-1"></a>    ax.set_ylim(ymax<span class="op">=</span><span class="dv">1550</span>)</span></code></pre></div>
+<pre><code>## &lt;matplotlib.legend.Legend object at 0x7fb10be69ef0&gt;
+## Text(0.5, 0, &#39;Income&#39;)
+## Text(0, 0.5, &#39;Balance&#39;)
+## (-60.080890496303056, 1550.0)
+## &lt;matplotlib.legend.Legend object at 0x7fb10be69fd0&gt;
+## Text(0.5, 0, &#39;Income&#39;)
+## Text(0, 0.5, &#39;Balance&#39;)
+## (145.14672679865524, 1550.0)</code></pre>
+</div>
+</div>
+<div id="non-linear-relationships" class="section level2" number="6.5">
+<h2><span class="header-section-number">6.5</span> Non-linear relationships</h2>
+<p><strong>Figure 3.8</strong></p>
+<div class="sourceCode" id="cb399"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb399-1"><a href="multiple-linear-regression.html#cb399-1" aria-hidden="true" tabindex="-1"></a>auto <span class="op">=</span> pd.read_csv(<span class="st">&#39;../data/Auto.csv&#39;</span>, na_values<span class="op">=</span><span class="st">&#39;?&#39;</span>).dropna()</span></code></pre></div>
+<div class="sourceCode" id="cb400"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb400-1"><a href="multiple-linear-regression.html#cb400-1" aria-hidden="true" tabindex="-1"></a>sns.regplot(x<span class="op">=</span><span class="st">&#39;weight&#39;</span>, y<span class="op">=</span><span class="st">&#39;mpg&#39;</span>, data<span class="op">=</span>auto,fit_reg<span class="op">=</span><span class="va">True</span>, order<span class="op">=</span><span class="dv">2</span>)</span></code></pre></div>
+<pre><code>## &lt;AxesSubplot:xlabel=&#39;weight&#39;, ylabel=&#39;mpg&#39;&gt;</code></pre>
+<div class="sourceCode" id="cb402"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb402-1"><a href="multiple-linear-regression.html#cb402-1" aria-hidden="true" tabindex="-1"></a><span class="co"># With Seaborn&#39;s regplot() you can easily plot higher order polynomials.</span></span>
+<span id="cb402-2"><a href="multiple-linear-regression.html#cb402-2" aria-hidden="true" tabindex="-1"></a>plt.scatter(x<span class="op">=</span>auto.horsepower, y<span class="op">=</span>auto.mpg, facecolors<span class="op">=</span><span class="st">&#39;None&#39;</span>, edgecolors<span class="op">=</span><span class="st">&#39;k&#39;</span>, alpha<span class="op">=</span><span class="fl">.5</span>)</span></code></pre></div>
+<pre><code>## &lt;matplotlib.collections.PathCollection object at 0x7fb10bf65160&gt;</code></pre>
+<div class="sourceCode" id="cb404"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb404-1"><a href="multiple-linear-regression.html#cb404-1" aria-hidden="true" tabindex="-1"></a>sns.regplot(x<span class="op">=</span>auto.horsepower, y<span class="op">=</span>auto.mpg, ci<span class="op">=</span><span class="va">None</span>, label<span class="op">=</span><span class="st">&#39;Linear&#39;</span>, scatter<span class="op">=</span><span class="va">False</span>, color<span class="op">=</span><span class="st">&#39;orange&#39;</span>)</span></code></pre></div>
+<pre><code>## &lt;AxesSubplot:xlabel=&#39;horsepower&#39;, ylabel=&#39;mpg&#39;&gt;</code></pre>
+<div class="sourceCode" id="cb406"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb406-1"><a href="multiple-linear-regression.html#cb406-1" aria-hidden="true" tabindex="-1"></a>sns.regplot(x<span class="op">=</span>auto.horsepower, y<span class="op">=</span>auto.mpg, ci<span class="op">=</span><span class="va">None</span>, label<span class="op">=</span><span class="st">&#39;Degree 2&#39;</span>, order<span class="op">=</span><span class="dv">2</span>, scatter<span class="op">=</span><span class="va">False</span>, color<span class="op">=</span><span class="st">&#39;lightblue&#39;</span>)</span></code></pre></div>
+<pre><code>## &lt;AxesSubplot:xlabel=&#39;horsepower&#39;, ylabel=&#39;mpg&#39;&gt;</code></pre>
+<div class="sourceCode" id="cb408"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb408-1"><a href="multiple-linear-regression.html#cb408-1" aria-hidden="true" tabindex="-1"></a>sns.regplot(x<span class="op">=</span>auto.horsepower, y<span class="op">=</span>auto.mpg, ci<span class="op">=</span><span class="va">None</span>, label<span class="op">=</span><span class="st">&#39;Degree 5&#39;</span>, order<span class="op">=</span><span class="dv">5</span>, scatter<span class="op">=</span><span class="va">False</span>, color<span class="op">=</span><span class="st">&#39;g&#39;</span>)</span></code></pre></div>
+<pre><code>## &lt;AxesSubplot:xlabel=&#39;horsepower&#39;, ylabel=&#39;mpg&#39;&gt;</code></pre>
+<div class="sourceCode" id="cb410"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb410-1"><a href="multiple-linear-regression.html#cb410-1" aria-hidden="true" tabindex="-1"></a>plt.legend()</span></code></pre></div>
+<pre><code>## &lt;matplotlib.legend.Legend object at 0x7fb10bf65f28&gt;</code></pre>
+<div class="sourceCode" id="cb412"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb412-1"><a href="multiple-linear-regression.html#cb412-1" aria-hidden="true" tabindex="-1"></a>plt.ylim(<span class="dv">5</span>,<span class="dv">55</span>)</span></code></pre></div>
+<pre><code>## (5.0, 55.0)</code></pre>
+<div class="sourceCode" id="cb414"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb414-1"><a href="multiple-linear-regression.html#cb414-1" aria-hidden="true" tabindex="-1"></a>plt.xlim(<span class="dv">40</span>,<span class="dv">240</span>)<span class="op">;</span></span></code></pre></div>
+<p><strong>Table 3.10</strong></p>
+<div class="sourceCode" id="cb415"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb415-1"><a href="multiple-linear-regression.html#cb415-1" aria-hidden="true" tabindex="-1"></a>auto[<span class="st">&#39;horsepower2&#39;</span>] <span class="op">=</span> auto.horsepower<span class="op">**</span><span class="dv">2</span></span>
+<span id="cb415-2"><a href="multiple-linear-regression.html#cb415-2" aria-hidden="true" tabindex="-1"></a>auto.head(<span class="dv">3</span>)</span></code></pre></div>
+<pre><code>##     mpg  cylinders  ...  Manufacturer  horsepower2
+## 0  18.0          8  ...     chevrolet        16900
+## 1  15.0          8  ...         buick        27225
+## 2  18.0          8  ...      plymouth        22500
+## 
+## [3 rows x 11 columns]</code></pre>
+<div class="sourceCode" id="cb417"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb417-1"><a href="multiple-linear-regression.html#cb417-1" aria-hidden="true" tabindex="-1"></a>est <span class="op">=</span> smf.ols(<span class="st">&#39;mpg ~ horsepower + horsepower2&#39;</span>, auto).fit()</span>
+<span id="cb417-2"><a href="multiple-linear-regression.html#cb417-2" aria-hidden="true" tabindex="-1"></a>est.summary().tables[<span class="dv">1</span>]</span></code></pre></div>
+<pre><code>## &lt;class &#39;statsmodels.iolib.table.SimpleTable&#39;&gt;</code></pre>
+<div id="outliers" class="section level3 unlisted unnumbered">
+<h3>Outliers</h3>
+<p><strong>Figure 3.9</strong></p>
+<div class="sourceCode" id="cb419"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb419-1"><a href="multiple-linear-regression.html#cb419-1" aria-hidden="true" tabindex="-1"></a>regr <span class="op">=</span> skl_lm.LinearRegression()</span>
+<span id="cb419-2"><a href="multiple-linear-regression.html#cb419-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb419-3"><a href="multiple-linear-regression.html#cb419-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Linear fit</span></span>
+<span id="cb419-4"><a href="multiple-linear-regression.html#cb419-4" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> auto.horsepower.values.reshape(<span class="op">-</span><span class="dv">1</span>,<span class="dv">1</span>)</span>
+<span id="cb419-5"><a href="multiple-linear-regression.html#cb419-5" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> auto.mpg</span>
+<span id="cb419-6"><a href="multiple-linear-regression.html#cb419-6" aria-hidden="true" tabindex="-1"></a>regr.fit(X, y)</span></code></pre></div>
+<pre><code>## LinearRegression()</code></pre>
+<div class="sourceCode" id="cb421"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb421-1"><a href="multiple-linear-regression.html#cb421-1" aria-hidden="true" tabindex="-1"></a>auto[<span class="st">&#39;pred1&#39;</span>] <span class="op">=</span> regr.predict(X)</span>
+<span id="cb421-2"><a href="multiple-linear-regression.html#cb421-2" aria-hidden="true" tabindex="-1"></a>auto[<span class="st">&#39;resid1&#39;</span>] <span class="op">=</span> auto.mpg <span class="op">-</span> auto.pred1</span>
+<span id="cb421-3"><a href="multiple-linear-regression.html#cb421-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb421-4"><a href="multiple-linear-regression.html#cb421-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Quadratic fit</span></span>
+<span id="cb421-5"><a href="multiple-linear-regression.html#cb421-5" aria-hidden="true" tabindex="-1"></a>X2 <span class="op">=</span> auto[[<span class="st">&#39;horsepower&#39;</span>, <span class="st">&#39;horsepower2&#39;</span>]].values</span>
+<span id="cb421-6"><a href="multiple-linear-regression.html#cb421-6" aria-hidden="true" tabindex="-1"></a>regr.fit(X2, y)</span></code></pre></div>
+<pre><code>## LinearRegression()</code></pre>
+<div class="sourceCode" id="cb423"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb423-1"><a href="multiple-linear-regression.html#cb423-1" aria-hidden="true" tabindex="-1"></a>auto[<span class="st">&#39;pred2&#39;</span>] <span class="op">=</span> regr.predict(X2)</span>
+<span id="cb423-2"><a href="multiple-linear-regression.html#cb423-2" aria-hidden="true" tabindex="-1"></a>auto[<span class="st">&#39;resid2&#39;</span>] <span class="op">=</span> auto.mpg <span class="op">-</span> auto.pred2</span></code></pre></div>
+<div class="sourceCode" id="cb424"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb424-1"><a href="multiple-linear-regression.html#cb424-1" aria-hidden="true" tabindex="-1"></a>fig, (ax1,ax2) <span class="op">=</span> plt.subplots(<span class="dv">1</span>,<span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">12</span>,<span class="dv">5</span>))</span>
+<span id="cb424-2"><a href="multiple-linear-regression.html#cb424-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb424-3"><a href="multiple-linear-regression.html#cb424-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Left plot</span></span>
+<span id="cb424-4"><a href="multiple-linear-regression.html#cb424-4" aria-hidden="true" tabindex="-1"></a>sns.regplot(x<span class="op">=</span>auto.pred1, y<span class="op">=</span>auto.resid1, lowess<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb424-5"><a href="multiple-linear-regression.html#cb424-5" aria-hidden="true" tabindex="-1"></a>            ax<span class="op">=</span>ax1, line_kws<span class="op">=</span>{<span class="st">&#39;color&#39;</span>:<span class="st">&#39;r&#39;</span>, <span class="st">&#39;lw&#39;</span>:<span class="dv">1</span>},</span>
+<span id="cb424-6"><a href="multiple-linear-regression.html#cb424-6" aria-hidden="true" tabindex="-1"></a>            scatter_kws<span class="op">=</span>{<span class="st">&#39;facecolors&#39;</span>:<span class="st">&#39;None&#39;</span>, <span class="st">&#39;edgecolors&#39;</span>:<span class="st">&#39;k&#39;</span>, <span class="st">&#39;alpha&#39;</span>:<span class="fl">0.5</span>})</span></code></pre></div>
+<pre><code>## &lt;AxesSubplot:xlabel=&#39;pred1&#39;, ylabel=&#39;resid1&#39;&gt;</code></pre>
+<div class="sourceCode" id="cb426"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb426-1"><a href="multiple-linear-regression.html#cb426-1" aria-hidden="true" tabindex="-1"></a>ax1.hlines(<span class="dv">0</span>,xmin<span class="op">=</span>ax1.xaxis.get_data_interval()[<span class="dv">0</span>],</span>
+<span id="cb426-2"><a href="multiple-linear-regression.html#cb426-2" aria-hidden="true" tabindex="-1"></a>           xmax<span class="op">=</span>ax1.xaxis.get_data_interval()[<span class="dv">1</span>], linestyles<span class="op">=</span><span class="st">&#39;dotted&#39;</span>)</span></code></pre></div>
+<pre><code>## &lt;matplotlib.collections.LineCollection object at 0x7fb10c999f28&gt;</code></pre>
+<div class="sourceCode" id="cb428"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb428-1"><a href="multiple-linear-regression.html#cb428-1" aria-hidden="true" tabindex="-1"></a>ax1.set_title(<span class="st">&#39;Residual Plot for Linear Fit&#39;</span>)</span>
+<span id="cb428-2"><a href="multiple-linear-regression.html#cb428-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb428-3"><a href="multiple-linear-regression.html#cb428-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Right plot</span></span></code></pre></div>
+<pre><code>## Text(0.5, 1.0, &#39;Residual Plot for Linear Fit&#39;)</code></pre>
+<div class="sourceCode" id="cb430"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb430-1"><a href="multiple-linear-regression.html#cb430-1" aria-hidden="true" tabindex="-1"></a>sns.regplot(x<span class="op">=</span>auto.pred2, y<span class="op">=</span>auto.resid2, lowess<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb430-2"><a href="multiple-linear-regression.html#cb430-2" aria-hidden="true" tabindex="-1"></a>            line_kws<span class="op">=</span>{<span class="st">&#39;color&#39;</span>:<span class="st">&#39;r&#39;</span>, <span class="st">&#39;lw&#39;</span>:<span class="dv">1</span>}, ax<span class="op">=</span>ax2,</span>
+<span id="cb430-3"><a href="multiple-linear-regression.html#cb430-3" aria-hidden="true" tabindex="-1"></a>            scatter_kws<span class="op">=</span>{<span class="st">&#39;facecolors&#39;</span>:<span class="st">&#39;None&#39;</span>, <span class="st">&#39;edgecolors&#39;</span>:<span class="st">&#39;k&#39;</span>, <span class="st">&#39;alpha&#39;</span>:<span class="fl">0.5</span>})</span></code></pre></div>
+<pre><code>## &lt;AxesSubplot:xlabel=&#39;pred2&#39;, ylabel=&#39;resid2&#39;&gt;</code></pre>
+<div class="sourceCode" id="cb432"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb432-1"><a href="multiple-linear-regression.html#cb432-1" aria-hidden="true" tabindex="-1"></a>ax2.hlines(<span class="dv">0</span>,xmin<span class="op">=</span>ax2.xaxis.get_data_interval()[<span class="dv">0</span>],</span>
+<span id="cb432-2"><a href="multiple-linear-regression.html#cb432-2" aria-hidden="true" tabindex="-1"></a>           xmax<span class="op">=</span>ax2.xaxis.get_data_interval()[<span class="dv">1</span>], linestyles<span class="op">=</span><span class="st">&#39;dotted&#39;</span>)</span></code></pre></div>
+<pre><code>## &lt;matplotlib.collections.LineCollection object at 0x7fb10c9a8a90&gt;</code></pre>
+<div class="sourceCode" id="cb434"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb434-1"><a href="multiple-linear-regression.html#cb434-1" aria-hidden="true" tabindex="-1"></a>ax2.set_title(<span class="st">&#39;Residual Plot for Quadratic Fit&#39;</span>)</span></code></pre></div>
+<pre><code>## Text(0.5, 1.0, &#39;Residual Plot for Quadratic Fit&#39;)</code></pre>
+<div class="sourceCode" id="cb436"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb436-1"><a href="multiple-linear-regression.html#cb436-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> ax <span class="kw">in</span> fig.axes:</span>
+<span id="cb436-2"><a href="multiple-linear-regression.html#cb436-2" aria-hidden="true" tabindex="-1"></a>    ax.set_xlabel(<span class="st">&#39;Fitted values&#39;</span>)</span>
+<span id="cb436-3"><a href="multiple-linear-regression.html#cb436-3" aria-hidden="true" tabindex="-1"></a>    ax.set_ylabel(<span class="st">&#39;Residuals&#39;</span>)</span></code></pre></div>
+<pre><code>## Text(0.5, 0, &#39;Fitted values&#39;)
+## Text(0, 0.5, &#39;Residuals&#39;)
+## Text(0.5, 0, &#39;Fitted values&#39;)
+## Text(0, 0.5, &#39;Residuals&#39;)</code></pre>
+
+</div>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="simple-linear-regressio.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="advanced-linear-regression.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["BIPM_DS.pdf", "BIPM_DS.epub"],
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

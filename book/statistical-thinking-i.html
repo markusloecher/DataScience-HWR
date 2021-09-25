@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Lesson 1 Statistical Thinking I | 581092 Data Science</title>
+  <meta name="description" content="Welcome to most important course you’ll ever take: Data Science 🙄" />
+  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Lesson 1 Statistical Thinking I | 581092 Data Science" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="Welcome to most important course you’ll ever take: Data Science 🙄" />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Lesson 1 Statistical Thinking I | 581092 Data Science" />
+  
+  <meta name="twitter:description" content="Welcome to most important course you’ll ever take: Data Science 🙄" />
+  
+
+<meta name="author" content="M Loecher" />
+
+
+<meta name="date" content="2021-09-24" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="index.html"/>
+<link rel="next" href="sampling-uncertainty.html"/>
+<script src="libs/header-attrs-2.7/header-attrs.js"></script>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">BIPM Data Science</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a>
+<ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#course-components"><i class="fa fa-check"></i>Course components</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#grading"><i class="fa fa-check"></i>Grading</a>
+<ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#software-and-environments"><i class="fa fa-check"></i>Software and Environments</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="1" data-path="statistical-thinking-i.html"><a href="statistical-thinking-i.html"><i class="fa fa-check"></i><b>1</b> Statistical Thinking I</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="statistical-thinking-i.html"><a href="statistical-thinking-i.html#overview"><i class="fa fa-check"></i><b>1.1</b> Overview</a></li>
+<li class="chapter" data-level="1.2" data-path="statistical-thinking-i.html"><a href="statistical-thinking-i.html#contingency-tables-as-simple-models"><i class="fa fa-check"></i><b>1.2</b> Contingency Tables as simple models</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="sampling-uncertainty.html"><a href="sampling-uncertainty.html"><i class="fa fa-check"></i><b>2</b> Sampling Uncertainty</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="sampling-uncertainty.html"><a href="sampling-uncertainty.html#ab-testing"><i class="fa fa-check"></i><b>2.1</b> A/B Testing</a></li>
+<li class="chapter" data-level="2.2" data-path="sampling-uncertainty.html"><a href="sampling-uncertainty.html#distributions"><i class="fa fa-check"></i><b>2.2</b> Distributions</a></li>
+<li class="chapter" data-level="2.3" data-path="sampling-uncertainty.html"><a href="sampling-uncertainty.html#hacker-statistic"><i class="fa fa-check"></i><b>2.3</b> Hacker Statistic</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="testing.html"><a href="testing.html"><i class="fa fa-check"></i><b>3</b> Testing</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="testing.html"><a href="testing.html#hypothesis-tests"><i class="fa fa-check"></i><b>3.1</b> Hypothesis Tests</a></li>
+<li class="chapter" data-level="3.2" data-path="testing.html"><a href="testing.html#parametric-tests"><i class="fa fa-check"></i><b>3.2</b> Parametric Tests</a></li>
+<li class="chapter" data-level="3.3" data-path="testing.html"><a href="testing.html#non-parametric-tests"><i class="fa fa-check"></i><b>3.3</b> Non parametric Tests</a></li>
+<li class="chapter" data-level="3.4" data-path="testing.html"><a href="testing.html#bootstrap-hypothesis-tests"><i class="fa fa-check"></i><b>3.4</b> Bootstrap Hypothesis Tests</a>
+<ul>
+<li class="chapter" data-level="3.4.1" data-path="testing.html"><a href="testing.html#a-two-sample-bootstrap-hypothesis-test-for-difference-of-means"><i class="fa fa-check"></i><b>3.4.1</b> A two-sample bootstrap hypothesis test for difference of means</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="advanced-tests.html"><a href="advanced-tests.html"><i class="fa fa-check"></i><b>4</b> Advanced Tests</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="advanced-tests.html"><a href="advanced-tests.html#permutation-2-sample-test"><i class="fa fa-check"></i><b>4.1</b> Permutation 2-sample test</a></li>
+<li class="chapter" data-level="4.2" data-path="advanced-tests.html"><a href="advanced-tests.html#sample-t-test"><i class="fa fa-check"></i><b>4.2</b> 2-sample t test</a></li>
+<li class="chapter" data-level="4.3" data-path="advanced-tests.html"><a href="advanced-tests.html#random-walks"><i class="fa fa-check"></i><b>4.3</b> Random Walks</a>
+<ul>
+<li class="chapter" data-level="4.3.1" data-path="advanced-tests.html"><a href="advanced-tests.html#the-sqrtn-law-again"><i class="fa fa-check"></i><b>4.3.1</b> The <span class="math inline">\(\sqrt{n}\)</span> law again !</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="simple-linear-regressio.html"><a href="simple-linear-regressio.html"><i class="fa fa-check"></i><b>5</b> Simple Linear Regressio</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="simple-linear-regressio.html"><a href="simple-linear-regressio.html#loss-functions"><i class="fa fa-check"></i><b>5.1</b> Loss Functions</a></li>
+<li class="chapter" data-level="5.2" data-path="simple-linear-regressio.html"><a href="simple-linear-regressio.html#least-squares"><i class="fa fa-check"></i><b>5.2</b> Least Squares</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html"><i class="fa fa-check"></i><b>6</b> Multiple Linear Regression</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#statsmodels"><i class="fa fa-check"></i><b>6.1</b> Statsmodels</a></li>
+<li class="chapter" data-level="6.2" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#other-considerations-in-the-regression-model"><i class="fa fa-check"></i><b>6.2</b> Other Considerations in the Regression Model</a></li>
+<li class="chapter" data-level="6.3" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#categorical-variables"><i class="fa fa-check"></i><b>6.3</b> Categorical Variables</a></li>
+<li class="chapter" data-level="6.4" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#interactions"><i class="fa fa-check"></i><b>6.4</b> Interactions</a></li>
+<li class="chapter" data-level="6.5" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#non-linear-relationships"><i class="fa fa-check"></i><b>6.5</b> Non-linear relationships</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="advanced-linear-regression.html"><a href="advanced-linear-regression.html"><i class="fa fa-check"></i><b>7</b> Advanced Linear Regression</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="advanced-linear-regression.html"><a href="advanced-linear-regression.html#dummy-coding"><i class="fa fa-check"></i><b>7.1</b> Dummy Coding</a></li>
+<li class="chapter" data-level="7.2" data-path="advanced-linear-regression.html"><a href="advanced-linear-regression.html#overfitting"><i class="fa fa-check"></i><b>7.2</b> Overfitting</a></li>
+<li class="chapter" data-level="7.3" data-path="advanced-linear-regression.html"><a href="advanced-linear-regression.html#cross-validation"><i class="fa fa-check"></i><b>7.3</b> Cross Validation</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="classification.html"><a href="classification.html"><i class="fa fa-check"></i><b>8</b> Classification</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="classification.html"><a href="classification.html#datasets"><i class="fa fa-check"></i><b>8.1</b> Datasets</a></li>
+<li class="chapter" data-level="8.2" data-path="classification.html"><a href="classification.html#logistic-regression"><i class="fa fa-check"></i><b>8.2</b> Logistic Regression</a></li>
+<li class="chapter" data-level="8.3" data-path="classification.html"><a href="classification.html#other-classifiers"><i class="fa fa-check"></i><b>8.3</b> Other Classifiers</a>
+<ul>
+<li class="chapter" data-level="8.3.1" data-path="classification.html"><a href="classification.html#k-nearest-neighbors"><i class="fa fa-check"></i><b>8.3.1</b> K Nearest Neighbors</a></li>
+<li class="chapter" data-level="8.3.2" data-path="classification.html"><a href="classification.html#multinomial-logistic-regression"><i class="fa fa-check"></i><b>8.3.2</b> Multinomial Logistic Regression</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="regularized-regression.html"><a href="regularized-regression.html"><i class="fa fa-check"></i><b>9</b> Regularized Regression</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="regularized-regression.html"><a href="regularized-regression.html#other-classifiers-1"><i class="fa fa-check"></i><b>9.1</b> Other Classifiers</a>
+<ul>
+<li class="chapter" data-level="9.1.1" data-path="regularized-regression.html"><a href="regularized-regression.html#k-nearest-neighbors-knn"><i class="fa fa-check"></i><b>9.1.1</b> K-Nearest Neighbors (KNN)</a></li>
+<li class="chapter" data-level="9.1.2" data-path="regularized-regression.html"><a href="regularized-regression.html#multinomial-logistic-regression-1"><i class="fa fa-check"></i><b>9.1.2</b> Multinomial Logistic Regression</a></li>
+<li class="chapter" data-level="9.1.3" data-path="regularized-regression.html"><a href="regularized-regression.html#roc-curves"><i class="fa fa-check"></i><b>9.1.3</b> ROC Curves</a></li>
+<li class="chapter" data-level="9.1.4" data-path="regularized-regression.html"><a href="regularized-regression.html#regularized-regression-1"><i class="fa fa-check"></i><b>9.1.4</b> Regularized Regression</a></li>
+<li class="chapter" data-level="9.1.5" data-path="regularized-regression.html"><a href="regularized-regression.html#kaggle"><i class="fa fa-check"></i><b>9.1.5</b> Kaggle</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="trees.html"><a href="trees.html"><i class="fa fa-check"></i><b>10</b> Trees</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="trees.html"><a href="trees.html#node-impurity"><i class="fa fa-check"></i><b>10.1</b> Node Impurity</a></li>
+<li class="chapter" data-level="10.2" data-path="trees.html"><a href="trees.html#regression-trees"><i class="fa fa-check"></i><b>10.2</b> Regression Trees</a></li>
+<li class="chapter" data-level="10.3" data-path="trees.html"><a href="trees.html#classification-trees"><i class="fa fa-check"></i><b>10.3</b> Classification Trees</a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="from-trees-to-forests.html"><a href="from-trees-to-forests.html"><i class="fa fa-check"></i><b>11</b> From Trees to Forests</a>
+<ul>
+<li class="chapter" data-level="11.1" data-path="from-trees-to-forests.html"><a href="from-trees-to-forests.html#classification-tree"><i class="fa fa-check"></i><b>11.1</b> Classification Tree</a></li>
+<li class="chapter" data-level="11.2" data-path="from-trees-to-forests.html"><a href="from-trees-to-forests.html#ensembles-of-estimators"><i class="fa fa-check"></i><b>11.2</b> Ensembles of Estimators</a></li>
+<li class="chapter" data-level="11.3" data-path="from-trees-to-forests.html"><a href="from-trees-to-forests.html#bagging"><i class="fa fa-check"></i><b>11.3</b> Bagging</a></li>
+<li class="chapter" data-level="11.4" data-path="from-trees-to-forests.html"><a href="from-trees-to-forests.html#random-forests"><i class="fa fa-check"></i><b>11.4</b> Random Forests</a></li>
+</ul></li>
+<li class="chapter" data-level="12" data-path="explainable-ml.html"><a href="explainable-ml.html"><i class="fa fa-check"></i><b>12</b> Explainable ML</a>
+<ul>
+<li class="chapter" data-level="12.1" data-path="explainable-ml.html"><a href="explainable-ml.html#partial-dependence-plots"><i class="fa fa-check"></i><b>12.1</b> Partial dependence plots</a></li>
+<li class="chapter" data-level="12.2" data-path="explainable-ml.html"><a href="explainable-ml.html#shap-values"><i class="fa fa-check"></i><b>12.2</b> SHAP values</a>
+<ul>
+<li class="chapter" data-level="12.2.1" data-path="explainable-ml.html"><a href="explainable-ml.html#titanic"><i class="fa fa-check"></i><b>12.2.1</b> Titanic</a></li>
+<li class="chapter" data-level="12.2.2" data-path="explainable-ml.html"><a href="explainable-ml.html#force-plots"><i class="fa fa-check"></i><b>12.2.2</b> Force plots</a></li>
+<li class="chapter" data-level="12.2.3" data-path="explainable-ml.html"><a href="explainable-ml.html#tasks-3"><i class="fa fa-check"></i><b>12.2.3</b> Tasks</a></li>
+</ul></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">581092 Data Science</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="statistical-thinking-i" class="section level1" number="1">
+<h1><span class="header-section-number">Lesson 1</span> Statistical Thinking I</h1>
+<div id="overview" class="section level2" number="1.1">
+<h2><span class="header-section-number">1.1</span> Overview</h2>
+<ol style="list-style-type: decimal">
+<li>Groupby
+<ul>
+<li>Interactions</li>
+<li>Simple Model</li>
+</ul></li>
+<li>Boxplots
+<ul>
+<li>Quantiles</li>
+<li>Whiskers</li>
+</ul></li>
+<li>Histograms and Standard Deviation</li>
+</ol>
+<p><strong>import libraries</strong>
+<!-- #endregion --></p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="statistical-thinking-i.html#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-2"><a href="statistical-thinking-i.html#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb1-3"><a href="statistical-thinking-i.html#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-4"><a href="statistical-thinking-i.html#cb1-4" aria-hidden="true" tabindex="-1"></a>pd.options.mode.chained_assignment <span class="op">=</span> <span class="va">None</span> <span class="co"># disable chained assignment warning</span></span>
+<span id="cb1-5"><a href="statistical-thinking-i.html#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span></code></pre></div>
+</div>
+<div id="contingency-tables-as-simple-models" class="section level2" number="1.2">
+<h2><span class="header-section-number">1.2</span> Contingency Tables as simple models</h2>
+<div id="explore-the-titanic-data" class="section level3 unlisted unnumbered">
+<h3>Explore the Titanic Data</h3>
+<div class="sourceCode" id="cb2"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="statistical-thinking-i.html#cb2-1" aria-hidden="true" tabindex="-1"></a>titanic <span class="op">=</span> sns.load_dataset(<span class="st">&#39;titanic&#39;</span>)</span>
+<span id="cb2-2"><a href="statistical-thinking-i.html#cb2-2" aria-hidden="true" tabindex="-1"></a>titanic.head()</span></code></pre></div>
+<pre><code>##    survived  pclass     sex   age  ...  deck  embark_town  alive  alone
+## 0         0       3    male  22.0  ...   NaN  Southampton     no  False
+## 1         1       1  female  38.0  ...     C    Cherbourg    yes  False
+## 2         1       3  female  26.0  ...   NaN  Southampton    yes   True
+## 3         1       1  female  35.0  ...     C  Southampton    yes  False
+## 4         0       3    male  35.0  ...   NaN  Southampton     no   True
+## 
+## [5 rows x 15 columns]</code></pre>
+<div class="sourceCode" id="cb4"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb4-1"><a href="statistical-thinking-i.html#cb4-1" aria-hidden="true" tabindex="-1"></a>titanicSmall <span class="op">=</span> titanic[[<span class="st">&#39;pclass&#39;</span>,<span class="st">&#39;sex&#39;</span>, <span class="st">&#39;survived&#39;</span>]]</span>
+<span id="cb4-2"><a href="statistical-thinking-i.html#cb4-2" aria-hidden="true" tabindex="-1"></a>SurvByClassSex <span class="op">=</span> titanicSmall.groupby([<span class="st">&#39;pclass&#39;</span>,<span class="st">&#39;sex&#39;</span>])</span>
+<span id="cb4-3"><a href="statistical-thinking-i.html#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="statistical-thinking-i.html#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co"># survival probability</span></span>
+<span id="cb4-5"><a href="statistical-thinking-i.html#cb4-5" aria-hidden="true" tabindex="-1"></a>survProb <span class="op">=</span> SurvByClassSex.mean()</span>
+<span id="cb4-6"><a href="statistical-thinking-i.html#cb4-6" aria-hidden="true" tabindex="-1"></a>survProb</span></code></pre></div>
+<pre><code>##                survived
+## pclass sex             
+## 1      female  0.968085
+##        male    0.368852
+## 2      female  0.921053
+##        male    0.157407
+## 3      female  0.500000
+##        male    0.135447</code></pre>
+<div class="sourceCode" id="cb6"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb6-1"><a href="statistical-thinking-i.html#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># survival count</span></span>
+<span id="cb6-2"><a href="statistical-thinking-i.html#cb6-2" aria-hidden="true" tabindex="-1"></a>survCount <span class="op">=</span> SurvByClassSex.count()</span>
+<span id="cb6-3"><a href="statistical-thinking-i.html#cb6-3" aria-hidden="true" tabindex="-1"></a>survCount</span></code></pre></div>
+<pre><code>##                survived
+## pclass sex             
+## 1      female        94
+##        male         122
+## 2      female        76
+##        male         108
+## 3      female       144
+##        male         347</code></pre>
+<div class="sourceCode" id="cb8"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb8-1"><a href="statistical-thinking-i.html#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># indexing multi-index pandas dataframes with .xs()</span></span>
+<span id="cb8-2"><a href="statistical-thinking-i.html#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="co"># female count only:</span></span>
+<span id="cb8-3"><a href="statistical-thinking-i.html#cb8-3" aria-hidden="true" tabindex="-1"></a>survCount.xs(key<span class="op">=</span><span class="st">&quot;female&quot;</span>,level<span class="op">=</span><span class="dv">1</span>)</span></code></pre></div>
+<pre><code>##         survived
+## pclass          
+## 1             94
+## 2             76
+## 3            144</code></pre>
+</div>
+<div id="task-1" class="section level3 unlisted unnumbered">
+<h3>Task 1</h3>
+<p>We can regard this simple counting exercise as a “predictive model” where we “predict” the outcome based on bucketing the data and “classify” the Survival status by <span class="math inline">\(S=1\)</span>, if <span class="math inline">\(P_S(sex,pclass) \geq 0.5\)</span> and <span class="math inline">\(0\)</span> otherwise.</p>
+<ol style="list-style-type: decimal">
+<li>Compute the <strong>confusion matrix</strong>, which is simply a <span class="math inline">\(2x2\)</span> contingency table of the predicted versus the actual outcomes. (Hint: Look at <code>pd.crosstab()</code>)</li>
+<li>(<strong>MC</strong>) Compute the overall accuracy of this model in two ways: (i) directly from the confusion matrix and (ii) from the survival probabilities. (Hint: Look at <code>SurvByClassSex.count()</code> and <code>np.dot()</code>)
+<ul>
+<li><strong>A</strong> 0.878</li>
+<li><strong>B</strong> 0.887</li>
+<li><strong>C</strong> 0.787</li>
+<li><strong>D</strong> 0.778</li>
+</ul></li>
+<li>Higher accuracy(=“classification rate”) clearly is equivalent to a lower “misclassification rate,” which in machine learning is also called a <em>loss function</em>. Discuss
+<ul>
+<li>whether misclassifying a female P1 passenger should count equally towards (reducing) the quality of the model as misclassifying a male P1 passenger.</li>
+<li>whether there could be another loss function which would be more discriminatory.</li>
+<li>what you would consider equally spaced “losses”
+<ul>
+<li><span class="math inline">\(0.3, 0.2, 0.1, 0\)</span></li>
+<li><span class="math inline">\(0.1, 0.01, 0.001, ...\)</span></li>
+</ul></li>
+</ul></li>
+</ol>
+<div id="compute-the-confusion-matrix" class="section level4 unlisted unnumbered">
+<h4>1.1 Compute the confusion matrix</h4>
+<div class="sourceCode" id="cb10"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb10-1"><a href="statistical-thinking-i.html#cb10-1" aria-hidden="true" tabindex="-1"></a>titanicSmall.loc[:,<span class="st">&quot;surv_pred&quot;</span>] <span class="op">=</span> titanic.loc[:,<span class="st">&quot;sex&quot;</span>] <span class="op">==</span> <span class="st">&quot;female&quot;</span></span>
+<span id="cb10-2"><a href="statistical-thinking-i.html#cb10-2" aria-hidden="true" tabindex="-1"></a>ConfMat <span class="op">=</span> pd.crosstab(titanicSmall[<span class="st">&quot;surv_pred&quot;</span>], titanicSmall[<span class="st">&quot;survived&quot;</span>])</span>
+<span id="cb10-3"><a href="statistical-thinking-i.html#cb10-3" aria-hidden="true" tabindex="-1"></a>ConfMat</span></code></pre></div>
+<pre><code>## survived     0    1
+## surv_pred          
+## False      468  109
+## True        81  233</code></pre>
+</div>
+<div id="compute-the-overall-accuracy-of-this-model-in-two-ways" class="section level4 unlisted unnumbered">
+<h4>1.2 Compute the overall accuracy of this model in two ways:</h4>
+<div class="sourceCode" id="cb12"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb12-1"><a href="statistical-thinking-i.html#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># method 1: using ConfMat.values accuracy = [(TN + TP) / N]</span></span>
+<span id="cb12-2"><a href="statistical-thinking-i.html#cb12-2" aria-hidden="true" tabindex="-1"></a>N <span class="op">=</span> np.<span class="bu">sum</span>(ConfMat.values)</span>
+<span id="cb12-3"><a href="statistical-thinking-i.html#cb12-3" aria-hidden="true" tabindex="-1"></a>acc1 <span class="op">=</span> np.<span class="bu">round</span>( (ConfMat.values[<span class="dv">0</span>,<span class="dv">0</span>]<span class="op">+</span>ConfMat.values[<span class="dv">1</span>,<span class="dv">1</span>]) <span class="op">/</span> N, <span class="dv">3</span>)</span>
+<span id="cb12-4"><a href="statistical-thinking-i.html#cb12-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-5"><a href="statistical-thinking-i.html#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="co"># method 2: using SurvProb and SurvByClassSex</span></span>
+<span id="cb12-6"><a href="statistical-thinking-i.html#cb12-6" aria-hidden="true" tabindex="-1"></a>p <span class="op">=</span> survProb.values</span>
+<span id="cb12-7"><a href="statistical-thinking-i.html#cb12-7" aria-hidden="true" tabindex="-1"></a>acc2 <span class="op">=</span> np.<span class="bu">round</span>( (survCount.values <span class="op">*</span> p).<span class="bu">sum</span>() <span class="op">/</span> N, <span class="dv">3</span>)</span>
+<span id="cb12-8"><a href="statistical-thinking-i.html#cb12-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-9"><a href="statistical-thinking-i.html#cb12-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&#39;acc method1: </span><span class="sc">{acc1}</span><span class="ch">\n</span><span class="st">acc method2: </span><span class="sc">{acc2}</span><span class="st">&#39;</span>)</span></code></pre></div>
+<pre><code>## acc method1: {acc1}
+## acc method2: {acc2}</code></pre>
+</div>
+<div id="higher-accuracyclassification-rate-clearly-is-equivalent-to-a-lower-misclassification-rate-which-in-machine-learning-is-also-called-a-loss-function.-discuss" class="section level4 unlisted unnumbered">
+<h4>1.3 Higher accuracy(=“classification rate”) clearly is equivalent to a lower “misclassification rate,” which in machine learning is also called a loss function. Discuss:</h4>
+<ul>
+<li>whether misclassifying a female P1 passenger should count equally towards (reducing) the quality of the model as misclassifying a male P1 passenger.</li>
+</ul>
+<div class="sourceCode" id="cb14"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb14-1"><a href="statistical-thinking-i.html#cb14-1" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">8</span>,<span class="dv">6</span>))</span>
+<span id="cb14-2"><a href="statistical-thinking-i.html#cb14-2" aria-hidden="true" tabindex="-1"></a>sns.barplot(data<span class="op">=</span>titanic,x<span class="op">=</span><span class="st">&quot;pclass&quot;</span>,y<span class="op">=</span><span class="st">&quot;survived&quot;</span>,hue<span class="op">=</span><span class="st">&quot;sex&quot;</span>,ax<span class="op">=</span>ax)</span>
+<span id="cb14-3"><a href="statistical-thinking-i.html#cb14-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-4"><a href="statistical-thinking-i.html#cb14-4" aria-hidden="true" tabindex="-1"></a>sns.lineplot(x<span class="op">=</span>[<span class="fl">0.2</span>,<span class="fl">1.2</span>,<span class="fl">2.2</span>],y<span class="op">=</span>survProb.xs(key<span class="op">=</span><span class="st">&quot;female&quot;</span>,level<span class="op">=</span><span class="dv">1</span>).values.flatten(),</span>
+<span id="cb14-5"><a href="statistical-thinking-i.html#cb14-5" aria-hidden="true" tabindex="-1"></a>             ax<span class="op">=</span>ax,color<span class="op">=</span><span class="st">&quot;k&quot;</span>,linewidth<span class="op">=</span><span class="dv">3</span>,dashes<span class="op">=</span><span class="va">True</span>)</span></code></pre></div>
+<pre><code>## &lt;AxesSubplot:xlabel=&#39;pclass&#39;, ylabel=&#39;survived&#39;&gt;</code></pre>
+<div class="sourceCode" id="cb16"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb16-1"><a href="statistical-thinking-i.html#cb16-1" aria-hidden="true" tabindex="-1"></a>sns.lineplot(x<span class="op">=</span>[<span class="op">-</span><span class="fl">0.2</span>,<span class="fl">0.8</span>,<span class="fl">1.8</span>],y<span class="op">=</span>survProb.xs(key<span class="op">=</span><span class="st">&quot;male&quot;</span>,level<span class="op">=</span><span class="dv">1</span>).values.flatten()</span>
+<span id="cb16-2"><a href="statistical-thinking-i.html#cb16-2" aria-hidden="true" tabindex="-1"></a>             ,ax<span class="op">=</span>ax,color<span class="op">=</span><span class="st">&quot;k&quot;</span>,linewidth<span class="op">=</span><span class="dv">3</span>,dashes<span class="op">=</span><span class="va">True</span>)<span class="op">;</span></span></code></pre></div>
+<ul>
+<li>whether there could be another loss function which would be more discriminatory.
+<ul>
+<li><em>Log Loss</em></li>
+</ul></li>
+<li>what you would consider equally spaced “losses”
+<ul>
+<li><span class="math inline">\(0.3, 0.2, 0.1, 0\)</span></li>
+<li><span class="math inline">\(0.1, 0.01, 0.001, ...\)</span></li>
+</ul></li>
+</ul>
+<!-- #region -->
+</div>
+</div>
+<div id="task-2" class="section level3 unlisted unnumbered">
+<h3>Task 2</h3>
+<p>We have seen a strong dependence of the <em>outcome</em> on the two “variables”/“features”/“regressors” <em>pclass</em> and <em>sex</em>.
+The natural question is whether there could be more factors “correlated with”/“influencing”/“affecting” Survival.</p>
+<ol style="list-style-type: decimal">
+<li>Does the port of embarkment matter ?
+<ul>
+<li>(<strong>MC</strong>) What is the distribution (counts) of embarkment? (Hint: look at <code>pd.value_counts</code> )
+<ul>
+<li><strong>A</strong> 168, 77, 644</li>
+<li><strong>B</strong> 158, 80, 636</li>
+<li><strong>C</strong> 170, 75, 639</li>
+<li><strong>D</strong> 164, 79, 667</li>
+</ul></li>
+<li>(<strong>MC</strong>) What are the survival rates for <em>Southampton</em> as a function of <code>pclass</code>?
+<ul>
+<li><strong>A</strong> 0.54, 0.42, 0.17</li>
+<li><strong>B</strong> 0.62, 0.39, 0.15</li>
+<li><strong>C</strong> 0.58, 0.46, 0.19</li>
+<li><strong>D</strong> 0.56, 0.37, 0.21</li>
+</ul></li>
+<li>Do the survival rates “look” different from <em>Cherbourg</em> ?</li>
+<li>How would you make sure that the observed differences are not due to chance ?</li>
+</ul></li>
+<li>Does the <em>fare</em> paid matter ?
+<ul>
+<li>How would you quantify/visualize this ?</li>
+<li>What is the fundamental difference between the previous relationship of two variables ?</li>
+<li>Have you heard of the terms <em>confounding</em> or <em>confounders</em> or <em>marginal dependence</em> versus <em>conditional dependence</em> ?</li>
+<li>Discuss dependencies among the features. Revisit the port of embarkment question in this light !</li>
+</ul></li>
+<li>Does <em>age</em> matter ?
+<ul>
+<li>(<strong>MC</strong>) What is the survival rate for passengers below the age of 18?
+<ul>
+<li><strong>A</strong> 0.47</li>
+<li><strong>B</strong> 0.74</li>
+<li><strong>C</strong> 0.54</li>
+<li><strong>D</strong> 0.45</li>
+</ul></li>
+<li>(<strong>MC</strong>) What are the survival rates for passengers below the age of 18 stratified by pclass?
+<ul>
+<li><strong>A</strong> 0.91, 0.87, 0.36</li>
+<li><strong>B</strong> 0.93, 0.88, 0.38</li>
+<li><strong>C</strong> 0.95, 0.93, 0.37</li>
+<li><strong>D</strong> 0.92, 0.91, 0.37</li>
+</ul></li>
+<li>How would you make sure that the observed differences are not due to chance ?</li>
+</ul></li>
+</ol>
+<!-- #endregion -->
+<div id="does-the-port-of-embarkment-matter" class="section level4 unlisted unnumbered">
+<h4>2.1 Does the port of embarkment matter ?</h4>
+<ul>
+<li>What is the distribution (counts) of embarkment? (Hint: look at <code>pd.value_counts</code> )</li>
+</ul>
+<div class="sourceCode" id="cb17"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb17-1"><a href="statistical-thinking-i.html#cb17-1" aria-hidden="true" tabindex="-1"></a>titanic[<span class="st">&#39;embarked&#39;</span>].value_counts()</span></code></pre></div>
+<pre><code>## S    644
+## C    168
+## Q     77
+## Name: embarked, dtype: int64</code></pre>
+<ul>
+<li>What are the survival rates for <em>Southampton</em> as a function of <code>pclass</code>?</li>
+</ul>
+<div class="sourceCode" id="cb19"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb19-1"><a href="statistical-thinking-i.html#cb19-1" aria-hidden="true" tabindex="-1"></a>titanic.groupby([<span class="st">&#39;embarked&#39;</span>, <span class="st">&#39;pclass&#39;</span>]).mean()[[<span class="st">&#39;survived&#39;</span>]].xs(key<span class="op">=</span><span class="st">&quot;S&quot;</span>)</span></code></pre></div>
+<pre><code>##         survived
+## pclass          
+## 1       0.582677
+## 2       0.463415
+## 3       0.189802</code></pre>
+<ul>
+<li>Do the survival rates “look” different from <em>Cherbourg</em> ?</li>
+</ul>
+<div class="sourceCode" id="cb21"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb21-1"><a href="statistical-thinking-i.html#cb21-1" aria-hidden="true" tabindex="-1"></a>titanic.groupby([<span class="st">&#39;embarked&#39;</span>, <span class="st">&#39;pclass&#39;</span>]).mean()[[<span class="st">&#39;survived&#39;</span>]].xs(key<span class="op">=</span><span class="st">&quot;C&quot;</span>)</span></code></pre></div>
+<pre><code>##         survived
+## pclass          
+## 1       0.694118
+## 2       0.529412
+## 3       0.378788</code></pre>
+<ul>
+<li>How would you make sure that the observed differences are not due to chance ?</li>
+</ul>
+</div>
+<div id="does-the-fare-paid-matter" class="section level4 unlisted unnumbered">
+<h4>2.2 Does the <em>fare</em> paid matter ?</h4>
+<p><strong>How would you quantify/visualize this?</strong></p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb23-1"><a href="statistical-thinking-i.html#cb23-1" aria-hidden="true" tabindex="-1"></a>titanic[<span class="st">&#39;surv_Jitter&#39;</span>] <span class="op">=</span> titanic[<span class="st">&#39;survived&#39;</span>] <span class="op">+</span>  np.random.normal(<span class="dv">0</span>,<span class="fl">0.035</span>,N)</span>
+<span id="cb23-2"><a href="statistical-thinking-i.html#cb23-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-3"><a href="statistical-thinking-i.html#cb23-3" aria-hidden="true" tabindex="-1"></a>plt.scatter(<span class="st">&#39;fare&#39;</span>, <span class="st">&#39;surv_Jitter&#39;</span>, data <span class="op">=</span> titanic, alpha <span class="op">=</span> <span class="fl">0.2</span>)</span>
+<span id="cb23-4"><a href="statistical-thinking-i.html#cb23-4" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">&quot;fare&quot;</span>)</span>
+<span id="cb23-5"><a href="statistical-thinking-i.html#cb23-5" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">&quot;survived&quot;</span>)<span class="op">;</span></span></code></pre></div>
+<ul>
+<li><p>What is the fundamental difference between the previous relationship of two variables ?</p></li>
+<li><p>Have you heard of the terms <em>confounding</em> or <em>confounders</em> or <em>marginal dependence</em> versus <em>conditional dependence</em> ?</p></li>
+<li><p>Discuss dependencies among the features. Revisit the port of embarkment question in this light !</p></li>
+</ul>
+<ol start="3" style="list-style-type: decimal">
+<li>Does <em>age</em> matter ?</li>
+</ol>
+<ul>
+<li>What is the survival rate for passengers below the age of 18?</li>
+</ul>
+<div class="sourceCode" id="cb24"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb24-1"><a href="statistical-thinking-i.html#cb24-1" aria-hidden="true" tabindex="-1"></a>titanic[<span class="st">&#39;Below18&#39;</span>] <span class="op">=</span> titanic[<span class="st">&#39;age&#39;</span>] <span class="op">&lt;</span> <span class="dv">18</span></span>
+<span id="cb24-2"><a href="statistical-thinking-i.html#cb24-2" aria-hidden="true" tabindex="-1"></a>titanic.groupby(<span class="st">&#39;Below18&#39;</span>).mean()[[<span class="st">&#39;survived&#39;</span>]]</span></code></pre></div>
+<pre><code>##          survived
+## Below18          
+## False    0.361183
+## True     0.539823</code></pre>
+<p><strong>Visualization of <code>age</code> and <code>survived</code></strong></p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb26-1"><a href="statistical-thinking-i.html#cb26-1" aria-hidden="true" tabindex="-1"></a>sns.histplot(data<span class="op">=</span>titanic,x<span class="op">=</span><span class="st">&quot;age&quot;</span>,hue<span class="op">=</span><span class="st">&quot;survived&quot;</span>,palette<span class="op">=</span>[<span class="st">&quot;red&quot;</span>,<span class="st">&quot;green&quot;</span>])<span class="op">;</span></span></code></pre></div>
+<ul>
+<li>What are the survival rates for passengers below the age of 18 stratified by pclass?</li>
+</ul>
+<div class="sourceCode" id="cb27"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb27-1"><a href="statistical-thinking-i.html#cb27-1" aria-hidden="true" tabindex="-1"></a>titanic[<span class="st">&#39;Below18&#39;</span>] <span class="op">=</span> titanic[<span class="st">&#39;age&#39;</span>] <span class="op">&lt;</span> <span class="dv">18</span></span>
+<span id="cb27-2"><a href="statistical-thinking-i.html#cb27-2" aria-hidden="true" tabindex="-1"></a>titanic.groupby([<span class="st">&#39;Below18&#39;</span>,<span class="st">&#39;pclass&#39;</span>]).mean()[[<span class="st">&#39;survived&#39;</span>]].xs(key<span class="op">=</span><span class="va">True</span>)</span></code></pre></div>
+<pre><code>##         survived
+## pclass          
+## 1       0.916667
+## 2       0.913043
+## 3       0.371795</code></pre>
+<ul>
+<li>How would you make sure that the observed differences are not due to chance ?</li>
+</ul>
+</div>
+</div>
+<div id="task-3" class="section level3 unlisted unnumbered">
+<h3>Task 3</h3>
+<ol style="list-style-type: decimal">
+<li>Create two random (normally distibuted) vectors x1 and x2 of length 500</li>
+<li>Compute their individual stdevs</li>
+<li>Create 2 new variables: (i) xs: the sum of x1 and x2 and (ii) xm: the mean of x1 and x2</li>
+<li>Compute the stdevs of xs and xm</li>
+</ol>
+<div class="sourceCode" id="cb29"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb29-1"><a href="statistical-thinking-i.html#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> numpy.random <span class="im">import</span> randn</span>
+<span id="cb29-2"><a href="statistical-thinking-i.html#cb29-2" aria-hidden="true" tabindex="-1"></a>np.random.seed(<span class="dv">123</span>)</span>
+<span id="cb29-3"><a href="statistical-thinking-i.html#cb29-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-4"><a href="statistical-thinking-i.html#cb29-4" aria-hidden="true" tabindex="-1"></a>x1<span class="op">=</span>randn(<span class="dv">500</span>)</span>
+<span id="cb29-5"><a href="statistical-thinking-i.html#cb29-5" aria-hidden="true" tabindex="-1"></a>x2<span class="op">=</span>randn(<span class="dv">500</span>)</span>
+<span id="cb29-6"><a href="statistical-thinking-i.html#cb29-6" aria-hidden="true" tabindex="-1"></a>x1[<span class="dv">0</span>:<span class="dv">5</span>]</span></code></pre></div>
+<pre><code>## array([-1.0856306 ,  0.99734545,  0.2829785 , -1.50629471, -0.57860025])</code></pre>
+<div class="sourceCode" id="cb31"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb31-1"><a href="statistical-thinking-i.html#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(np.std(x1), np.std(x2) )</span></code></pre></div>
+<pre><code>## 1.0032028561568238 0.9983655274978708</code></pre>
+<div class="sourceCode" id="cb33"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb33-1"><a href="statistical-thinking-i.html#cb33-1" aria-hidden="true" tabindex="-1"></a>xs<span class="op">=</span>x1<span class="op">+</span>x2</span>
+<span id="cb33-2"><a href="statistical-thinking-i.html#cb33-2" aria-hidden="true" tabindex="-1"></a>xm<span class="op">=</span>(x1<span class="op">+</span>x2)<span class="op">/</span><span class="dv">2</span></span>
+<span id="cb33-3"><a href="statistical-thinking-i.html#cb33-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-4"><a href="statistical-thinking-i.html#cb33-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(np.std(xs), np.std(xm) )</span></code></pre></div>
+<pre><code>## 1.4220961462939055 0.7110480731469527</code></pre>
+
+</div>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="index.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="sampling-uncertainty.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["BIPM_DS.pdf", "BIPM_DS.epub"],
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>
