@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Lesson 7 Advanced Linear Regression | 581092 Data Science</title>
+  <meta name="description" content="Welcome to most important course you’ll ever take: Data Science 🙄" />
+  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Lesson 7 Advanced Linear Regression | 581092 Data Science" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="Welcome to most important course you’ll ever take: Data Science 🙄" />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Lesson 7 Advanced Linear Regression | 581092 Data Science" />
+  
+  <meta name="twitter:description" content="Welcome to most important course you’ll ever take: Data Science 🙄" />
+  
+
+<meta name="author" content="M Loecher" />
+
+
+<meta name="date" content="2021-09-24" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="multiple-linear-regression.html"/>
+<link rel="next" href="classification.html"/>
+<script src="libs/header-attrs-2.7/header-attrs.js"></script>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">BIPM Data Science</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a>
+<ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#course-components"><i class="fa fa-check"></i>Course components</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#grading"><i class="fa fa-check"></i>Grading</a>
+<ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#software-and-environments"><i class="fa fa-check"></i>Software and Environments</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="1" data-path="statistical-thinking-i.html"><a href="statistical-thinking-i.html"><i class="fa fa-check"></i><b>1</b> Statistical Thinking I</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="statistical-thinking-i.html"><a href="statistical-thinking-i.html#overview"><i class="fa fa-check"></i><b>1.1</b> Overview</a></li>
+<li class="chapter" data-level="1.2" data-path="statistical-thinking-i.html"><a href="statistical-thinking-i.html#contingency-tables-as-simple-models"><i class="fa fa-check"></i><b>1.2</b> Contingency Tables as simple models</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="sampling-uncertainty.html"><a href="sampling-uncertainty.html"><i class="fa fa-check"></i><b>2</b> Sampling Uncertainty</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="sampling-uncertainty.html"><a href="sampling-uncertainty.html#ab-testing"><i class="fa fa-check"></i><b>2.1</b> A/B Testing</a></li>
+<li class="chapter" data-level="2.2" data-path="sampling-uncertainty.html"><a href="sampling-uncertainty.html#distributions"><i class="fa fa-check"></i><b>2.2</b> Distributions</a></li>
+<li class="chapter" data-level="2.3" data-path="sampling-uncertainty.html"><a href="sampling-uncertainty.html#hacker-statistic"><i class="fa fa-check"></i><b>2.3</b> Hacker Statistic</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="testing.html"><a href="testing.html"><i class="fa fa-check"></i><b>3</b> Testing</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="testing.html"><a href="testing.html#hypothesis-tests"><i class="fa fa-check"></i><b>3.1</b> Hypothesis Tests</a></li>
+<li class="chapter" data-level="3.2" data-path="testing.html"><a href="testing.html#parametric-tests"><i class="fa fa-check"></i><b>3.2</b> Parametric Tests</a></li>
+<li class="chapter" data-level="3.3" data-path="testing.html"><a href="testing.html#non-parametric-tests"><i class="fa fa-check"></i><b>3.3</b> Non parametric Tests</a></li>
+<li class="chapter" data-level="3.4" data-path="testing.html"><a href="testing.html#bootstrap-hypothesis-tests"><i class="fa fa-check"></i><b>3.4</b> Bootstrap Hypothesis Tests</a>
+<ul>
+<li class="chapter" data-level="3.4.1" data-path="testing.html"><a href="testing.html#a-two-sample-bootstrap-hypothesis-test-for-difference-of-means"><i class="fa fa-check"></i><b>3.4.1</b> A two-sample bootstrap hypothesis test for difference of means</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="advanced-tests.html"><a href="advanced-tests.html"><i class="fa fa-check"></i><b>4</b> Advanced Tests</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="advanced-tests.html"><a href="advanced-tests.html#permutation-2-sample-test"><i class="fa fa-check"></i><b>4.1</b> Permutation 2-sample test</a></li>
+<li class="chapter" data-level="4.2" data-path="advanced-tests.html"><a href="advanced-tests.html#sample-t-test"><i class="fa fa-check"></i><b>4.2</b> 2-sample t test</a></li>
+<li class="chapter" data-level="4.3" data-path="advanced-tests.html"><a href="advanced-tests.html#random-walks"><i class="fa fa-check"></i><b>4.3</b> Random Walks</a>
+<ul>
+<li class="chapter" data-level="4.3.1" data-path="advanced-tests.html"><a href="advanced-tests.html#the-sqrtn-law-again"><i class="fa fa-check"></i><b>4.3.1</b> The <span class="math inline">\(\sqrt{n}\)</span> law again !</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="simple-linear-regressio.html"><a href="simple-linear-regressio.html"><i class="fa fa-check"></i><b>5</b> Simple Linear Regressio</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="simple-linear-regressio.html"><a href="simple-linear-regressio.html#loss-functions"><i class="fa fa-check"></i><b>5.1</b> Loss Functions</a></li>
+<li class="chapter" data-level="5.2" data-path="simple-linear-regressio.html"><a href="simple-linear-regressio.html#least-squares"><i class="fa fa-check"></i><b>5.2</b> Least Squares</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html"><i class="fa fa-check"></i><b>6</b> Multiple Linear Regression</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#statsmodels"><i class="fa fa-check"></i><b>6.1</b> Statsmodels</a></li>
+<li class="chapter" data-level="6.2" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#other-considerations-in-the-regression-model"><i class="fa fa-check"></i><b>6.2</b> Other Considerations in the Regression Model</a></li>
+<li class="chapter" data-level="6.3" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#categorical-variables"><i class="fa fa-check"></i><b>6.3</b> Categorical Variables</a></li>
+<li class="chapter" data-level="6.4" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#interactions"><i class="fa fa-check"></i><b>6.4</b> Interactions</a></li>
+<li class="chapter" data-level="6.5" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#non-linear-relationships"><i class="fa fa-check"></i><b>6.5</b> Non-linear relationships</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="advanced-linear-regression.html"><a href="advanced-linear-regression.html"><i class="fa fa-check"></i><b>7</b> Advanced Linear Regression</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="advanced-linear-regression.html"><a href="advanced-linear-regression.html#dummy-coding"><i class="fa fa-check"></i><b>7.1</b> Dummy Coding</a></li>
+<li class="chapter" data-level="7.2" data-path="advanced-linear-regression.html"><a href="advanced-linear-regression.html#overfitting"><i class="fa fa-check"></i><b>7.2</b> Overfitting</a></li>
+<li class="chapter" data-level="7.3" data-path="advanced-linear-regression.html"><a href="advanced-linear-regression.html#cross-validation"><i class="fa fa-check"></i><b>7.3</b> Cross Validation</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="classification.html"><a href="classification.html"><i class="fa fa-check"></i><b>8</b> Classification</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="classification.html"><a href="classification.html#datasets"><i class="fa fa-check"></i><b>8.1</b> Datasets</a></li>
+<li class="chapter" data-level="8.2" data-path="classification.html"><a href="classification.html#logistic-regression"><i class="fa fa-check"></i><b>8.2</b> Logistic Regression</a></li>
+<li class="chapter" data-level="8.3" data-path="classification.html"><a href="classification.html#other-classifiers"><i class="fa fa-check"></i><b>8.3</b> Other Classifiers</a>
+<ul>
+<li class="chapter" data-level="8.3.1" data-path="classification.html"><a href="classification.html#k-nearest-neighbors"><i class="fa fa-check"></i><b>8.3.1</b> K Nearest Neighbors</a></li>
+<li class="chapter" data-level="8.3.2" data-path="classification.html"><a href="classification.html#multinomial-logistic-regression"><i class="fa fa-check"></i><b>8.3.2</b> Multinomial Logistic Regression</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="regularized-regression.html"><a href="regularized-regression.html"><i class="fa fa-check"></i><b>9</b> Regularized Regression</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="regularized-regression.html"><a href="regularized-regression.html#other-classifiers-1"><i class="fa fa-check"></i><b>9.1</b> Other Classifiers</a>
+<ul>
+<li class="chapter" data-level="9.1.1" data-path="regularized-regression.html"><a href="regularized-regression.html#k-nearest-neighbors-knn"><i class="fa fa-check"></i><b>9.1.1</b> K-Nearest Neighbors (KNN)</a></li>
+<li class="chapter" data-level="9.1.2" data-path="regularized-regression.html"><a href="regularized-regression.html#multinomial-logistic-regression-1"><i class="fa fa-check"></i><b>9.1.2</b> Multinomial Logistic Regression</a></li>
+<li class="chapter" data-level="9.1.3" data-path="regularized-regression.html"><a href="regularized-regression.html#roc-curves"><i class="fa fa-check"></i><b>9.1.3</b> ROC Curves</a></li>
+<li class="chapter" data-level="9.1.4" data-path="regularized-regression.html"><a href="regularized-regression.html#regularized-regression-1"><i class="fa fa-check"></i><b>9.1.4</b> Regularized Regression</a></li>
+<li class="chapter" data-level="9.1.5" data-path="regularized-regression.html"><a href="regularized-regression.html#kaggle"><i class="fa fa-check"></i><b>9.1.5</b> Kaggle</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="trees.html"><a href="trees.html"><i class="fa fa-check"></i><b>10</b> Trees</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="trees.html"><a href="trees.html#node-impurity"><i class="fa fa-check"></i><b>10.1</b> Node Impurity</a></li>
+<li class="chapter" data-level="10.2" data-path="trees.html"><a href="trees.html#regression-trees"><i class="fa fa-check"></i><b>10.2</b> Regression Trees</a></li>
+<li class="chapter" data-level="10.3" data-path="trees.html"><a href="trees.html#classification-trees"><i class="fa fa-check"></i><b>10.3</b> Classification Trees</a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="from-trees-to-forests.html"><a href="from-trees-to-forests.html"><i class="fa fa-check"></i><b>11</b> From Trees to Forests</a>
+<ul>
+<li class="chapter" data-level="11.1" data-path="from-trees-to-forests.html"><a href="from-trees-to-forests.html#classification-tree"><i class="fa fa-check"></i><b>11.1</b> Classification Tree</a></li>
+<li class="chapter" data-level="11.2" data-path="from-trees-to-forests.html"><a href="from-trees-to-forests.html#ensembles-of-estimators"><i class="fa fa-check"></i><b>11.2</b> Ensembles of Estimators</a></li>
+<li class="chapter" data-level="11.3" data-path="from-trees-to-forests.html"><a href="from-trees-to-forests.html#bagging"><i class="fa fa-check"></i><b>11.3</b> Bagging</a></li>
+<li class="chapter" data-level="11.4" data-path="from-trees-to-forests.html"><a href="from-trees-to-forests.html#random-forests"><i class="fa fa-check"></i><b>11.4</b> Random Forests</a></li>
+</ul></li>
+<li class="chapter" data-level="12" data-path="explainable-ml.html"><a href="explainable-ml.html"><i class="fa fa-check"></i><b>12</b> Explainable ML</a>
+<ul>
+<li class="chapter" data-level="12.1" data-path="explainable-ml.html"><a href="explainable-ml.html#partial-dependence-plots"><i class="fa fa-check"></i><b>12.1</b> Partial dependence plots</a></li>
+<li class="chapter" data-level="12.2" data-path="explainable-ml.html"><a href="explainable-ml.html#shap-values"><i class="fa fa-check"></i><b>12.2</b> SHAP values</a>
+<ul>
+<li class="chapter" data-level="12.2.1" data-path="explainable-ml.html"><a href="explainable-ml.html#titanic"><i class="fa fa-check"></i><b>12.2.1</b> Titanic</a></li>
+<li class="chapter" data-level="12.2.2" data-path="explainable-ml.html"><a href="explainable-ml.html#force-plots"><i class="fa fa-check"></i><b>12.2.2</b> Force plots</a></li>
+<li class="chapter" data-level="12.2.3" data-path="explainable-ml.html"><a href="explainable-ml.html#tasks-3"><i class="fa fa-check"></i><b>12.2.3</b> Tasks</a></li>
+</ul></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">581092 Data Science</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="advanced-linear-regression" class="section level1" number="7">
+<h1><span class="header-section-number">Lesson 7</span> Advanced Linear Regression</h1>
+<div class="sourceCode" id="cb438"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb438-1"><a href="advanced-linear-regression.html#cb438-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb438-2"><a href="advanced-linear-regression.html#cb438-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb438-3"><a href="advanced-linear-regression.html#cb438-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb438-4"><a href="advanced-linear-regression.html#cb438-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> mpl_toolkits.mplot3d <span class="im">import</span> axes3d</span>
+<span id="cb438-5"><a href="advanced-linear-regression.html#cb438-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
+<span id="cb438-6"><a href="advanced-linear-regression.html#cb438-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb438-7"><a href="advanced-linear-regression.html#cb438-7" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> scale</span>
+<span id="cb438-8"><a href="advanced-linear-regression.html#cb438-8" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> sklearn.linear_model <span class="im">as</span> skl_lm</span>
+<span id="cb438-9"><a href="advanced-linear-regression.html#cb438-9" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> mean_squared_error, r2_score</span>
+<span id="cb438-10"><a href="advanced-linear-regression.html#cb438-10" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> statsmodels.api <span class="im">as</span> sm</span>
+<span id="cb438-11"><a href="advanced-linear-regression.html#cb438-11" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> statsmodels.formula.api <span class="im">as</span> smf</span>
+<span id="cb438-12"><a href="advanced-linear-regression.html#cb438-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb438-13"><a href="advanced-linear-regression.html#cb438-13" aria-hidden="true" tabindex="-1"></a><span class="co"># %matplotlib inline</span></span>
+<span id="cb438-14"><a href="advanced-linear-regression.html#cb438-14" aria-hidden="true" tabindex="-1"></a>sns.set_style(<span class="st">&#39;white&#39;</span>)</span>
+<span id="cb438-15"><a href="advanced-linear-regression.html#cb438-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb438-16"><a href="advanced-linear-regression.html#cb438-16" aria-hidden="true" tabindex="-1"></a><span class="co"># %precision 3</span></span></code></pre></div>
+<div id="dummy-coding" class="section level2" number="7.1">
+<h2><span class="header-section-number">7.1</span> Dummy Coding</h2>
+<div class="sourceCode" id="cb439"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb439-1"><a href="advanced-linear-regression.html#cb439-1" aria-hidden="true" tabindex="-1"></a>titanic <span class="op">=</span> sns.load_dataset(<span class="st">&#39;titanic&#39;</span>)</span>
+<span id="cb439-2"><a href="advanced-linear-regression.html#cb439-2" aria-hidden="true" tabindex="-1"></a>titanic.head()</span></code></pre></div>
+<pre><code>##    survived  pclass     sex   age  ...  deck  embark_town  alive  alone
+## 0         0       3    male  22.0  ...   NaN  Southampton     no  False
+## 1         1       1  female  38.0  ...     C    Cherbourg    yes  False
+## 2         1       3  female  26.0  ...   NaN  Southampton    yes   True
+## 3         1       1  female  35.0  ...     C  Southampton    yes  False
+## 4         0       3    male  35.0  ...   NaN  Southampton     no   True
+## 
+## [5 rows x 15 columns]</code></pre>
+<div class="sourceCode" id="cb441"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb441-1"><a href="advanced-linear-regression.html#cb441-1" aria-hidden="true" tabindex="-1"></a><span class="co">#no dummies</span></span>
+<span id="cb441-2"><a href="advanced-linear-regression.html#cb441-2" aria-hidden="true" tabindex="-1"></a>est <span class="op">=</span> smf.ols(<span class="st">&#39;survived ~ age + pclass + sex + fare&#39;</span>, titanic).fit()</span>
+<span id="cb441-3"><a href="advanced-linear-regression.html#cb441-3" aria-hidden="true" tabindex="-1"></a>est.summary().tables[<span class="dv">1</span>]</span></code></pre></div>
+<pre><code>## &lt;class &#39;statsmodels.iolib.table.SimpleTable&#39;&gt;</code></pre>
+<div id="task-1-1" class="section level3 unlisted unnumbered">
+<h3>Task 1</h3>
+<ul>
+<li>Change Pclass to a factor/categorical variable</li>
+<li>What is the fundamental difference between modeling Pclass as an integer or a factor?</li>
+<li>Why seems one “level” always be missing? Learn/argue about <em>design/model matrices</em> and remember the discussion about multicollinearity from last week.</li>
+<li>Drop <em>Pclass</em> from the model and compare the coeffients and std. errors for <em>Fare</em>.</li>
+</ul>
+<div class="sourceCode" id="cb443"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb443-1"><a href="advanced-linear-regression.html#cb443-1" aria-hidden="true" tabindex="-1"></a><span class="co">#yes dummies</span></span></code></pre></div>
+<div class="sourceCode" id="cb444"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb444-1"><a href="advanced-linear-regression.html#cb444-1" aria-hidden="true" tabindex="-1"></a><span class="co">#drop pclass:</span></span></code></pre></div>
+</div>
+<div id="interactions-1" class="section level3 unlisted unnumbered">
+<h3>Interactions</h3>
+<div id="factor-factor" class="section level4 unlisted unnumbered">
+<h4>Factor-Factor</h4>
+<div class="sourceCode" id="cb445"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb445-1"><a href="advanced-linear-regression.html#cb445-1" aria-hidden="true" tabindex="-1"></a><span class="co">#interaction terms for factors:</span></span>
+<span id="cb445-2"><a href="advanced-linear-regression.html#cb445-2" aria-hidden="true" tabindex="-1"></a>est <span class="op">=</span> smf.ols(<span class="st">&#39;survived ~ age  + C(sex): C(pclass) &#39;</span>, titanic).fit()</span>
+<span id="cb445-3"><a href="advanced-linear-regression.html#cb445-3" aria-hidden="true" tabindex="-1"></a>est.summary().tables[<span class="dv">1</span>]</span></code></pre></div>
+<pre><code>## &lt;class &#39;statsmodels.iolib.table.SimpleTable&#39;&gt;</code></pre>
+<div class="sourceCode" id="cb447"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb447-1"><a href="advanced-linear-regression.html#cb447-1" aria-hidden="true" tabindex="-1"></a><span class="co">#interaction terms for factors with metric variables:</span></span>
+<span id="cb447-2"><a href="advanced-linear-regression.html#cb447-2" aria-hidden="true" tabindex="-1"></a>est <span class="op">=</span> smf.ols(<span class="st">&#39;survived ~ C(sex): age +C(sex)  &#39;</span>, titanic).fit()</span>
+<span id="cb447-3"><a href="advanced-linear-regression.html#cb447-3" aria-hidden="true" tabindex="-1"></a>est.summary().tables[<span class="dv">1</span>]</span></code></pre></div>
+<pre><code>## &lt;class &#39;statsmodels.iolib.table.SimpleTable&#39;&gt;</code></pre>
+<div id="interactions-between-qualitative-and-quantitative-variables" class="section level5 unlisted unnumbered">
+<h5>Interactions between <code>qualitative</code> and <code>quantitative</code> variables</h5>
+<p>Consider the Credit data set, and suppose that we wish to
+predict balance using income (quantitative) and student
+(qualitative).
+Without an interaction term, the model takes the form
+<span class="math display">\[ balance_i = \beta_0 + \beta_1 \cdot income_i +
+\begin{cases}
+    \beta_2 ,\hspace{1cm} \text{if ith person is a student} \\
+    0 ,\hspace{1.1cm} \text{    if ith person is not a student}
+\end{cases}
+\]</span></p>
+<p>With interactions, it takes the form
+<span class="math display">\[ balance_i =
+\begin{cases}
+    (\beta_0 + \beta_2) + (\beta_1 + \beta_3) \cdot income_i   ,\hspace{0.6cm} \text{if student} \\
+    \beta_0 + \beta_1 \cdot income_i ,\hspace{3cm} \text{    if not student}
+\end{cases}
+\]</span></p>
+<div class="sourceCode" id="cb449"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb449-1"><a href="advanced-linear-regression.html#cb449-1" aria-hidden="true" tabindex="-1"></a>credit <span class="op">=</span> pd.read_csv(<span class="st">&#39;../data/Credit.csv&#39;</span>, usecols<span class="op">=</span><span class="bu">list</span>(<span class="bu">range</span>(<span class="dv">1</span>,<span class="dv">12</span>)))</span>
+<span id="cb449-2"><a href="advanced-linear-regression.html#cb449-2" aria-hidden="true" tabindex="-1"></a>credit[<span class="st">&#39;Student2&#39;</span>] <span class="op">=</span> credit.Student.<span class="bu">map</span>({<span class="st">&#39;No&#39;</span>:<span class="dv">0</span>, <span class="st">&#39;Yes&#39;</span>:<span class="dv">1</span>})</span>
+<span id="cb449-3"><a href="advanced-linear-regression.html#cb449-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb449-4"><a href="advanced-linear-regression.html#cb449-4" aria-hidden="true" tabindex="-1"></a>est1 <span class="op">=</span> smf.ols(<span class="st">&#39;Balance ~ Income + Student2&#39;</span>, credit).fit()</span>
+<span id="cb449-5"><a href="advanced-linear-regression.html#cb449-5" aria-hidden="true" tabindex="-1"></a>regr1 <span class="op">=</span> est1.params</span>
+<span id="cb449-6"><a href="advanced-linear-regression.html#cb449-6" aria-hidden="true" tabindex="-1"></a>est2 <span class="op">=</span> smf.ols(<span class="st">&#39;Balance ~ Income + Income*Student2&#39;</span>, credit).fit()</span>
+<span id="cb449-7"><a href="advanced-linear-regression.html#cb449-7" aria-hidden="true" tabindex="-1"></a>regr2 <span class="op">=</span> est2.params</span>
+<span id="cb449-8"><a href="advanced-linear-regression.html#cb449-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb449-9"><a href="advanced-linear-regression.html#cb449-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&#39;Regression 1 - without interaction term&#39;</span>)</span>
+<span id="cb449-10"><a href="advanced-linear-regression.html#cb449-10" aria-hidden="true" tabindex="-1"></a><span class="co">#print(est1.summary().tables[1])</span></span></code></pre></div>
+<pre><code>## Regression 1 - without interaction term</code></pre>
+<div class="sourceCode" id="cb451"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb451-1"><a href="advanced-linear-regression.html#cb451-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(regr1)</span></code></pre></div>
+<pre><code>## Intercept    211.1430
+## Income         5.9843
+## Student2     382.6705
+## dtype: float64</code></pre>
+<div class="sourceCode" id="cb453"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb453-1"><a href="advanced-linear-regression.html#cb453-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&#39;</span><span class="ch">\n</span><span class="st">Regression 2 - with interaction term&#39;</span>)</span>
+<span id="cb453-2"><a href="advanced-linear-regression.html#cb453-2" aria-hidden="true" tabindex="-1"></a><span class="co">#print(est2.summary().tables[1])</span></span></code></pre></div>
+<pre><code>## 
+## Regression 2 - with interaction term</code></pre>
+<div class="sourceCode" id="cb455"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb455-1"><a href="advanced-linear-regression.html#cb455-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(regr2)</span></code></pre></div>
+<pre><code>## Intercept          200.6232
+## Income               6.2182
+## Student2           476.6758
+## Income:Student2     -1.9992
+## dtype: float64</code></pre>
+</div>
+</div>
+<div id="figure-3.7-islr" class="section level4 unlisted unnumbered">
+<h4>Figure 3.7 (ISLR)</h4>
+<div class="sourceCode" id="cb457"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb457-1"><a href="advanced-linear-regression.html#cb457-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Income (x-axis)</span></span>
+<span id="cb457-2"><a href="advanced-linear-regression.html#cb457-2" aria-hidden="true" tabindex="-1"></a>income <span class="op">=</span> np.linspace(<span class="dv">0</span>,<span class="dv">150</span>)</span>
+<span id="cb457-3"><a href="advanced-linear-regression.html#cb457-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb457-4"><a href="advanced-linear-regression.html#cb457-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Balance without interaction term (y-axis)</span></span>
+<span id="cb457-5"><a href="advanced-linear-regression.html#cb457-5" aria-hidden="true" tabindex="-1"></a>student1 <span class="op">=</span> np.linspace(regr1[<span class="st">&#39;Intercept&#39;</span>]<span class="op">+</span>regr1[<span class="st">&#39;Student2&#39;</span>],</span>
+<span id="cb457-6"><a href="advanced-linear-regression.html#cb457-6" aria-hidden="true" tabindex="-1"></a>                       regr1[<span class="st">&#39;Intercept&#39;</span>]<span class="op">+</span>regr1[<span class="st">&#39;Student2&#39;</span>]<span class="op">+</span><span class="dv">150</span><span class="op">*</span>regr1[<span class="st">&#39;Income&#39;</span>])</span>
+<span id="cb457-7"><a href="advanced-linear-regression.html#cb457-7" aria-hidden="true" tabindex="-1"></a>non_student1 <span class="op">=</span>  np.linspace(regr1[<span class="st">&#39;Intercept&#39;</span>], regr1[<span class="st">&#39;Intercept&#39;</span>]<span class="op">+</span><span class="dv">150</span><span class="op">*</span>regr1[<span class="st">&#39;Income&#39;</span>])</span>
+<span id="cb457-8"><a href="advanced-linear-regression.html#cb457-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb457-9"><a href="advanced-linear-regression.html#cb457-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Balance with iteraction term (y-axis)</span></span>
+<span id="cb457-10"><a href="advanced-linear-regression.html#cb457-10" aria-hidden="true" tabindex="-1"></a>student2 <span class="op">=</span> np.linspace(regr2[<span class="st">&#39;Intercept&#39;</span>]<span class="op">+</span>regr2[<span class="st">&#39;Student2&#39;</span>],</span>
+<span id="cb457-11"><a href="advanced-linear-regression.html#cb457-11" aria-hidden="true" tabindex="-1"></a>                       regr2[<span class="st">&#39;Intercept&#39;</span>]<span class="op">+</span>regr2[<span class="st">&#39;Student2&#39;</span>]<span class="op">+</span></span>
+<span id="cb457-12"><a href="advanced-linear-regression.html#cb457-12" aria-hidden="true" tabindex="-1"></a>                       <span class="dv">150</span><span class="op">*</span>(regr2[<span class="st">&#39;Income&#39;</span>]<span class="op">+</span>regr2[<span class="st">&#39;Income:Student2&#39;</span>]))</span>
+<span id="cb457-13"><a href="advanced-linear-regression.html#cb457-13" aria-hidden="true" tabindex="-1"></a>non_student2 <span class="op">=</span>  np.linspace(regr2[<span class="st">&#39;Intercept&#39;</span>], regr2[<span class="st">&#39;Intercept&#39;</span>]<span class="op">+</span><span class="dv">150</span><span class="op">*</span>regr2[<span class="st">&#39;Income&#39;</span>])</span>
+<span id="cb457-14"><a href="advanced-linear-regression.html#cb457-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb457-15"><a href="advanced-linear-regression.html#cb457-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Create plot</span></span>
+<span id="cb457-16"><a href="advanced-linear-regression.html#cb457-16" aria-hidden="true" tabindex="-1"></a>fig, (ax1,ax2) <span class="op">=</span> plt.subplots(<span class="dv">1</span>,<span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">12</span>,<span class="dv">5</span>))</span>
+<span id="cb457-17"><a href="advanced-linear-regression.html#cb457-17" aria-hidden="true" tabindex="-1"></a>ax1.plot(income, student1, <span class="st">&#39;r&#39;</span>, income, non_student1, <span class="st">&#39;k&#39;</span>)</span></code></pre></div>
+<pre><code>## [&lt;matplotlib.lines.Line2D object at 0x7fb10d0c28d0&gt;, &lt;matplotlib.lines.Line2D object at 0x7fb10d0d1358&gt;]</code></pre>
+<div class="sourceCode" id="cb459"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb459-1"><a href="advanced-linear-regression.html#cb459-1" aria-hidden="true" tabindex="-1"></a>ax2.plot(income, student2, <span class="st">&#39;r&#39;</span>, income, non_student2, <span class="st">&#39;k&#39;</span>)</span></code></pre></div>
+<pre><code>## [&lt;matplotlib.lines.Line2D object at 0x7fb10d0d14a8&gt;, &lt;matplotlib.lines.Line2D object at 0x7fb10d0d1978&gt;]</code></pre>
+<div class="sourceCode" id="cb461"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb461-1"><a href="advanced-linear-regression.html#cb461-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> ax <span class="kw">in</span> fig.axes:</span>
+<span id="cb461-2"><a href="advanced-linear-regression.html#cb461-2" aria-hidden="true" tabindex="-1"></a>    ax.legend([<span class="st">&#39;student&#39;</span>, <span class="st">&#39;non-student&#39;</span>], loc<span class="op">=</span><span class="dv">2</span>)</span>
+<span id="cb461-3"><a href="advanced-linear-regression.html#cb461-3" aria-hidden="true" tabindex="-1"></a>    ax.set_xlabel(<span class="st">&#39;Income&#39;</span>)</span>
+<span id="cb461-4"><a href="advanced-linear-regression.html#cb461-4" aria-hidden="true" tabindex="-1"></a>    ax.set_ylabel(<span class="st">&#39;Balance&#39;</span>)</span>
+<span id="cb461-5"><a href="advanced-linear-regression.html#cb461-5" aria-hidden="true" tabindex="-1"></a>    ax.set_ylim(ymax<span class="op">=</span><span class="dv">1550</span>)</span>
+<span id="cb461-6"><a href="advanced-linear-regression.html#cb461-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb461-7"><a href="advanced-linear-regression.html#cb461-7" aria-hidden="true" tabindex="-1"></a><span class="co">#General question: the figures all look like blurry png&#39;s,</span></span>
+<span id="cb461-8"><a href="advanced-linear-regression.html#cb461-8" aria-hidden="true" tabindex="-1"></a><span class="co">#no way to get high quality vector graphics?</span></span></code></pre></div>
+<pre><code>## &lt;matplotlib.legend.Legend object at 0x7fb10d0d1e48&gt;
+## Text(0.5, 0, &#39;Income&#39;)
+## Text(0, 0.5, &#39;Balance&#39;)
+## (147.12692071801723, 1550.0)
+## &lt;matplotlib.legend.Legend object at 0x7fb10d0d1f60&gt;
+## Text(0.5, 0, &#39;Income&#39;)
+## Text(0, 0.5, &#39;Balance&#39;)
+## (145.14672679864282, 1550.0)</code></pre>
+</div>
+</div>
+</div>
+<div id="model-complexity" class="section level2 unlisted unnumbered">
+<h2>Model Complexity</h2>
+<p>Compare the following models:</p>
+<div class="sourceCode" id="cb463"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb463-1"><a href="advanced-linear-regression.html#cb463-1" aria-hidden="true" tabindex="-1"></a>advertising <span class="op">=</span> pd.read_csv(<span class="st">&#39;../data/Advertising.csv&#39;</span>, usecols<span class="op">=</span>[<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>])</span>
+<span id="cb463-2"><a href="advanced-linear-regression.html#cb463-2" aria-hidden="true" tabindex="-1"></a>np.set_printoptions(<span class="dv">3</span>)</span>
+<span id="cb463-3"><a href="advanced-linear-regression.html#cb463-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb463-4"><a href="advanced-linear-regression.html#cb463-4" aria-hidden="true" tabindex="-1"></a>est1 <span class="op">=</span> smf.ols(<span class="st">&#39;Sales ~ TV&#39;</span>, advertising).fit()</span>
+<span id="cb463-5"><a href="advanced-linear-regression.html#cb463-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="vs">r&#39;$R^2=$</span><span class="sc">{:1.3f}</span><span class="vs">&#39;</span>.<span class="bu">format</span>(est1.rsquared))</span></code></pre></div>
+<pre><code>## $R^2=$0.612</code></pre>
+<div class="sourceCode" id="cb465"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb465-1"><a href="advanced-linear-regression.html#cb465-1" aria-hidden="true" tabindex="-1"></a>advertising[<span class="st">&quot;TV2&quot;</span>] <span class="op">=</span> advertising.TV<span class="op">**</span><span class="dv">2</span></span>
+<span id="cb465-2"><a href="advanced-linear-regression.html#cb465-2" aria-hidden="true" tabindex="-1"></a>est2 <span class="op">=</span> smf.ols(<span class="st">&#39;Sales ~ TV + TV2&#39;</span>, advertising).fit()</span>
+<span id="cb465-3"><a href="advanced-linear-regression.html#cb465-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="vs">r&#39;$R^2=$</span><span class="sc">{:1.3f}</span><span class="vs">&#39;</span>.<span class="bu">format</span>(est2.rsquared))</span></code></pre></div>
+<pre><code>## $R^2=$0.619</code></pre>
+<div class="sourceCode" id="cb467"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb467-1"><a href="advanced-linear-regression.html#cb467-1" aria-hidden="true" tabindex="-1"></a>advertising[<span class="st">&quot;TV3&quot;</span>] <span class="op">=</span> advertising.TV<span class="op">**</span><span class="dv">3</span></span>
+<span id="cb467-2"><a href="advanced-linear-regression.html#cb467-2" aria-hidden="true" tabindex="-1"></a>est3 <span class="op">=</span> smf.ols(<span class="st">&#39;Sales ~ TV + TV2 + TV3&#39;</span>, advertising).fit()</span>
+<span id="cb467-3"><a href="advanced-linear-regression.html#cb467-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="vs">r&#39;$R^2=$</span><span class="sc">{:1.3f}</span><span class="vs">&#39;</span>.<span class="bu">format</span>(est3.rsquared))</span></code></pre></div>
+<pre><code>## $R^2=$0.622</code></pre>
+<div class="sourceCode" id="cb469"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb469-1"><a href="advanced-linear-regression.html#cb469-1" aria-hidden="true" tabindex="-1"></a>advertising[<span class="st">&quot;TV4&quot;</span>] <span class="op">=</span> advertising.TV<span class="op">**</span><span class="dv">4</span></span>
+<span id="cb469-2"><a href="advanced-linear-regression.html#cb469-2" aria-hidden="true" tabindex="-1"></a>est3 <span class="op">=</span> smf.ols(<span class="st">&#39;Sales ~ TV + TV2 + TV3 + TV4&#39;</span>, advertising).fit()</span>
+<span id="cb469-3"><a href="advanced-linear-regression.html#cb469-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="vs">r&#39;$R^2=$</span><span class="sc">{:1.3f}</span><span class="vs">&#39;</span>.<span class="bu">format</span>(est3.rsquared))</span></code></pre></div>
+<pre><code>## $R^2=$0.623</code></pre>
+</div>
+<div id="overfitting" class="section level2" number="7.2">
+<h2><span class="header-section-number">7.2</span> Overfitting</h2>
+<p>Can we “play this game” indefinitely?
+Check graphically:</p>
+<div class="sourceCode" id="cb471"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb471-1"><a href="advanced-linear-regression.html#cb471-1" aria-hidden="true" tabindex="-1"></a><span class="co">#sns.regplot(&#39;TV&#39;, &#39;Sales&#39;, data=advertising,fit_reg=True, order=10)</span></span>
+<span id="cb471-2"><a href="advanced-linear-regression.html#cb471-2" aria-hidden="true" tabindex="-1"></a>fit <span class="op">=</span> np.polyfit(advertising.TV, advertising.Sales,<span class="dv">2</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb472"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb472-1"><a href="advanced-linear-regression.html#cb472-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> numpy.polynomial <span class="im">import</span> Polynomial</span>
+<span id="cb472-2"><a href="advanced-linear-regression.html#cb472-2" aria-hidden="true" tabindex="-1"></a>plt.plot(advertising.TV, advertising.Sales, <span class="st">&quot;o&quot;</span>)</span></code></pre></div>
+<pre><code>## [&lt;matplotlib.lines.Line2D object at 0x7fb10d23fcf8&gt;]</code></pre>
+<div class="sourceCode" id="cb474"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb474-1"><a href="advanced-linear-regression.html#cb474-1" aria-hidden="true" tabindex="-1"></a>p <span class="op">=</span> Polynomial.fit(advertising.TV, advertising.Sales, <span class="dv">25</span>)</span>
+<span id="cb474-2"><a href="advanced-linear-regression.html#cb474-2" aria-hidden="true" tabindex="-1"></a>plt.plot(<span class="op">*</span>p.linspace())<span class="op">;</span></span></code></pre></div>
+<p>How do we quantify the notion of <strong>overfitting</strong>, i.e. the (obvious?) impression that the model is “too wiggly,” or <strong>too complex</strong> ?</p>
+<p>The <span class="math inline">\(R^2\)</span> on the data we used to fit the model is useless for this purpose because it seems to only improve the more complex the model becomes!</p>
+<p>One useful idea seems the following: if the orange line does not really capture the “true model,” i.e. has adapted too much to the noise, its performance on a test set would be worse than a simpler model.</p>
+<p><img src="../figures/ISLR-Fig2-10.png" width=600></p>
+<p>Let us examine this idea by using a</p>
+<div id="train-test-split" class="section level3 unlisted unnumbered">
+<h3>Train Test Split</h3>
+<div class="sourceCode" id="cb475"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb475-1"><a href="advanced-linear-regression.html#cb475-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> mean_squared_error</span>
+<span id="cb475-2"><a href="advanced-linear-regression.html#cb475-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> train_test_split</span>
+<span id="cb475-3"><a href="advanced-linear-regression.html#cb475-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> LinearRegression</span>
+<span id="cb475-4"><a href="advanced-linear-regression.html#cb475-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb475-5"><a href="advanced-linear-regression.html#cb475-5" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> advertising[[<span class="st">&quot;Radio&quot;</span>, <span class="st">&quot;Newspaper&quot;</span>, <span class="st">&quot;TV&quot;</span>]]</span>
+<span id="cb475-6"><a href="advanced-linear-regression.html#cb475-6" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> advertising.Sales</span>
+<span id="cb475-7"><a href="advanced-linear-regression.html#cb475-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Create training and test sets</span></span>
+<span id="cb475-8"><a href="advanced-linear-regression.html#cb475-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb475-9"><a href="advanced-linear-regression.html#cb475-9" aria-hidden="true" tabindex="-1"></a>X_train, X_test, y_train, y_test <span class="op">=</span> train_test_split(X, y, test_size <span class="op">=</span> <span class="fl">0.3</span>, random_state<span class="op">=</span><span class="dv">42</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb476"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb476-1"><a href="advanced-linear-regression.html#cb476-1" aria-hidden="true" tabindex="-1"></a><span class="co">#X_train[0:5,:]</span></span>
+<span id="cb476-2"><a href="advanced-linear-regression.html#cb476-2" aria-hidden="true" tabindex="-1"></a><span class="co">#pd.DataFrame(X).head()</span></span>
+<span id="cb476-3"><a href="advanced-linear-regression.html#cb476-3" aria-hidden="true" tabindex="-1"></a>X_train.head()</span>
+<span id="cb476-4"><a href="advanced-linear-regression.html#cb476-4" aria-hidden="true" tabindex="-1"></a><span class="co">#advertising.head()</span></span></code></pre></div>
+<pre><code>##      Radio  Newspaper     TV
+## 169   10.6        6.4  284.3
+## 97    21.0       22.0  184.9
+## 31    17.4       38.6  112.9
+## 12    35.1       65.9   23.8
+## 35     4.1        8.5  290.7</code></pre>
+</div>
+<div id="task-2-1" class="section level3 unlisted unnumbered">
+<h3>Task 2</h3>
+<ol style="list-style-type: decimal">
+<li>Compare the <span class="math inline">\(R^2\)</span> and <em>rmse</em> for the quadratic and quartic models on the test data</li>
+<li>Boston housing data
+<ul>
+<li>Compute the <span class="math inline">\(R^2\)</span> for the test portion</li>
+<li>Compare with the adjusted <span class="math inline">\(R^2\)</span>.</li>
+<li>Think about the model complexity parameter in OLS.</li>
+<li>How would one choose which variables should be part of the model?</li>
+</ul></li>
+</ol>
+<div class="sourceCode" id="cb478"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb478-1"><a href="advanced-linear-regression.html#cb478-1" aria-hidden="true" tabindex="-1"></a>p,stats <span class="op">=</span> Polynomial.fit(advertising.TV, advertising.Sales, <span class="dv">25</span>, full<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb478-2"><a href="advanced-linear-regression.html#cb478-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb478-3"><a href="advanced-linear-regression.html#cb478-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> PolynomialFeatures</span>
+<span id="cb478-4"><a href="advanced-linear-regression.html#cb478-4" aria-hidden="true" tabindex="-1"></a>poly <span class="op">=</span> PolynomialFeatures(degree<span class="op">=</span><span class="dv">25</span>)</span>
+<span id="cb478-5"><a href="advanced-linear-regression.html#cb478-5" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> poly.fit_transform(advertising.TV.values.reshape(<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>))</span>
+<span id="cb478-6"><a href="advanced-linear-regression.html#cb478-6" aria-hidden="true" tabindex="-1"></a>regr <span class="op">=</span> skl_lm.LinearRegression().fit(X, advertising.Sales)</span>
+<span id="cb478-7"><a href="advanced-linear-regression.html#cb478-7" aria-hidden="true" tabindex="-1"></a>yHat <span class="op">=</span> regr.intercept_<span class="op">+</span> np.dot(X,regr.coef_)</span>
+<span id="cb478-8"><a href="advanced-linear-regression.html#cb478-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb478-9"><a href="advanced-linear-regression.html#cb478-9" aria-hidden="true" tabindex="-1"></a>plt.plot(advertising.TV, advertising.Sales, <span class="st">&quot;o&quot;</span>)</span></code></pre></div>
+<pre><code>## [&lt;matplotlib.lines.Line2D object at 0x7fb10d14dc88&gt;]</code></pre>
+<div class="sourceCode" id="cb480"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb480-1"><a href="advanced-linear-regression.html#cb480-1" aria-hidden="true" tabindex="-1"></a>plt.plot(advertising.TV, yHat, <span class="st">&quot;x&quot;</span>)</span></code></pre></div>
+<pre><code>## [&lt;matplotlib.lines.Line2D object at 0x7fb10d1b2d68&gt;]</code></pre>
+<div class="sourceCode" id="cb482"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb482-1"><a href="advanced-linear-regression.html#cb482-1" aria-hidden="true" tabindex="-1"></a>np.corrcoef(yHat, advertising.Sales)[<span class="dv">0</span>,<span class="dv">1</span>]<span class="op">**</span><span class="dv">2</span></span></code></pre></div>
+<pre><code>## 0.38577826148087324</code></pre>
+<p><strong>Boston Housing Data</strong></p>
+<div class="sourceCode" id="cb484"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb484-1"><a href="advanced-linear-regression.html#cb484-1" aria-hidden="true" tabindex="-1"></a>boston <span class="op">=</span> pd.read_csv(<span class="st">&#39;../data/boston.csv&#39;</span>)</span>
+<span id="cb484-2"><a href="advanced-linear-regression.html#cb484-2" aria-hidden="true" tabindex="-1"></a>boston.head()</span></code></pre></div>
+<pre><code>##      crim    zn  indus  chas    nox  ...  tax  ptratio   black  lstat  medv
+## 0  0.0063  18.0   2.31     0  0.538  ...  296     15.3  396.90   4.98  24.0
+## 1  0.0273   0.0   7.07     0  0.469  ...  242     17.8  396.90   9.14  21.6
+## 2  0.0273   0.0   7.07     0  0.469  ...  242     17.8  392.83   4.03  34.7
+## 3  0.0324   0.0   2.18     0  0.458  ...  222     18.7  394.63   2.94  33.4
+## 4  0.0691   0.0   2.18     0  0.458  ...  222     18.7  396.90   5.33  36.2
+## 
+## [5 rows x 14 columns]</code></pre>
+<div class="sourceCode" id="cb486"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb486-1"><a href="advanced-linear-regression.html#cb486-1" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> boston.drop(<span class="st">&#39;medv&#39;</span>, axis<span class="op">=</span><span class="dv">1</span>).values</span>
+<span id="cb486-2"><a href="advanced-linear-regression.html#cb486-2" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> boston[<span class="st">&#39;medv&#39;</span>].values</span></code></pre></div>
+<div class="sourceCode" id="cb487"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb487-1"><a href="advanced-linear-regression.html#cb487-1" aria-hidden="true" tabindex="-1"></a>boston.columns</span></code></pre></div>
+<pre><code>## Index([&#39;crim&#39;, &#39;zn&#39;, &#39;indus&#39;, &#39;chas&#39;, &#39;nox&#39;, &#39;rm&#39;, &#39;age&#39;, &#39;dis&#39;, &#39;rad&#39;, &#39;tax&#39;,
+##        &#39;ptratio&#39;, &#39;black&#39;, &#39;lstat&#39;, &#39;medv&#39;],
+##       dtype=&#39;object&#39;)</code></pre>
+<div class="sourceCode" id="cb489"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb489-1"><a href="advanced-linear-regression.html#cb489-1" aria-hidden="true" tabindex="-1"></a>x_vars <span class="op">=</span> <span class="st">&quot;+&quot;</span>.join(boston.columns[:<span class="op">-</span><span class="dv">1</span>])</span>
+<span id="cb489-2"><a href="advanced-linear-regression.html#cb489-2" aria-hidden="true" tabindex="-1"></a>est <span class="op">=</span> smf.ols(<span class="st">&#39;medv ~ &#39;</span> <span class="op">+</span> x_vars, boston).fit()</span>
+<span id="cb489-3"><a href="advanced-linear-regression.html#cb489-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(est.summary()) <span class="co">#.tables[1]</span></span></code></pre></div>
+<pre><code>##                             OLS Regression Results                            
+## ==============================================================================
+## Dep. Variable:                   medv   R-squared:                       0.741
+## Model:                            OLS   Adj. R-squared:                  0.734
+## Method:                 Least Squares   F-statistic:                     108.1
+## Date:                Fri, 24 Sep 2021   Prob (F-statistic):          6.72e-135
+## Time:                        17:41:38   Log-Likelihood:                -1498.8
+## No. Observations:                 506   AIC:                             3026.
+## Df Residuals:                     492   BIC:                             3085.
+## Df Model:                          13                                         
+## Covariance Type:            nonrobust                                         
+## ==============================================================================
+##                  coef    std err          t      P&gt;|t|      [0.025      0.975]
+## ------------------------------------------------------------------------------
+## Intercept     36.4595      5.103      7.144      0.000      26.432      46.487
+## crim          -0.1080      0.033     -3.287      0.001      -0.173      -0.043
+## zn             0.0464      0.014      3.382      0.001       0.019       0.073
+## indus          0.0206      0.061      0.334      0.738      -0.100       0.141
+## chas           2.6867      0.862      3.118      0.002       0.994       4.380
+## nox          -17.7666      3.820     -4.651      0.000     -25.272     -10.262
+## rm             3.8099      0.418      9.116      0.000       2.989       4.631
+## age            0.0007      0.013      0.052      0.958      -0.025       0.027
+## dis           -1.4756      0.199     -7.398      0.000      -1.867      -1.084
+## rad            0.3060      0.066      4.613      0.000       0.176       0.436
+## tax           -0.0123      0.004     -3.280      0.001      -0.020      -0.005
+## ptratio       -0.9527      0.131     -7.283      0.000      -1.210      -0.696
+## black          0.0093      0.003      3.467      0.001       0.004       0.015
+## lstat         -0.5248      0.051    -10.347      0.000      -0.624      -0.425
+## ==============================================================================
+## Omnibus:                      178.041   Durbin-Watson:                   1.078
+## Prob(Omnibus):                  0.000   Jarque-Bera (JB):              783.126
+## Skew:                           1.521   Prob(JB):                    8.84e-171
+## Kurtosis:                       8.281   Cond. No.                     1.51e+04
+## ==============================================================================
+## 
+## Notes:
+## [1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+## [2] The condition number is large, 1.51e+04. This might indicate that there are
+## strong multicollinearity or other numerical problems.</code></pre>
+<div class="sourceCode" id="cb491"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb491-1"><a href="advanced-linear-regression.html#cb491-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> mean_squared_error</span>
+<span id="cb491-2"><a href="advanced-linear-regression.html#cb491-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> train_test_split</span>
+<span id="cb491-3"><a href="advanced-linear-regression.html#cb491-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> LinearRegression</span></code></pre></div>
+</div>
+</div>
+<div id="cross-validation" class="section level2" number="7.3">
+<h2><span class="header-section-number">7.3</span> Cross Validation</h2>
+<p><strong>Drawbacks of validation set approach</strong></p>
+<ul>
+<li>The validation estimate of the test error can be highly variable, depending on precisely which observations are included in the training/validation set.</li>
+<li>In the validation approach, only a subset of the observations - those that are included in the training set rather than in the validation set - are used to fit the model.</li>
+<li>This suggests that the validation set error may tend to <strong>overestimate the test error</strong> for the model fit on the entire data set.</li>
+</ul>
+<p><strong>K-fold Cross-validation</strong></p>
+<ul>
+<li>randomly divide the data into K equal-sized parts. We leave out part k, fit the model to the other K-1 parts (combined), and then obtain predictions for the left-out kth part.</li>
+<li>This is done in turn for each part <span class="math inline">\(k = 1,2, \ldots, K\)</span>, and then the results are combined.</li>
+</ul>
+<div class="sourceCode" id="cb492"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb492-1"><a href="advanced-linear-regression.html#cb492-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> cross_val_score</span>
+<span id="cb492-2"><a href="advanced-linear-regression.html#cb492-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb492-3"><a href="advanced-linear-regression.html#cb492-3" aria-hidden="true" tabindex="-1"></a>reg_all <span class="op">=</span> LinearRegression()</span>
+<span id="cb492-4"><a href="advanced-linear-regression.html#cb492-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb492-5"><a href="advanced-linear-regression.html#cb492-5" aria-hidden="true" tabindex="-1"></a>cv_results <span class="op">=</span> cross_val_score(reg_all, X, y, cv<span class="op">=</span><span class="dv">5</span>)</span>
+<span id="cb492-6"><a href="advanced-linear-regression.html#cb492-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb492-7"><a href="advanced-linear-regression.html#cb492-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;CV results: &quot;</span>, cv_results)</span></code></pre></div>
+<pre><code>## CV results:  [ 0.639  0.714  0.587  0.079 -0.253]</code></pre>
+<div class="sourceCode" id="cb494"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb494-1"><a href="advanced-linear-regression.html#cb494-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;CV results mean: &quot;</span>, np.mean(cv_results))</span></code></pre></div>
+<pre><code>## CV results mean:  0.3532759243958711</code></pre>
+<!-- #region -->
+<p><strong>Comments</strong></p>
+<ul>
+<li>For non-equal fold sizes, we need to compute the weighted mean!</li>
+<li>Setting <span class="math inline">\(K = n\)</span> yields n-fold or <strong>leave-one out cross-validation</strong> (LOOCV).</li>
+<li>With least-squares linear or polynomial regression, an amazing shortcut makes the cost of LOOCV the same as that of a single model fit! The following formula holds:
+<span class="math display">\[
+CV_n = \frac{1}{n} \sum{\left( \frac{y_i - \hat{y}_i}{1-h_i} \right)^2}
+\]</span>
+where <span class="math inline">\(\hat{y}_i\)</span> is the ith fitted value from the original least
+squares fit, and <span class="math inline">\(h_i\)</span> is the leverage (see ISLR book for details.) This is like the ordinary MSE, except the ith residual is divided by <span class="math inline">\(1-h_i\)</span>.</li>
+</ul>
+<div id="task-3-1" class="section level3 unlisted unnumbered">
+<h3>Task 3</h3>
+<ul>
+<li>Sketch the code for your own CV function.</li>
+<li>Reproduce the left panel of Fig. 5.6, i.e. the right panel of Fig 2.9 from the ISLR book</li>
+</ul>
+<p><img src="../figures/ISLR-Fig2-9.png" width=600>
+<!-- #endregion --></p>
+
+</div>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="multiple-linear-regression.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="classification.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["BIPM_DS.pdf", "BIPM_DS.epub"],
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

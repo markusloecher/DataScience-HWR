@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Lesson 4 Advanced Tests | 581092 Data Science</title>
+  <meta name="description" content="Welcome to most important course you’ll ever take: Data Science 🙄" />
+  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Lesson 4 Advanced Tests | 581092 Data Science" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="Welcome to most important course you’ll ever take: Data Science 🙄" />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Lesson 4 Advanced Tests | 581092 Data Science" />
+  
+  <meta name="twitter:description" content="Welcome to most important course you’ll ever take: Data Science 🙄" />
+  
+
+<meta name="author" content="M Loecher" />
+
+
+<meta name="date" content="2021-09-24" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="testing.html"/>
+<link rel="next" href="simple-linear-regressio.html"/>
+<script src="libs/header-attrs-2.7/header-attrs.js"></script>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">BIPM Data Science</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a>
+<ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#course-components"><i class="fa fa-check"></i>Course components</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#grading"><i class="fa fa-check"></i>Grading</a>
+<ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#software-and-environments"><i class="fa fa-check"></i>Software and Environments</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="1" data-path="statistical-thinking-i.html"><a href="statistical-thinking-i.html"><i class="fa fa-check"></i><b>1</b> Statistical Thinking I</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="statistical-thinking-i.html"><a href="statistical-thinking-i.html#overview"><i class="fa fa-check"></i><b>1.1</b> Overview</a></li>
+<li class="chapter" data-level="1.2" data-path="statistical-thinking-i.html"><a href="statistical-thinking-i.html#contingency-tables-as-simple-models"><i class="fa fa-check"></i><b>1.2</b> Contingency Tables as simple models</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="sampling-uncertainty.html"><a href="sampling-uncertainty.html"><i class="fa fa-check"></i><b>2</b> Sampling Uncertainty</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="sampling-uncertainty.html"><a href="sampling-uncertainty.html#ab-testing"><i class="fa fa-check"></i><b>2.1</b> A/B Testing</a></li>
+<li class="chapter" data-level="2.2" data-path="sampling-uncertainty.html"><a href="sampling-uncertainty.html#distributions"><i class="fa fa-check"></i><b>2.2</b> Distributions</a></li>
+<li class="chapter" data-level="2.3" data-path="sampling-uncertainty.html"><a href="sampling-uncertainty.html#hacker-statistic"><i class="fa fa-check"></i><b>2.3</b> Hacker Statistic</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="testing.html"><a href="testing.html"><i class="fa fa-check"></i><b>3</b> Testing</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="testing.html"><a href="testing.html#hypothesis-tests"><i class="fa fa-check"></i><b>3.1</b> Hypothesis Tests</a></li>
+<li class="chapter" data-level="3.2" data-path="testing.html"><a href="testing.html#parametric-tests"><i class="fa fa-check"></i><b>3.2</b> Parametric Tests</a></li>
+<li class="chapter" data-level="3.3" data-path="testing.html"><a href="testing.html#non-parametric-tests"><i class="fa fa-check"></i><b>3.3</b> Non parametric Tests</a></li>
+<li class="chapter" data-level="3.4" data-path="testing.html"><a href="testing.html#bootstrap-hypothesis-tests"><i class="fa fa-check"></i><b>3.4</b> Bootstrap Hypothesis Tests</a>
+<ul>
+<li class="chapter" data-level="3.4.1" data-path="testing.html"><a href="testing.html#a-two-sample-bootstrap-hypothesis-test-for-difference-of-means"><i class="fa fa-check"></i><b>3.4.1</b> A two-sample bootstrap hypothesis test for difference of means</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="advanced-tests.html"><a href="advanced-tests.html"><i class="fa fa-check"></i><b>4</b> Advanced Tests</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="advanced-tests.html"><a href="advanced-tests.html#permutation-2-sample-test"><i class="fa fa-check"></i><b>4.1</b> Permutation 2-sample test</a></li>
+<li class="chapter" data-level="4.2" data-path="advanced-tests.html"><a href="advanced-tests.html#sample-t-test"><i class="fa fa-check"></i><b>4.2</b> 2-sample t test</a></li>
+<li class="chapter" data-level="4.3" data-path="advanced-tests.html"><a href="advanced-tests.html#random-walks"><i class="fa fa-check"></i><b>4.3</b> Random Walks</a>
+<ul>
+<li class="chapter" data-level="4.3.1" data-path="advanced-tests.html"><a href="advanced-tests.html#the-sqrtn-law-again"><i class="fa fa-check"></i><b>4.3.1</b> The <span class="math inline">\(\sqrt{n}\)</span> law again !</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="simple-linear-regressio.html"><a href="simple-linear-regressio.html"><i class="fa fa-check"></i><b>5</b> Simple Linear Regressio</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="simple-linear-regressio.html"><a href="simple-linear-regressio.html#loss-functions"><i class="fa fa-check"></i><b>5.1</b> Loss Functions</a></li>
+<li class="chapter" data-level="5.2" data-path="simple-linear-regressio.html"><a href="simple-linear-regressio.html#least-squares"><i class="fa fa-check"></i><b>5.2</b> Least Squares</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html"><i class="fa fa-check"></i><b>6</b> Multiple Linear Regression</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#statsmodels"><i class="fa fa-check"></i><b>6.1</b> Statsmodels</a></li>
+<li class="chapter" data-level="6.2" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#other-considerations-in-the-regression-model"><i class="fa fa-check"></i><b>6.2</b> Other Considerations in the Regression Model</a></li>
+<li class="chapter" data-level="6.3" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#categorical-variables"><i class="fa fa-check"></i><b>6.3</b> Categorical Variables</a></li>
+<li class="chapter" data-level="6.4" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#interactions"><i class="fa fa-check"></i><b>6.4</b> Interactions</a></li>
+<li class="chapter" data-level="6.5" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#non-linear-relationships"><i class="fa fa-check"></i><b>6.5</b> Non-linear relationships</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="advanced-linear-regression.html"><a href="advanced-linear-regression.html"><i class="fa fa-check"></i><b>7</b> Advanced Linear Regression</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="advanced-linear-regression.html"><a href="advanced-linear-regression.html#dummy-coding"><i class="fa fa-check"></i><b>7.1</b> Dummy Coding</a></li>
+<li class="chapter" data-level="7.2" data-path="advanced-linear-regression.html"><a href="advanced-linear-regression.html#overfitting"><i class="fa fa-check"></i><b>7.2</b> Overfitting</a></li>
+<li class="chapter" data-level="7.3" data-path="advanced-linear-regression.html"><a href="advanced-linear-regression.html#cross-validation"><i class="fa fa-check"></i><b>7.3</b> Cross Validation</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="classification.html"><a href="classification.html"><i class="fa fa-check"></i><b>8</b> Classification</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="classification.html"><a href="classification.html#datasets"><i class="fa fa-check"></i><b>8.1</b> Datasets</a></li>
+<li class="chapter" data-level="8.2" data-path="classification.html"><a href="classification.html#logistic-regression"><i class="fa fa-check"></i><b>8.2</b> Logistic Regression</a></li>
+<li class="chapter" data-level="8.3" data-path="classification.html"><a href="classification.html#other-classifiers"><i class="fa fa-check"></i><b>8.3</b> Other Classifiers</a>
+<ul>
+<li class="chapter" data-level="8.3.1" data-path="classification.html"><a href="classification.html#k-nearest-neighbors"><i class="fa fa-check"></i><b>8.3.1</b> K Nearest Neighbors</a></li>
+<li class="chapter" data-level="8.3.2" data-path="classification.html"><a href="classification.html#multinomial-logistic-regression"><i class="fa fa-check"></i><b>8.3.2</b> Multinomial Logistic Regression</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="regularized-regression.html"><a href="regularized-regression.html"><i class="fa fa-check"></i><b>9</b> Regularized Regression</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="regularized-regression.html"><a href="regularized-regression.html#other-classifiers-1"><i class="fa fa-check"></i><b>9.1</b> Other Classifiers</a>
+<ul>
+<li class="chapter" data-level="9.1.1" data-path="regularized-regression.html"><a href="regularized-regression.html#k-nearest-neighbors-knn"><i class="fa fa-check"></i><b>9.1.1</b> K-Nearest Neighbors (KNN)</a></li>
+<li class="chapter" data-level="9.1.2" data-path="regularized-regression.html"><a href="regularized-regression.html#multinomial-logistic-regression-1"><i class="fa fa-check"></i><b>9.1.2</b> Multinomial Logistic Regression</a></li>
+<li class="chapter" data-level="9.1.3" data-path="regularized-regression.html"><a href="regularized-regression.html#roc-curves"><i class="fa fa-check"></i><b>9.1.3</b> ROC Curves</a></li>
+<li class="chapter" data-level="9.1.4" data-path="regularized-regression.html"><a href="regularized-regression.html#regularized-regression-1"><i class="fa fa-check"></i><b>9.1.4</b> Regularized Regression</a></li>
+<li class="chapter" data-level="9.1.5" data-path="regularized-regression.html"><a href="regularized-regression.html#kaggle"><i class="fa fa-check"></i><b>9.1.5</b> Kaggle</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="trees.html"><a href="trees.html"><i class="fa fa-check"></i><b>10</b> Trees</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="trees.html"><a href="trees.html#node-impurity"><i class="fa fa-check"></i><b>10.1</b> Node Impurity</a></li>
+<li class="chapter" data-level="10.2" data-path="trees.html"><a href="trees.html#regression-trees"><i class="fa fa-check"></i><b>10.2</b> Regression Trees</a></li>
+<li class="chapter" data-level="10.3" data-path="trees.html"><a href="trees.html#classification-trees"><i class="fa fa-check"></i><b>10.3</b> Classification Trees</a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="from-trees-to-forests.html"><a href="from-trees-to-forests.html"><i class="fa fa-check"></i><b>11</b> From Trees to Forests</a>
+<ul>
+<li class="chapter" data-level="11.1" data-path="from-trees-to-forests.html"><a href="from-trees-to-forests.html#classification-tree"><i class="fa fa-check"></i><b>11.1</b> Classification Tree</a></li>
+<li class="chapter" data-level="11.2" data-path="from-trees-to-forests.html"><a href="from-trees-to-forests.html#ensembles-of-estimators"><i class="fa fa-check"></i><b>11.2</b> Ensembles of Estimators</a></li>
+<li class="chapter" data-level="11.3" data-path="from-trees-to-forests.html"><a href="from-trees-to-forests.html#bagging"><i class="fa fa-check"></i><b>11.3</b> Bagging</a></li>
+<li class="chapter" data-level="11.4" data-path="from-trees-to-forests.html"><a href="from-trees-to-forests.html#random-forests"><i class="fa fa-check"></i><b>11.4</b> Random Forests</a></li>
+</ul></li>
+<li class="chapter" data-level="12" data-path="explainable-ml.html"><a href="explainable-ml.html"><i class="fa fa-check"></i><b>12</b> Explainable ML</a>
+<ul>
+<li class="chapter" data-level="12.1" data-path="explainable-ml.html"><a href="explainable-ml.html#partial-dependence-plots"><i class="fa fa-check"></i><b>12.1</b> Partial dependence plots</a></li>
+<li class="chapter" data-level="12.2" data-path="explainable-ml.html"><a href="explainable-ml.html#shap-values"><i class="fa fa-check"></i><b>12.2</b> SHAP values</a>
+<ul>
+<li class="chapter" data-level="12.2.1" data-path="explainable-ml.html"><a href="explainable-ml.html#titanic"><i class="fa fa-check"></i><b>12.2.1</b> Titanic</a></li>
+<li class="chapter" data-level="12.2.2" data-path="explainable-ml.html"><a href="explainable-ml.html#force-plots"><i class="fa fa-check"></i><b>12.2.2</b> Force plots</a></li>
+<li class="chapter" data-level="12.2.3" data-path="explainable-ml.html"><a href="explainable-ml.html#tasks-3"><i class="fa fa-check"></i><b>12.2.3</b> Tasks</a></li>
+</ul></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">581092 Data Science</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="advanced-tests" class="section level1" number="4">
+<h1><span class="header-section-number">Lesson 4</span> Advanced Tests</h1>
+<ol style="list-style-type: decimal">
+<li>Permutation Tests</li>
+<li>Binary Processes
+<ul>
+<li>AB Tests</li>
+<li>Binomial Distribution</li>
+</ul></li>
+</ol>
+<p><strong>Importing Our Functions</strong></p>
+<div class="sourceCode" id="cb136"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb136-1"><a href="advanced-tests.html#cb136-1" aria-hidden="true" tabindex="-1"></a><span class="co"># %run ../ourFunctions.py</span></span>
+<span id="cb136-2"><a href="advanced-tests.html#cb136-2" aria-hidden="true" tabindex="-1"></a><span class="co"># %precision 3</span></span></code></pre></div>
+<div class="sourceCode" id="cb137"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb137-1"><a href="advanced-tests.html#cb137-1" aria-hidden="true" tabindex="-1"></a><span class="co"># # %load ../ourFunctions.py</span></span>
+<span id="cb137-2"><a href="advanced-tests.html#cb137-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb137-3"><a href="advanced-tests.html#cb137-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib <span class="im">as</span> matplt</span>
+<span id="cb137-4"><a href="advanced-tests.html#cb137-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb137-5"><a href="advanced-tests.html#cb137-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb137-6"><a href="advanced-tests.html#cb137-6" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
+<span id="cb137-7"><a href="advanced-tests.html#cb137-7" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.stats <span class="im">import</span> norm</span>
+<span id="cb137-8"><a href="advanced-tests.html#cb137-8" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy <span class="im">import</span> stats</span>
+<span id="cb137-9"><a href="advanced-tests.html#cb137-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb137-10"><a href="advanced-tests.html#cb137-10" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> numpy <span class="im">import</span> random</span>
+<span id="cb137-11"><a href="advanced-tests.html#cb137-11" aria-hidden="true" tabindex="-1"></a><span class="co">#random.seed(42)</span></span>
+<span id="cb137-12"><a href="advanced-tests.html#cb137-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb137-13"><a href="advanced-tests.html#cb137-13" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> ecdf(data):</span>
+<span id="cb137-14"><a href="advanced-tests.html#cb137-14" aria-hidden="true" tabindex="-1"></a>    <span class="co">&quot;&quot;&quot;Compute ECDF for a one-dimensional array of measurements.&quot;&quot;&quot;</span></span>
+<span id="cb137-15"><a href="advanced-tests.html#cb137-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb137-16"><a href="advanced-tests.html#cb137-16" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Number of data points: n</span></span>
+<span id="cb137-17"><a href="advanced-tests.html#cb137-17" aria-hidden="true" tabindex="-1"></a>    n <span class="op">=</span> <span class="bu">len</span>(data)</span>
+<span id="cb137-18"><a href="advanced-tests.html#cb137-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb137-19"><a href="advanced-tests.html#cb137-19" aria-hidden="true" tabindex="-1"></a>    <span class="co"># x-data for the ECDF: x</span></span>
+<span id="cb137-20"><a href="advanced-tests.html#cb137-20" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> np.sort(data)</span>
+<span id="cb137-21"><a href="advanced-tests.html#cb137-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb137-22"><a href="advanced-tests.html#cb137-22" aria-hidden="true" tabindex="-1"></a>    <span class="co"># y-data for the ECDF: y</span></span>
+<span id="cb137-23"><a href="advanced-tests.html#cb137-23" aria-hidden="true" tabindex="-1"></a>    y <span class="op">=</span> np.arange(<span class="dv">1</span>, n<span class="op">+</span><span class="dv">1</span>) <span class="op">/</span> n</span>
+<span id="cb137-24"><a href="advanced-tests.html#cb137-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb137-25"><a href="advanced-tests.html#cb137-25" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> x, y</span>
+<span id="cb137-26"><a href="advanced-tests.html#cb137-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb137-27"><a href="advanced-tests.html#cb137-27" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> bootstrap_replicate_1d(data, func):</span>
+<span id="cb137-28"><a href="advanced-tests.html#cb137-28" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> func(np.random.choice(data, size<span class="op">=</span><span class="bu">len</span>(data)))</span>
+<span id="cb137-29"><a href="advanced-tests.html#cb137-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb137-30"><a href="advanced-tests.html#cb137-30" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> draw_bs_reps(data, func, size<span class="op">=</span><span class="dv">1</span>):</span>
+<span id="cb137-31"><a href="advanced-tests.html#cb137-31" aria-hidden="true" tabindex="-1"></a>    <span class="co">&quot;&quot;&quot;Draw bootstrap replicates.&quot;&quot;&quot;</span></span>
+<span id="cb137-32"><a href="advanced-tests.html#cb137-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb137-33"><a href="advanced-tests.html#cb137-33" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Initialize array of replicates: bs_replicates</span></span>
+<span id="cb137-34"><a href="advanced-tests.html#cb137-34" aria-hidden="true" tabindex="-1"></a>    bs_replicates <span class="op">=</span> np.empty(size)</span>
+<span id="cb137-35"><a href="advanced-tests.html#cb137-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb137-36"><a href="advanced-tests.html#cb137-36" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Generate replicates</span></span>
+<span id="cb137-37"><a href="advanced-tests.html#cb137-37" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(size):</span>
+<span id="cb137-38"><a href="advanced-tests.html#cb137-38" aria-hidden="true" tabindex="-1"></a>        bs_replicates[i] <span class="op">=</span> bootstrap_replicate_1d(data, func)</span>
+<span id="cb137-39"><a href="advanced-tests.html#cb137-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb137-40"><a href="advanced-tests.html#cb137-40" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> bs_replicates</span>
+<span id="cb137-41"><a href="advanced-tests.html#cb137-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb137-42"><a href="advanced-tests.html#cb137-42" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> bs_2sample_test(xA, xB, func, direction <span class="op">=</span>(<span class="st">&quot;two-sided&quot;</span>,<span class="st">&quot;left&quot;</span>, <span class="st">&quot;right&quot;</span>)[<span class="dv">0</span>], size<span class="op">=</span><span class="dv">1000</span>):</span>
+<span id="cb137-43"><a href="advanced-tests.html#cb137-43" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Compute &quot;pooled&quot; mean</span></span>
+<span id="cb137-44"><a href="advanced-tests.html#cb137-44" aria-hidden="true" tabindex="-1"></a>    mean_overall <span class="op">=</span> np.mean([xA,xB])</span>
+<span id="cb137-45"><a href="advanced-tests.html#cb137-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb137-46"><a href="advanced-tests.html#cb137-46" aria-hidden="true" tabindex="-1"></a>    empirical_diff_means <span class="op">=</span> np.mean(xA)<span class="op">-</span>np.mean(xB)</span>
+<span id="cb137-47"><a href="advanced-tests.html#cb137-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb137-48"><a href="advanced-tests.html#cb137-48" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Generate shifted arrays</span></span>
+<span id="cb137-49"><a href="advanced-tests.html#cb137-49" aria-hidden="true" tabindex="-1"></a>    xA_underNull <span class="op">=</span> xA <span class="op">-</span> np.mean(xA) <span class="op">+</span> mean_overall</span>
+<span id="cb137-50"><a href="advanced-tests.html#cb137-50" aria-hidden="true" tabindex="-1"></a>    xB_underNull <span class="op">=</span> xB <span class="op">-</span> np.mean(xB) <span class="op">+</span> mean_overall</span>
+<span id="cb137-51"><a href="advanced-tests.html#cb137-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb137-52"><a href="advanced-tests.html#cb137-52" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Compute 10,000 bootstrap replicates from shifted arrays</span></span>
+<span id="cb137-53"><a href="advanced-tests.html#cb137-53" aria-hidden="true" tabindex="-1"></a>    bs_replicates_m <span class="op">=</span> draw_bs_reps(xA_underNull, np.mean, size<span class="op">=</span>size)</span>
+<span id="cb137-54"><a href="advanced-tests.html#cb137-54" aria-hidden="true" tabindex="-1"></a>    bs_replicates_f <span class="op">=</span> draw_bs_reps(xB_underNull, np.mean, size<span class="op">=</span>size)</span>
+<span id="cb137-55"><a href="advanced-tests.html#cb137-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb137-56"><a href="advanced-tests.html#cb137-56" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Get replicates of difference of means: bs_replicates</span></span>
+<span id="cb137-57"><a href="advanced-tests.html#cb137-57" aria-hidden="true" tabindex="-1"></a>    bs_replicates <span class="op">=</span> bs_replicates_m <span class="op">-</span> bs_replicates_f</span>
+<span id="cb137-58"><a href="advanced-tests.html#cb137-58" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb137-59"><a href="advanced-tests.html#cb137-59" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Compute and print p-value: p</span></span>
+<span id="cb137-60"><a href="advanced-tests.html#cb137-60" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> direction <span class="op">==</span> <span class="st">&quot;two-sided&quot;</span>:        </span>
+<span id="cb137-61"><a href="advanced-tests.html#cb137-61" aria-hidden="true" tabindex="-1"></a>        p <span class="op">=</span> np.<span class="bu">sum</span>(np.<span class="bu">abs</span>(bs_replicates) <span class="op">&gt;=</span> np.<span class="bu">abs</span>(empirical_diff_means)) <span class="op">/</span> <span class="bu">len</span>(bs_replicates)</span>
+<span id="cb137-62"><a href="advanced-tests.html#cb137-62" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> direction <span class="op">==</span> <span class="st">&quot;left&quot;</span>:        </span>
+<span id="cb137-63"><a href="advanced-tests.html#cb137-63" aria-hidden="true" tabindex="-1"></a>        p <span class="op">=</span> np.<span class="bu">sum</span>(bs_replicates <span class="op">&lt;=</span> empirical_diff_means) <span class="op">/</span> <span class="bu">len</span>(bs_replicates)</span>
+<span id="cb137-64"><a href="advanced-tests.html#cb137-64" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> direction <span class="op">==</span> <span class="st">&quot;right&quot;</span>:        </span>
+<span id="cb137-65"><a href="advanced-tests.html#cb137-65" aria-hidden="true" tabindex="-1"></a>        p <span class="op">=</span> np.<span class="bu">sum</span>(bs_replicates <span class="op">&gt;=</span> empirical_diff_means) <span class="op">/</span> <span class="bu">len</span>(bs_replicates)</span>
+<span id="cb137-66"><a href="advanced-tests.html#cb137-66" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">&#39;p-value =&#39;</span>, p)</span>
+<span id="cb137-67"><a href="advanced-tests.html#cb137-67" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb137-68"><a href="advanced-tests.html#cb137-68" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> bs_replicates</span>
+<span id="cb137-69"><a href="advanced-tests.html#cb137-69" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb137-70"><a href="advanced-tests.html#cb137-70" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> plot2ECDFs(x1, x2,leg<span class="op">=</span>(<span class="st">&#39;male&#39;</span>, <span class="st">&#39;female&#39;</span>),xlab<span class="op">=</span><span class="st">&#39;birth weight(g)&#39;</span>,ylab<span class="op">=</span><span class="st">&#39;ECDF&#39;</span>,title<span class="op">=</span><span class="st">&#39;&#39;</span>):</span>
+<span id="cb137-71"><a href="advanced-tests.html#cb137-71" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Compute ECDF for sample size 40: m_40, f_40</span></span>
+<span id="cb137-72"><a href="advanced-tests.html#cb137-72" aria-hidden="true" tabindex="-1"></a>    mx_40, my_40 <span class="op">=</span> ecdf(x1)</span>
+<span id="cb137-73"><a href="advanced-tests.html#cb137-73" aria-hidden="true" tabindex="-1"></a>    fx_40, fy_40 <span class="op">=</span> ecdf(x2)</span>
+<span id="cb137-74"><a href="advanced-tests.html#cb137-74" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb137-75"><a href="advanced-tests.html#cb137-75" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Plot all ECDFs on the same plot</span></span>
+<span id="cb137-76"><a href="advanced-tests.html#cb137-76" aria-hidden="true" tabindex="-1"></a>    _ <span class="op">=</span> plt.plot(mx_40, my_40, marker <span class="op">=</span> <span class="st">&#39;.&#39;</span>, linestyle <span class="op">=</span> <span class="st">&#39;none&#39;</span>)</span>
+<span id="cb137-77"><a href="advanced-tests.html#cb137-77" aria-hidden="true" tabindex="-1"></a>    _ <span class="op">=</span> plt.plot(fx_40, fy_40, marker <span class="op">=</span> <span class="st">&#39;.&#39;</span>, linestyle <span class="op">=</span> <span class="st">&#39;none&#39;</span>)</span>
+<span id="cb137-78"><a href="advanced-tests.html#cb137-78" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb137-79"><a href="advanced-tests.html#cb137-79" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Make nice margins</span></span>
+<span id="cb137-80"><a href="advanced-tests.html#cb137-80" aria-hidden="true" tabindex="-1"></a>    plt.margins(<span class="fl">0.02</span>)</span>
+<span id="cb137-81"><a href="advanced-tests.html#cb137-81" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb137-82"><a href="advanced-tests.html#cb137-82" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Annotate the plot</span></span>
+<span id="cb137-83"><a href="advanced-tests.html#cb137-83" aria-hidden="true" tabindex="-1"></a>    plt.legend(leg, loc<span class="op">=</span><span class="st">&#39;lower right&#39;</span>)</span>
+<span id="cb137-84"><a href="advanced-tests.html#cb137-84" aria-hidden="true" tabindex="-1"></a>    _ <span class="op">=</span> plt.xlabel(xlab)</span>
+<span id="cb137-85"><a href="advanced-tests.html#cb137-85" aria-hidden="true" tabindex="-1"></a>    _ <span class="op">=</span> plt.ylabel(ylab)</span>
+<span id="cb137-86"><a href="advanced-tests.html#cb137-86" aria-hidden="true" tabindex="-1"></a>    _ <span class="op">=</span> plt.title(title)</span>
+<span id="cb137-87"><a href="advanced-tests.html#cb137-87" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb137-88"><a href="advanced-tests.html#cb137-88" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Display the plot</span></span>
+<span id="cb137-89"><a href="advanced-tests.html#cb137-89" aria-hidden="true" tabindex="-1"></a>    plt.grid()</span>
+<span id="cb137-90"><a href="advanced-tests.html#cb137-90" aria-hidden="true" tabindex="-1"></a>    plt.show()</span>
+<span id="cb137-91"><a href="advanced-tests.html#cb137-91" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb137-92"><a href="advanced-tests.html#cb137-92" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> mean_density_comparison(M<span class="op">=</span><span class="dv">500</span>, n<span class="op">=</span><span class="dv">10</span>):</span>
+<span id="cb137-93"><a href="advanced-tests.html#cb137-93" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb137-94"><a href="advanced-tests.html#cb137-94" aria-hidden="true" tabindex="-1"></a>    <span class="co">#Generate an gender iteration array</span></span>
+<span id="cb137-95"><a href="advanced-tests.html#cb137-95" aria-hidden="true" tabindex="-1"></a>    gender_iter <span class="op">=</span> [<span class="st">&#39;male&#39;</span>, <span class="st">&#39;female&#39;</span>]</span>
+<span id="cb137-96"><a href="advanced-tests.html#cb137-96" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb137-97"><a href="advanced-tests.html#cb137-97" aria-hidden="true" tabindex="-1"></a>    <span class="co">#Create an empty DataFrame with &#39;gender&#39; and &#39;dbirwt&#39; column</span></span>
+<span id="cb137-98"><a href="advanced-tests.html#cb137-98" aria-hidden="true" tabindex="-1"></a>    columns <span class="op">=</span> [<span class="st">&#39;gender&#39;</span>, <span class="st">&#39;dbirwt&#39;</span>]</span>
+<span id="cb137-99"><a href="advanced-tests.html#cb137-99" aria-hidden="true" tabindex="-1"></a>    df_new <span class="op">=</span> pd.DataFrame(columns<span class="op">=</span>columns)</span>
+<span id="cb137-100"><a href="advanced-tests.html#cb137-100" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb137-101"><a href="advanced-tests.html#cb137-101" aria-hidden="true" tabindex="-1"></a>    <span class="co">#Create an empty array to store the standard deviation of the differnt gender &#39;male&#39; = std_dev[0], &#39;female&#39; = std_dev[1]</span></span>
+<span id="cb137-102"><a href="advanced-tests.html#cb137-102" aria-hidden="true" tabindex="-1"></a>    std_dev <span class="op">=</span> np.empty(<span class="dv">2</span>)</span>
+<span id="cb137-103"><a href="advanced-tests.html#cb137-103" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb137-104"><a href="advanced-tests.html#cb137-104" aria-hidden="true" tabindex="-1"></a>    <span class="co">#Iterate over gender and create a specific data subset</span></span>
+<span id="cb137-105"><a href="advanced-tests.html#cb137-105" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> ind,v <span class="kw">in</span> <span class="bu">enumerate</span>(gender_iter):</span>
+<span id="cb137-106"><a href="advanced-tests.html#cb137-106" aria-hidden="true" tabindex="-1"></a>        subset <span class="op">=</span> df_cleaned[df_cleaned.gender <span class="op">==</span> v]</span>
+<span id="cb137-107"><a href="advanced-tests.html#cb137-107" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb137-108"><a href="advanced-tests.html#cb137-108" aria-hidden="true" tabindex="-1"></a>        <span class="co">#create M random sample means of n samples and add it to df_new</span></span>
+<span id="cb137-109"><a href="advanced-tests.html#cb137-109" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(M):</span>
+<span id="cb137-110"><a href="advanced-tests.html#cb137-110" aria-hidden="true" tabindex="-1"></a>            rand_samples <span class="op">=</span> np.random.choice(subset.dbirwt, n)</span>
+<span id="cb137-111"><a href="advanced-tests.html#cb137-111" aria-hidden="true" tabindex="-1"></a>            x <span class="op">=</span> np.mean(rand_samples)</span>
+<span id="cb137-112"><a href="advanced-tests.html#cb137-112" aria-hidden="true" tabindex="-1"></a>            df_new.loc[<span class="bu">len</span>(df_new)<span class="op">+</span><span class="dv">1</span>] <span class="op">=</span> [v, x]</span>
+<span id="cb137-113"><a href="advanced-tests.html#cb137-113" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb137-114"><a href="advanced-tests.html#cb137-114" aria-hidden="true" tabindex="-1"></a>        <span class="co">#plot male and female data and calculate the standard daviation of the data</span></span>
+<span id="cb137-115"><a href="advanced-tests.html#cb137-115" aria-hidden="true" tabindex="-1"></a>        plot_data <span class="op">=</span> df_new[df_new.gender <span class="op">==</span> v]</span>
+<span id="cb137-116"><a href="advanced-tests.html#cb137-116" aria-hidden="true" tabindex="-1"></a>        std_dev[ind] <span class="op">=</span> np.std(plot_data[<span class="st">&#39;dbirwt&#39;</span>])  </span>
+<span id="cb137-117"><a href="advanced-tests.html#cb137-117" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb137-118"><a href="advanced-tests.html#cb137-118" aria-hidden="true" tabindex="-1"></a>        plot_data.dbirwt.plot.density()</span>
+<span id="cb137-119"><a href="advanced-tests.html#cb137-119" aria-hidden="true" tabindex="-1"></a>        plt.xlabel(<span class="st">&#39;dbirwt&#39;</span>)</span>
+<span id="cb137-120"><a href="advanced-tests.html#cb137-120" aria-hidden="true" tabindex="-1"></a>        plt.legend(gender_iter)</span>
+<span id="cb137-121"><a href="advanced-tests.html#cb137-121" aria-hidden="true" tabindex="-1"></a>        <span class="co">#plt.grid()</span></span>
+<span id="cb137-122"><a href="advanced-tests.html#cb137-122" aria-hidden="true" tabindex="-1"></a>        <span class="co">#plt.title(&quot;n=&quot; + str(n))</span></span>
+<span id="cb137-123"><a href="advanced-tests.html#cb137-123" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb137-124"><a href="advanced-tests.html#cb137-124" aria-hidden="true" tabindex="-1"></a>    <span class="co">#return the sample mean data</span></span>
+<span id="cb137-125"><a href="advanced-tests.html#cb137-125" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> df_new</span>
+<span id="cb137-126"><a href="advanced-tests.html#cb137-126" aria-hidden="true" tabindex="-1"></a>    <span class="co">#return the standard deviation of [&#39;male&#39;, &#39;female&#39;]</span></span>
+<span id="cb137-127"><a href="advanced-tests.html#cb137-127" aria-hidden="true" tabindex="-1"></a>    <span class="co">#return std_dev</span></span>
+<span id="cb137-128"><a href="advanced-tests.html#cb137-128" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb137-129"><a href="advanced-tests.html#cb137-129" aria-hidden="true" tabindex="-1"></a><span class="co"># Test the function</span></span>
+<span id="cb137-130"><a href="advanced-tests.html#cb137-130" aria-hidden="true" tabindex="-1"></a><span class="co"># SM40 = mean_density_comparison(M=100, n=40)</span></span>
+<span id="cb137-131"><a href="advanced-tests.html#cb137-131" aria-hidden="true" tabindex="-1"></a><span class="co"># plt.figure()</span></span>
+<span id="cb137-132"><a href="advanced-tests.html#cb137-132" aria-hidden="true" tabindex="-1"></a><span class="co"># SM640 = mean_density_comparison(M=100, n=640)</span></span>
+<span id="cb137-133"><a href="advanced-tests.html#cb137-133" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb137-134"><a href="advanced-tests.html#cb137-134" aria-hidden="true" tabindex="-1"></a><span class="co"># # Permutation tests</span></span>
+<span id="cb137-135"><a href="advanced-tests.html#cb137-135" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb137-136"><a href="advanced-tests.html#cb137-136" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> permutation_sample(data1, data2):</span>
+<span id="cb137-137"><a href="advanced-tests.html#cb137-137" aria-hidden="true" tabindex="-1"></a>    <span class="co">&quot;&quot;&quot;Generate a permutation sample from two data sets.&quot;&quot;&quot;</span></span>
+<span id="cb137-138"><a href="advanced-tests.html#cb137-138" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb137-139"><a href="advanced-tests.html#cb137-139" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Concatenate the data sets: data</span></span>
+<span id="cb137-140"><a href="advanced-tests.html#cb137-140" aria-hidden="true" tabindex="-1"></a>    data <span class="op">=</span> np.concatenate((data1, data2))</span>
+<span id="cb137-141"><a href="advanced-tests.html#cb137-141" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb137-142"><a href="advanced-tests.html#cb137-142" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Permute the concatenated array: permuted_data</span></span>
+<span id="cb137-143"><a href="advanced-tests.html#cb137-143" aria-hidden="true" tabindex="-1"></a>    permuted_data <span class="op">=</span> np.random.permutation(data)</span>
+<span id="cb137-144"><a href="advanced-tests.html#cb137-144" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb137-145"><a href="advanced-tests.html#cb137-145" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Split the permuted array into two: perm_sample_1, perm_sample_2</span></span>
+<span id="cb137-146"><a href="advanced-tests.html#cb137-146" aria-hidden="true" tabindex="-1"></a>    perm_sample_1 <span class="op">=</span> permuted_data[:<span class="bu">len</span>(data1)]</span>
+<span id="cb137-147"><a href="advanced-tests.html#cb137-147" aria-hidden="true" tabindex="-1"></a>    perm_sample_2 <span class="op">=</span> permuted_data[<span class="bu">len</span>(data1):]</span>
+<span id="cb137-148"><a href="advanced-tests.html#cb137-148" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb137-149"><a href="advanced-tests.html#cb137-149" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> perm_sample_1, perm_sample_2</span>
+<span id="cb137-150"><a href="advanced-tests.html#cb137-150" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb137-151"><a href="advanced-tests.html#cb137-151" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> draw_perm_reps(data_1, data_2, func, size<span class="op">=</span><span class="dv">1</span>):</span>
+<span id="cb137-152"><a href="advanced-tests.html#cb137-152" aria-hidden="true" tabindex="-1"></a>    <span class="co">&quot;&quot;&quot;Generate multiple permutation replicates.&quot;&quot;&quot;</span></span>
+<span id="cb137-153"><a href="advanced-tests.html#cb137-153" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb137-154"><a href="advanced-tests.html#cb137-154" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Initialize array of replicates: perm_replicates</span></span>
+<span id="cb137-155"><a href="advanced-tests.html#cb137-155" aria-hidden="true" tabindex="-1"></a>    perm_replicates <span class="op">=</span> np.empty(size)</span>
+<span id="cb137-156"><a href="advanced-tests.html#cb137-156" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb137-157"><a href="advanced-tests.html#cb137-157" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(size):</span>
+<span id="cb137-158"><a href="advanced-tests.html#cb137-158" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Generate permutation sample</span></span>
+<span id="cb137-159"><a href="advanced-tests.html#cb137-159" aria-hidden="true" tabindex="-1"></a>        perm_sample_1, perm_sample_2 <span class="op">=</span> permutation_sample(data_1, data_2)</span>
+<span id="cb137-160"><a href="advanced-tests.html#cb137-160" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb137-161"><a href="advanced-tests.html#cb137-161" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Compute the test statistic</span></span>
+<span id="cb137-162"><a href="advanced-tests.html#cb137-162" aria-hidden="true" tabindex="-1"></a>        perm_replicates[i] <span class="op">=</span> func(perm_sample_1, perm_sample_2)</span>
+<span id="cb137-163"><a href="advanced-tests.html#cb137-163" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb137-164"><a href="advanced-tests.html#cb137-164" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> perm_replicates</span>
+<span id="cb137-165"><a href="advanced-tests.html#cb137-165" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb137-166"><a href="advanced-tests.html#cb137-166" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> diff_of_means(data_1, data_2):</span>
+<span id="cb137-167"><a href="advanced-tests.html#cb137-167" aria-hidden="true" tabindex="-1"></a>    <span class="co">&quot;&quot;&quot;Difference in means of two arrays.&quot;&quot;&quot;</span></span>
+<span id="cb137-168"><a href="advanced-tests.html#cb137-168" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb137-169"><a href="advanced-tests.html#cb137-169" aria-hidden="true" tabindex="-1"></a>    <span class="co"># The difference of means of data_1, data_2: diff</span></span>
+<span id="cb137-170"><a href="advanced-tests.html#cb137-170" aria-hidden="true" tabindex="-1"></a>    diff <span class="op">=</span> np.mean(data_1) <span class="op">-</span> np.mean(data_2)</span>
+<span id="cb137-171"><a href="advanced-tests.html#cb137-171" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb137-172"><a href="advanced-tests.html#cb137-172" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> diff</span></code></pre></div>
+<!-- #region -->
+<div id="permutation-2-sample-test" class="section level2" number="4.1">
+<h2><span class="header-section-number">4.1</span> Permutation 2-sample test</h2>
+<p>We have used the bootstrap to compare two sets of data, both of which are samples. In particular, we can test two-sample hypotheses such as</p>
+<p><span class="math inline">\(H_0: \mu_m = \mu_f, H_A: \mu_m \neq \mu_f\)</span></p>
+<p>or the one-sided versions:</p>
+<p><span class="math inline">\(H_0: \mu_m = \mu_f, H_A: \mu_m &gt; \mu_f\)</span></p>
+<p><span class="math inline">\(H_0: \mu_m = \mu_f, H_A: \mu_m &lt; \mu_f\)</span></p>
+<p>Another way to compare 2 distributions (in some ways much more straightforward than the bootstrap) is <strong>permutation sampling</strong>. It directly simulates the hypothesis that two variables have identical probability distributions.</p>
+<p>A permutation sample of two arrays having respectively <span class="math inline">\(n_1\)</span> and <span class="math inline">\(n_2\)</span> entries is constructed by concatenating the arrays together, scrambling the contents of the concatenated array, and then taking the first <span class="math inline">\(n_1\)</span> entries as the permutation sample of the first array and the last <span class="math inline">\(n_2\)</span> entries as the permutation sample of the second array.</p>
+<p>At DataCamp the first example offers a nice visualization of this process:</p>
+<div>
+<p><img src="../figures/PennsylvaniaOhioDataCamp.png" width="400"/></p>
+</div>
+<p>Complete the code below to run a permutation test:
+<!-- #endregion --></p>
+<div class="sourceCode" id="cb138"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb138-1"><a href="advanced-tests.html#cb138-1" aria-hidden="true" tabindex="-1"></a><span class="co">#def permutation_sample(data1, data2):</span></span>
+<span id="cb138-2"><a href="advanced-tests.html#cb138-2" aria-hidden="true" tabindex="-1"></a><span class="co">#    &quot;&quot;&quot;Generate a permutation sample from two data sets.&quot;&quot;&quot;</span></span>
+<span id="cb138-3"><a href="advanced-tests.html#cb138-3" aria-hidden="true" tabindex="-1"></a><span class="co">#</span></span>
+<span id="cb138-4"><a href="advanced-tests.html#cb138-4" aria-hidden="true" tabindex="-1"></a><span class="co">#    # Concatenate the data sets: data</span></span>
+<span id="cb138-5"><a href="advanced-tests.html#cb138-5" aria-hidden="true" tabindex="-1"></a><span class="co">#    data = np.concatenate((data1, data2))</span></span>
+<span id="cb138-6"><a href="advanced-tests.html#cb138-6" aria-hidden="true" tabindex="-1"></a><span class="co">#</span></span>
+<span id="cb138-7"><a href="advanced-tests.html#cb138-7" aria-hidden="true" tabindex="-1"></a><span class="co">#    # Permute the concatenated array: permuted_data</span></span>
+<span id="cb138-8"><a href="advanced-tests.html#cb138-8" aria-hidden="true" tabindex="-1"></a><span class="co">#    permuted_data = np.random.permutation(data)</span></span>
+<span id="cb138-9"><a href="advanced-tests.html#cb138-9" aria-hidden="true" tabindex="-1"></a><span class="co">#</span></span>
+<span id="cb138-10"><a href="advanced-tests.html#cb138-10" aria-hidden="true" tabindex="-1"></a><span class="co">#    # Split the permuted array into two: perm_sample_1, perm_sample_2</span></span>
+<span id="cb138-11"><a href="advanced-tests.html#cb138-11" aria-hidden="true" tabindex="-1"></a><span class="co">#    perm_sample_1 = permuted_data[:len(data1)]</span></span>
+<span id="cb138-12"><a href="advanced-tests.html#cb138-12" aria-hidden="true" tabindex="-1"></a><span class="co">#    perm_sample_2 = permuted_data[len(data1):]</span></span>
+<span id="cb138-13"><a href="advanced-tests.html#cb138-13" aria-hidden="true" tabindex="-1"></a><span class="co">#</span></span>
+<span id="cb138-14"><a href="advanced-tests.html#cb138-14" aria-hidden="true" tabindex="-1"></a><span class="co">#    return perm_sample_1, perm_sample_2</span></span>
+<span id="cb138-15"><a href="advanced-tests.html#cb138-15" aria-hidden="true" tabindex="-1"></a><span class="co">#</span></span>
+<span id="cb138-16"><a href="advanced-tests.html#cb138-16" aria-hidden="true" tabindex="-1"></a><span class="co">#def draw_perm_reps(data_1, data_2, func, size=1):</span></span>
+<span id="cb138-17"><a href="advanced-tests.html#cb138-17" aria-hidden="true" tabindex="-1"></a><span class="co">#    &quot;&quot;&quot;Generate multiple permutation replicates.&quot;&quot;&quot;</span></span>
+<span id="cb138-18"><a href="advanced-tests.html#cb138-18" aria-hidden="true" tabindex="-1"></a><span class="co">#</span></span>
+<span id="cb138-19"><a href="advanced-tests.html#cb138-19" aria-hidden="true" tabindex="-1"></a><span class="co">#    # Initialize array of replicates: perm_replicates</span></span>
+<span id="cb138-20"><a href="advanced-tests.html#cb138-20" aria-hidden="true" tabindex="-1"></a><span class="co">#    np.random.seed(123)</span></span>
+<span id="cb138-21"><a href="advanced-tests.html#cb138-21" aria-hidden="true" tabindex="-1"></a><span class="co">#    perm_replicates = np.empty(size)</span></span>
+<span id="cb138-22"><a href="advanced-tests.html#cb138-22" aria-hidden="true" tabindex="-1"></a><span class="co">#</span></span>
+<span id="cb138-23"><a href="advanced-tests.html#cb138-23" aria-hidden="true" tabindex="-1"></a><span class="co">#    for i in range(size):</span></span>
+<span id="cb138-24"><a href="advanced-tests.html#cb138-24" aria-hidden="true" tabindex="-1"></a><span class="co">#        # Generate permutation sample</span></span>
+<span id="cb138-25"><a href="advanced-tests.html#cb138-25" aria-hidden="true" tabindex="-1"></a><span class="co">#        perm_sample_1, perm_sample_2 = permutation_sample(data_1, data_2)</span></span>
+<span id="cb138-26"><a href="advanced-tests.html#cb138-26" aria-hidden="true" tabindex="-1"></a><span class="co">#</span></span>
+<span id="cb138-27"><a href="advanced-tests.html#cb138-27" aria-hidden="true" tabindex="-1"></a><span class="co">#    # Compute the test statistic</span></span>
+<span id="cb138-28"><a href="advanced-tests.html#cb138-28" aria-hidden="true" tabindex="-1"></a><span class="co">#    perm_replicates[i] = func(perm_sample_1, perm_sample_2)</span></span>
+<span id="cb138-29"><a href="advanced-tests.html#cb138-29" aria-hidden="true" tabindex="-1"></a><span class="co">#    #perm_replicates[i] = np.mean(data_1) - np.mean(data_2)</span></span>
+<span id="cb138-30"><a href="advanced-tests.html#cb138-30" aria-hidden="true" tabindex="-1"></a><span class="co">#</span></span>
+<span id="cb138-31"><a href="advanced-tests.html#cb138-31" aria-hidden="true" tabindex="-1"></a><span class="co">#    return perm_replicates</span></span>
+<span id="cb138-32"><a href="advanced-tests.html#cb138-32" aria-hidden="true" tabindex="-1"></a><span class="co">#</span></span>
+<span id="cb138-33"><a href="advanced-tests.html#cb138-33" aria-hidden="true" tabindex="-1"></a><span class="co">#def diff_of_means(data_1, data_2):</span></span>
+<span id="cb138-34"><a href="advanced-tests.html#cb138-34" aria-hidden="true" tabindex="-1"></a><span class="co">#    &quot;&quot;&quot;Difference in means of two arrays.&quot;&quot;&quot;</span></span>
+<span id="cb138-35"><a href="advanced-tests.html#cb138-35" aria-hidden="true" tabindex="-1"></a><span class="co">#</span></span>
+<span id="cb138-36"><a href="advanced-tests.html#cb138-36" aria-hidden="true" tabindex="-1"></a><span class="co">#    # The difference of means of data_1, data_2: diff</span></span>
+<span id="cb138-37"><a href="advanced-tests.html#cb138-37" aria-hidden="true" tabindex="-1"></a><span class="co">#    diff = np.mean(data_1) - np.mean(data_2)</span></span>
+<span id="cb138-38"><a href="advanced-tests.html#cb138-38" aria-hidden="true" tabindex="-1"></a><span class="co">#</span></span>
+<span id="cb138-39"><a href="advanced-tests.html#cb138-39" aria-hidden="true" tabindex="-1"></a><span class="co">#    return diff</span></span></code></pre></div>
+<p><strong>Let us apply our first permutation sampling on the Titanic data. (First, we explore the data a bit)</strong></p>
+<div class="sourceCode" id="cb139"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb139-1"><a href="advanced-tests.html#cb139-1" aria-hidden="true" tabindex="-1"></a>titanic <span class="op">=</span> sns.load_dataset(<span class="st">&#39;titanic&#39;</span>)</span>
+<span id="cb139-2"><a href="advanced-tests.html#cb139-2" aria-hidden="true" tabindex="-1"></a>titanic.head()</span></code></pre></div>
+<pre><code>##    survived  pclass     sex   age  ...  deck  embark_town  alive  alone
+## 0         0       3    male  22.0  ...   NaN  Southampton     no  False
+## 1         1       1  female  38.0  ...     C    Cherbourg    yes  False
+## 2         1       3  female  26.0  ...   NaN  Southampton    yes   True
+## 3         1       1  female  35.0  ...     C  Southampton    yes  False
+## 4         0       3    male  35.0  ...   NaN  Southampton     no   True
+## 
+## [5 rows x 15 columns]</code></pre>
+<div class="sourceCode" id="cb141"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb141-1"><a href="advanced-tests.html#cb141-1" aria-hidden="true" tabindex="-1"></a>PclassSurv <span class="op">=</span> titanic.groupby([<span class="st">&#39;pclass&#39;</span>, <span class="st">&#39;survived&#39;</span>])</span>
+<span id="cb141-2"><a href="advanced-tests.html#cb141-2" aria-hidden="true" tabindex="-1"></a>PclassSurv.size()</span></code></pre></div>
+<pre><code>## pclass  survived
+## 1       0            80
+##         1           136
+## 2       0            97
+##         1            87
+## 3       0           372
+##         1           119
+## dtype: int64</code></pre>
+<div class="sourceCode" id="cb143"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb143-1"><a href="advanced-tests.html#cb143-1" aria-hidden="true" tabindex="-1"></a>pd.crosstab(titanic.pclass, titanic.survived,margins<span class="op">=</span><span class="va">True</span>)</span></code></pre></div>
+<pre><code>## survived    0    1  All
+## pclass                 
+## 1          80  136  216
+## 2          97   87  184
+## 3         372  119  491
+## All       549  342  891</code></pre>
+<div class="sourceCode" id="cb145"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb145-1"><a href="advanced-tests.html#cb145-1" aria-hidden="true" tabindex="-1"></a>WomenOnly <span class="op">=</span> titanic[titanic[<span class="st">&quot;sex&quot;</span>]<span class="op">==</span><span class="st">&quot;female&quot;</span>]</span>
+<span id="cb145-2"><a href="advanced-tests.html#cb145-2" aria-hidden="true" tabindex="-1"></a>pd.crosstab(WomenOnly.pclass, WomenOnly.survived,margins<span class="op">=</span><span class="va">True</span>)</span></code></pre></div>
+<pre><code>## survived   0    1  All
+## pclass                
+## 1          3   91   94
+## 2          6   70   76
+## 3         72   72  144
+## All       81  233  314</code></pre>
+<p><strong>Test the claim that the survival chances of women in 1st and 2nd class were pretty much the same.</strong></p>
+<ol style="list-style-type: decimal">
+<li><p>Write down the Null hypothesis and test statistic</p></li>
+<li><p>Write code that generates permutation samples from two data sets</p></li>
+<li><p>Generate many <strong>permutation replicates</strong> for the relevant Titanic subset</p></li>
+<li><p>Compute a p-value</p></li>
+<li><p>Write code that generates permutation samples from two data sets</p></li>
+</ol>
+<div class="sourceCode" id="cb147"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb147-1"><a href="advanced-tests.html#cb147-1" aria-hidden="true" tabindex="-1"></a>Women1 <span class="op">=</span> WomenOnly[WomenOnly[<span class="st">&quot;pclass&quot;</span>]<span class="op">==</span><span class="dv">1</span>].survived</span>
+<span id="cb147-2"><a href="advanced-tests.html#cb147-2" aria-hidden="true" tabindex="-1"></a>Women2 <span class="op">=</span> WomenOnly[WomenOnly[<span class="st">&quot;pclass&quot;</span>]<span class="op">==</span><span class="dv">2</span>].survived</span>
+<span id="cb147-3"><a href="advanced-tests.html#cb147-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb147-4"><a href="advanced-tests.html#cb147-4" aria-hidden="true" tabindex="-1"></a>obsDiff <span class="op">=</span> np.mean(Women1)<span class="op">-</span>np.mean(Women2)</span>
+<span id="cb147-5"><a href="advanced-tests.html#cb147-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb147-6"><a href="advanced-tests.html#cb147-6" aria-hidden="true" tabindex="-1"></a><span class="co">#perm_sample_1, perm_sample_2 = permutation_sample(Women1, Women2)</span></span>
+<span id="cb147-7"><a href="advanced-tests.html#cb147-7" aria-hidden="true" tabindex="-1"></a>np.random.seed(<span class="dv">123</span>)</span>
+<span id="cb147-8"><a href="advanced-tests.html#cb147-8" aria-hidden="true" tabindex="-1"></a><span class="co">#tmp=np.concatenate((perm_sample_1, perm_sample_2))</span></span>
+<span id="cb147-9"><a href="advanced-tests.html#cb147-9" aria-hidden="true" tabindex="-1"></a>perm_replicates <span class="op">=</span> draw_perm_reps(Women1, Women2, diff_of_means, <span class="dv">10000</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb148"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb148-1"><a href="advanced-tests.html#cb148-1" aria-hidden="true" tabindex="-1"></a>obsDiff</span></code></pre></div>
+<pre><code>## 0.04703247480403139</code></pre>
+<div class="sourceCode" id="cb150"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb150-1"><a href="advanced-tests.html#cb150-1" aria-hidden="true" tabindex="-1"></a>perm_replicates</span></code></pre></div>
+<pre><code>## array([-0.00055991, -0.00055991, -0.00055991, ...,  0.02323628,
+##        -0.0481523 , -0.0243561 ])</code></pre>
+<ol start="3" style="list-style-type: decimal">
+<li>Generate many <strong>permutation replicates</strong> for the relevant Titanic subset</li>
+</ol>
+<div class="sourceCode" id="cb152"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb152-1"><a href="advanced-tests.html#cb152-1" aria-hidden="true" tabindex="-1"></a>tmp<span class="op">=</span>plt.hist(perm_replicates)</span>
+<span id="cb152-2"><a href="advanced-tests.html#cb152-2" aria-hidden="true" tabindex="-1"></a>plt.vlines(obsDiff,<span class="dv">0</span>,<span class="dv">2500</span>,colors<span class="op">=</span><span class="st">&quot;red&quot;</span>)</span></code></pre></div>
+<pre><code>## &lt;matplotlib.collections.LineCollection object at 0x7fb1aad426d8&gt;</code></pre>
+<div class="sourceCode" id="cb154"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb154-1"><a href="advanced-tests.html#cb154-1" aria-hidden="true" tabindex="-1"></a>plt.vlines(<span class="op">-</span>obsDiff,<span class="dv">0</span>,<span class="dv">2500</span>, colors<span class="op">=</span><span class="st">&quot;red&quot;</span>)</span></code></pre></div>
+<pre><code>## &lt;matplotlib.collections.LineCollection object at 0x7fb1aad6a7b8&gt;</code></pre>
+<div class="sourceCode" id="cb156"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb156-1"><a href="advanced-tests.html#cb156-1" aria-hidden="true" tabindex="-1"></a>obsDiff <span class="op">=</span> np.mean(Women1)<span class="op">-</span>np.mean(Women2)</span>
+<span id="cb156-2"><a href="advanced-tests.html#cb156-2" aria-hidden="true" tabindex="-1"></a>pVal2 <span class="op">=</span> np.mean(<span class="bu">abs</span>(perm_replicates) <span class="op">&gt;</span> obsDiff)</span>
+<span id="cb156-3"><a href="advanced-tests.html#cb156-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(pVal2)</span>
+<span id="cb156-4"><a href="advanced-tests.html#cb156-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb156-5"><a href="advanced-tests.html#cb156-5" aria-hidden="true" tabindex="-1"></a><span class="co">#pVal1=np.mean(perm_replicates &gt; obsDiff)</span></span></code></pre></div>
+<pre><code>## 0.1876</code></pre>
+<div class="sourceCode" id="cb158"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb158-1"><a href="advanced-tests.html#cb158-1" aria-hidden="true" tabindex="-1"></a>boolArray <span class="op">=</span>  perm_replicates <span class="op">&gt;</span> obsDiff</span>
+<span id="cb158-2"><a href="advanced-tests.html#cb158-2" aria-hidden="true" tabindex="-1"></a>pVal1<span class="op">=</span>np.<span class="bu">sum</span>(boolArray)<span class="op">/</span><span class="bu">len</span>(perm_replicates)</span>
+<span id="cb158-3"><a href="advanced-tests.html#cb158-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb158-4"><a href="advanced-tests.html#cb158-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(pVal1)</span></code></pre></div>
+<pre><code>## 0.0431</code></pre>
+<ol start="4" style="list-style-type: decimal">
+<li>Compute a p-value</li>
+</ol>
+<div class="sourceCode" id="cb160"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb160-1"><a href="advanced-tests.html#cb160-1" aria-hidden="true" tabindex="-1"></a><span class="co"># # %load ../InNotebookSolutions/class4_sol2.py</span></span>
+<span id="cb160-2"><a href="advanced-tests.html#cb160-2" aria-hidden="true" tabindex="-1"></a>Women1 <span class="op">=</span> WomenOnly[WomenOnly[<span class="st">&quot;pclass&quot;</span>]<span class="op">==</span><span class="dv">1</span>].survived</span>
+<span id="cb160-3"><a href="advanced-tests.html#cb160-3" aria-hidden="true" tabindex="-1"></a>Women2 <span class="op">=</span> WomenOnly[WomenOnly[<span class="st">&quot;pclass&quot;</span>]<span class="op">==</span><span class="dv">2</span>].survived</span>
+<span id="cb160-4"><a href="advanced-tests.html#cb160-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb160-5"><a href="advanced-tests.html#cb160-5" aria-hidden="true" tabindex="-1"></a>obsDiff <span class="op">=</span> np.mean(Women1)<span class="op">-</span>np.mean(Women2)</span>
+<span id="cb160-6"><a href="advanced-tests.html#cb160-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb160-7"><a href="advanced-tests.html#cb160-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Acquire permutation samples: perm_replicates</span></span>
+<span id="cb160-8"><a href="advanced-tests.html#cb160-8" aria-hidden="true" tabindex="-1"></a>perm_replicates <span class="op">=</span> draw_perm_reps(Women1, Women2, diff_of_means, <span class="dv">10000</span>)</span>
+<span id="cb160-9"><a href="advanced-tests.html#cb160-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb160-10"><a href="advanced-tests.html#cb160-10" aria-hidden="true" tabindex="-1"></a><span class="co">#p-value:</span></span>
+<span id="cb160-11"><a href="advanced-tests.html#cb160-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&#39;p-vlaue:&#39;</span>, np.mean(perm_replicates <span class="op">&gt;</span>obsDiff))</span></code></pre></div>
+<pre><code>## p-vlaue: 0.0468</code></pre>
+<p><strong>What is the difference between these two methods ?</strong></p>
+<p>Testing the hypothesis that two samples have the same distribution may be done with a bootstrap test, but a permutation test is preferred because it is more accurate (exact, in fact). But a permutation test is not as versatile as the bootstrap.</p>
+<p>We often want to test the hypothesis that population A and population B have the same mean, but not necessarily the same distribution. This is difficult with a permutation test as it assumes <strong>exchangeability</strong>.</p>
+<p>We will get back to this topic!</p>
+<p><a href="https://ntrs.nasa.gov/archive/nasa/casi.ntrs.nasa.gov/20150001882.pdf">More info..</a></p>
+</div>
+<div id="sample-t-test" class="section level2" number="4.2">
+<h2><span class="header-section-number">4.2</span> 2-sample t test</h2>
+<p>Of course there is an equivalent fully parametric 2-sample test, the t-test:</p>
+<div class="sourceCode" id="cb162"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb162-1"><a href="advanced-tests.html#cb162-1" aria-hidden="true" tabindex="-1"></a>preg <span class="op">=</span> pd.read_hdf(<span class="st">&#39;../data/pregNSFG.h5&#39;</span>, <span class="st">&#39;df&#39;</span>)</span>
+<span id="cb162-2"><a href="advanced-tests.html#cb162-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb162-3"><a href="advanced-tests.html#cb162-3" aria-hidden="true" tabindex="-1"></a><span class="co">#only look at live births</span></span>
+<span id="cb162-4"><a href="advanced-tests.html#cb162-4" aria-hidden="true" tabindex="-1"></a>live <span class="op">=</span> preg[preg.outcome <span class="op">==</span> <span class="dv">1</span>]</span>
+<span id="cb162-5"><a href="advanced-tests.html#cb162-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb162-6"><a href="advanced-tests.html#cb162-6" aria-hidden="true" tabindex="-1"></a><span class="co">#define first babies</span></span>
+<span id="cb162-7"><a href="advanced-tests.html#cb162-7" aria-hidden="true" tabindex="-1"></a>firsts <span class="op">=</span> live[live.birthord <span class="op">==</span> <span class="dv">1</span>]</span>
+<span id="cb162-8"><a href="advanced-tests.html#cb162-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb162-9"><a href="advanced-tests.html#cb162-9" aria-hidden="true" tabindex="-1"></a><span class="co">#and all others</span></span>
+<span id="cb162-10"><a href="advanced-tests.html#cb162-10" aria-hidden="true" tabindex="-1"></a>others <span class="op">=</span> live[live.birthord <span class="op">!=</span> <span class="dv">1</span>]</span></code></pre></div>
+<div class="sourceCode" id="cb163"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb163-1"><a href="advanced-tests.html#cb163-1" aria-hidden="true" tabindex="-1"></a>tRes <span class="op">=</span> stats.ttest_ind(firsts.prglngth.values, others.prglngth.values)</span>
+<span id="cb163-2"><a href="advanced-tests.html#cb163-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb163-3"><a href="advanced-tests.html#cb163-3" aria-hidden="true" tabindex="-1"></a><span class="co">#arrg precision is not working</span></span>
+<span id="cb163-4"><a href="advanced-tests.html#cb163-4" aria-hidden="true" tabindex="-1"></a>pd.set_option(<span class="st">&#39;precision&#39;</span>, <span class="dv">4</span>)</span>
+<span id="cb163-5"><a href="advanced-tests.html#cb163-5" aria-hidden="true" tabindex="-1"></a>p <span class="op">=</span> pd.Series([tRes.pvalue,tRes.statistic], index <span class="op">=</span> [<span class="st">&#39;p-value:&#39;</span>, <span class="st">&#39;test statistic:&#39;</span>])</span></code></pre></div>
+<div class="sourceCode" id="cb164"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb164-1"><a href="advanced-tests.html#cb164-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(p)</span></code></pre></div>
+<pre><code>## p-value:           0.1676
+## test statistic:    1.3802
+## dtype: float64</code></pre>
+<div class="sourceCode" id="cb166"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb166-1"><a href="advanced-tests.html#cb166-1" aria-hidden="true" tabindex="-1"></a>tRes <span class="op">=</span> stats.ttest_ind(firsts.prglngth.values, others.prglngth.values)</span>
+<span id="cb166-2"><a href="advanced-tests.html#cb166-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb166-3"><a href="advanced-tests.html#cb166-3" aria-hidden="true" tabindex="-1"></a><span class="co">#arrg precision is not working</span></span>
+<span id="cb166-4"><a href="advanced-tests.html#cb166-4" aria-hidden="true" tabindex="-1"></a>pd.set_option(<span class="st">&#39;precision&#39;</span>, <span class="dv">4</span>)</span>
+<span id="cb166-5"><a href="advanced-tests.html#cb166-5" aria-hidden="true" tabindex="-1"></a>p <span class="op">=</span> pd.Series([tRes.pvalue,tRes.statistic], index <span class="op">=</span> [<span class="st">&#39;p-value:&#39;</span>, <span class="st">&#39;test statistic:&#39;</span>])</span></code></pre></div>
+<div class="sourceCode" id="cb167"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb167-1"><a href="advanced-tests.html#cb167-1" aria-hidden="true" tabindex="-1"></a><span class="co">#ttest_ind often underestimates p for unequal variances:</span></span>
+<span id="cb167-2"><a href="advanced-tests.html#cb167-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb167-3"><a href="advanced-tests.html#cb167-3" aria-hidden="true" tabindex="-1"></a>tRes <span class="op">=</span> stats.ttest_ind(firsts.prglngth.values, others.prglngth.values, equal_var <span class="op">=</span> <span class="va">False</span>)</span>
+<span id="cb167-4"><a href="advanced-tests.html#cb167-4" aria-hidden="true" tabindex="-1"></a>p <span class="op">=</span> pd.Series([tRes.pvalue,tRes.statistic], index <span class="op">=</span> [<span class="st">&#39;p-value:&#39;</span>, <span class="st">&#39;test statistic:&#39;</span>])</span></code></pre></div>
+<div class="sourceCode" id="cb168"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb168-1"><a href="advanced-tests.html#cb168-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(p)</span></code></pre></div>
+<pre><code>## p-value:           0.1685
+## test statistic:    1.3771
+## dtype: float64</code></pre>
+<div class="sourceCode" id="cb170"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb170-1"><a href="advanced-tests.html#cb170-1" aria-hidden="true" tabindex="-1"></a><span class="co">#ttest_ind often underestimates p for unequal variances:</span></span>
+<span id="cb170-2"><a href="advanced-tests.html#cb170-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb170-3"><a href="advanced-tests.html#cb170-3" aria-hidden="true" tabindex="-1"></a>tRes <span class="op">=</span> stats.ttest_ind(firsts.prglngth.values, others.prglngth.values, equal_var <span class="op">=</span> <span class="va">False</span>)</span>
+<span id="cb170-4"><a href="advanced-tests.html#cb170-4" aria-hidden="true" tabindex="-1"></a>p <span class="op">=</span> pd.Series([tRes.pvalue,tRes.statistic], index <span class="op">=</span> [<span class="st">&#39;p-value:&#39;</span>, <span class="st">&#39;test statistic:&#39;</span>])</span></code></pre></div>
+<p><strong>Can you reproduce the first p-value from the <a href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.t.html">test statistic</a> ?</strong></p>
+<div class="sourceCode" id="cb171"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb171-1"><a href="advanced-tests.html#cb171-1" aria-hidden="true" tabindex="-1"></a><span class="co"># # %load ../InNotebookSolutions/class4_sol_t.py</span></span>
+<span id="cb171-2"><a href="advanced-tests.html#cb171-2" aria-hidden="true" tabindex="-1"></a><span class="co">#get a quantile:</span></span>
+<span id="cb171-3"><a href="advanced-tests.html#cb171-3" aria-hidden="true" tabindex="-1"></a>stats.t.ppf(<span class="fl">0.975</span>,<span class="dv">10</span>)</span>
+<span id="cb171-4"><a href="advanced-tests.html#cb171-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb171-5"><a href="advanced-tests.html#cb171-5" aria-hidden="true" tabindex="-1"></a><span class="co">#reproduce p-value:</span></span></code></pre></div>
+<pre><code>## 2.2281388519649385</code></pre>
+<div class="sourceCode" id="cb173"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb173-1"><a href="advanced-tests.html#cb173-1" aria-hidden="true" tabindex="-1"></a>n1 <span class="op">=</span> <span class="bu">len</span>(firsts.prglngth.values)</span>
+<span id="cb173-2"><a href="advanced-tests.html#cb173-2" aria-hidden="true" tabindex="-1"></a>n2 <span class="op">=</span> <span class="bu">len</span>(others.prglngth.values)</span>
+<span id="cb173-3"><a href="advanced-tests.html#cb173-3" aria-hidden="true" tabindex="-1"></a>pVal <span class="op">=</span> <span class="dv">2</span><span class="op">*</span>(<span class="dv">1</span><span class="op">-</span>stats.t.cdf(<span class="fl">1.3802</span>,n1<span class="op">+</span>n2<span class="op">-</span><span class="dv">2</span>))</span>
+<span id="cb173-4"><a href="advanced-tests.html#cb173-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&#39;p-value:&#39;</span>,pVal)</span></code></pre></div>
+<pre><code>## p-value: 0.1675588076428014</code></pre>
+</div>
+<div id="random-walks" class="section level2" number="4.3">
+<h2><span class="header-section-number">4.3</span> Random Walks</h2>
+<p>An illustrative application of basic stochastic concepts in binary processes is the simulation of random walks. Let’s first consider a simple random walk starting at 0 with steps of 1 and -1 occurring with equal probability (<span class="math inline">\(p = 0.5\)</span>).</p>
+<div class="sourceCode" id="cb175"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb175-1"><a href="advanced-tests.html#cb175-1" aria-hidden="true" tabindex="-1"></a>nsteps <span class="op">=</span> <span class="dv">10000</span></span>
+<span id="cb175-2"><a href="advanced-tests.html#cb175-2" aria-hidden="true" tabindex="-1"></a>draws <span class="op">=</span> np.random.randint(<span class="dv">0</span>, <span class="dv">2</span>, size<span class="op">=</span>nsteps)</span>
+<span id="cb175-3"><a href="advanced-tests.html#cb175-3" aria-hidden="true" tabindex="-1"></a>steps <span class="op">=</span> np.where(draws <span class="op">&gt;</span> <span class="dv">0</span>, <span class="dv">1</span>, <span class="op">-</span><span class="dv">1</span>)</span>
+<span id="cb175-4"><a href="advanced-tests.html#cb175-4" aria-hidden="true" tabindex="-1"></a>walk <span class="op">=</span> steps.cumsum() <span class="co"># random walk !</span></span>
+<span id="cb175-5"><a href="advanced-tests.html#cb175-5" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> plt.figure()<span class="op">;</span> ax <span class="op">=</span> fig.add_subplot(<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>)</span>
+<span id="cb175-6"><a href="advanced-tests.html#cb175-6" aria-hidden="true" tabindex="-1"></a>ax.plot(walk, linewidth<span class="op">=</span><span class="fl">0.5</span>)</span></code></pre></div>
+<pre><code>## [&lt;matplotlib.lines.Line2D object at 0x7fb1be274e48&gt;]</code></pre>
+<div class="sourceCode" id="cb177"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb177-1"><a href="advanced-tests.html#cb177-1" aria-hidden="true" tabindex="-1"></a>ax.grid()</span></code></pre></div>
+<p><strong>Extra Credit</strong></p>
+<p>A more complicated statistic is the first crossing time, the step at which the random walk reaches a particular value. Here we might want to know how long it took the random walk to get at least 10 steps away from the origin 0 in either direction.
+np.abs(walk) &gt;= 10 gives us a boolean array indicating where the walk has reached or exceeded 10, but we want the index of the first 10 or -10. This can be computed using argmax, which returns the first index of the maximum value in the boolean array (True is the maximum value):</p>
+<div class="sourceCode" id="cb178"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb178-1"><a href="advanced-tests.html#cb178-1" aria-hidden="true" tabindex="-1"></a>(np.<span class="bu">abs</span>(walk) <span class="op">&gt;=</span> <span class="dv">10</span>).argmax()</span></code></pre></div>
+<pre><code>## 89</code></pre>
+<div id="simulating-many-random-walks-at-once" class="section level3 unlisted unnumbered">
+<h3>Simulating Many Random Walks at Once</h3>
+<p>If your goal was to simulate many random walks, say 5,000 of them, you can generate all of the random walks with minor modifications to the above code. The numpy.random functions if passed a 2-tuple will generate a 2D array of draws, and we can compute the cumulative sum across the rows to compute all 5,000 random walks in one shot</p>
+<div class="sourceCode" id="cb180"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb180-1"><a href="advanced-tests.html#cb180-1" aria-hidden="true" tabindex="-1"></a>nwalks <span class="op">=</span> <span class="dv">5000</span></span>
+<span id="cb180-2"><a href="advanced-tests.html#cb180-2" aria-hidden="true" tabindex="-1"></a>nsteps <span class="op">=</span> <span class="dv">10000</span></span>
+<span id="cb180-3"><a href="advanced-tests.html#cb180-3" aria-hidden="true" tabindex="-1"></a>draws <span class="op">=</span> np.random.randint(<span class="dv">0</span>, <span class="dv">2</span>, size<span class="op">=</span>(nwalks, nsteps)) <span class="co"># 0 or 1</span></span>
+<span id="cb180-4"><a href="advanced-tests.html#cb180-4" aria-hidden="true" tabindex="-1"></a>steps <span class="op">=</span> np.where(draws <span class="op">&gt;</span> <span class="dv">0</span>, <span class="dv">1</span>, <span class="op">-</span><span class="dv">1</span>)</span>
+<span id="cb180-5"><a href="advanced-tests.html#cb180-5" aria-hidden="true" tabindex="-1"></a>walks <span class="op">=</span> steps.cumsum(<span class="dv">1</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb181"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb181-1"><a href="advanced-tests.html#cb181-1" aria-hidden="true" tabindex="-1"></a>walks.shape</span></code></pre></div>
+<pre><code>## (5000, 10000)</code></pre>
+<div class="sourceCode" id="cb183"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb183-1"><a href="advanced-tests.html#cb183-1" aria-hidden="true" tabindex="-1"></a>nwalks <span class="op">=</span> <span class="dv">5000</span></span>
+<span id="cb183-2"><a href="advanced-tests.html#cb183-2" aria-hidden="true" tabindex="-1"></a>nsteps <span class="op">=</span> <span class="dv">10000</span></span>
+<span id="cb183-3"><a href="advanced-tests.html#cb183-3" aria-hidden="true" tabindex="-1"></a>draws <span class="op">=</span> np.random.randint(<span class="dv">0</span>, <span class="dv">2</span>, size<span class="op">=</span>(nwalks, nsteps)) <span class="co"># 0 or 1</span></span>
+<span id="cb183-4"><a href="advanced-tests.html#cb183-4" aria-hidden="true" tabindex="-1"></a>steps <span class="op">=</span> np.where(draws <span class="op">&gt;</span> <span class="dv">0</span>, <span class="dv">1</span>, <span class="op">-</span><span class="dv">1</span>)</span>
+<span id="cb183-5"><a href="advanced-tests.html#cb183-5" aria-hidden="true" tabindex="-1"></a>walks <span class="op">=</span> steps.cumsum(<span class="dv">1</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb184"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb184-1"><a href="advanced-tests.html#cb184-1" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> plt.figure()</span>
+<span id="cb184-2"><a href="advanced-tests.html#cb184-2" aria-hidden="true" tabindex="-1"></a>ax <span class="op">=</span> fig.add_subplot(<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>)</span>
+<span id="cb184-3"><a href="advanced-tests.html#cb184-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb184-4"><a href="advanced-tests.html#cb184-4" aria-hidden="true" tabindex="-1"></a>ax.plot(walks[<span class="dv">1</span>,:], <span class="st">&#39;k&#39;</span>, label<span class="op">=</span><span class="st">&#39;one&#39;</span>, linewidth<span class="op">=</span><span class="fl">0.25</span>)</span></code></pre></div>
+<pre><code>## [&lt;matplotlib.lines.Line2D object at 0x7fb1badd4d68&gt;]</code></pre>
+<div class="sourceCode" id="cb186"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb186-1"><a href="advanced-tests.html#cb186-1" aria-hidden="true" tabindex="-1"></a>ax.plot(walks[<span class="dv">2</span>,:], label<span class="op">=</span><span class="st">&#39;two&#39;</span>, linestyle <span class="op">=</span><span class="st">&#39;--&#39;</span>, linewidth<span class="op">=</span><span class="fl">0.25</span>)</span></code></pre></div>
+<pre><code>## [&lt;matplotlib.lines.Line2D object at 0x7fb1badd4dd8&gt;]</code></pre>
+<div class="sourceCode" id="cb188"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb188-1"><a href="advanced-tests.html#cb188-1" aria-hidden="true" tabindex="-1"></a>ax.plot(walks[<span class="dv">3</span>,:],  label<span class="op">=</span><span class="st">&#39;three&#39;</span>, linestyle <span class="op">=</span><span class="st">&#39;--&#39;</span>, linewidth<span class="op">=</span><span class="fl">0.25</span>)</span></code></pre></div>
+<pre><code>## [&lt;matplotlib.lines.Line2D object at 0x7fb1bae5f978&gt;]</code></pre>
+<div class="sourceCode" id="cb190"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb190-1"><a href="advanced-tests.html#cb190-1" aria-hidden="true" tabindex="-1"></a>ax.plot(walks[<span class="dv">4</span>,:],  label<span class="op">=</span><span class="st">&#39;four&#39;</span>, linestyle <span class="op">=</span><span class="st">&#39;--&#39;</span>, linewidth<span class="op">=</span><span class="fl">0.25</span>)</span></code></pre></div>
+<pre><code>## [&lt;matplotlib.lines.Line2D object at 0x7fb1badbbe80&gt;]</code></pre>
+<div class="sourceCode" id="cb192"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb192-1"><a href="advanced-tests.html#cb192-1" aria-hidden="true" tabindex="-1"></a>ax.grid()</span>
+<span id="cb192-2"><a href="advanced-tests.html#cb192-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb192-3"><a href="advanced-tests.html#cb192-3" aria-hidden="true" tabindex="-1"></a><span class="co">#a very useless legend just because we can</span></span>
+<span id="cb192-4"><a href="advanced-tests.html#cb192-4" aria-hidden="true" tabindex="-1"></a>ax.legend(loc<span class="op">=</span><span class="st">&#39;best&#39;</span>)<span class="op">;</span></span></code></pre></div>
+</div>
+<div id="the-sqrtn-law-again" class="section level3" number="4.3.1">
+<h3><span class="header-section-number">4.3.1</span> The <span class="math inline">\(\sqrt{n}\)</span> law again !</h3>
+<p>Compute the variance and/or standard deviation at times <span class="math inline">\(1000, 4000, 9000\)</span>.</p>
+<div class="sourceCode" id="cb193"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb193-1"><a href="advanced-tests.html#cb193-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&#39;std_1000:&#39;</span>, np.std(walks[:,<span class="dv">1000</span>]))</span></code></pre></div>
+<pre><code>## std_1000: 31.985538009544253</code></pre>
+<div class="sourceCode" id="cb195"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb195-1"><a href="advanced-tests.html#cb195-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&#39;std_4000:&#39;</span>, np.std(walks[:,<span class="dv">4000</span>]))</span></code></pre></div>
+<pre><code>## std_4000: 63.65415401998522</code></pre>
+<div class="sourceCode" id="cb197"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb197-1"><a href="advanced-tests.html#cb197-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&#39;std_9000:&#39;</span>, np.std(walks[:,<span class="dv">9000</span>]))</span></code></pre></div>
+<pre><code>## std_9000: 95.417731496824</code></pre>
+<p><strong>Extra Credit</strong></p>
+<p>Out of these walks, let’s compute the minimum crossing time to 30 or -30. This is slightly tricky because not all 5,000 of them reach 30. We can check this using the <em>any</em> method.</p>
+<p>We can then use this boolean array to select out the rows of walks that actually cross the absolute 30 level and call argmax across axis 1 to get the crossing times:</p>
+<div class="sourceCode" id="cb199"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb199-1"><a href="advanced-tests.html#cb199-1" aria-hidden="true" tabindex="-1"></a>hits30 <span class="op">=</span> (np.<span class="bu">abs</span>(walks) <span class="op">&gt;=</span> <span class="dv">30</span>).<span class="bu">any</span>(<span class="dv">1</span>)</span>
+<span id="cb199-2"><a href="advanced-tests.html#cb199-2" aria-hidden="true" tabindex="-1"></a>hits30</span></code></pre></div>
+<pre><code>## array([ True,  True,  True, ...,  True,  True,  True])</code></pre>
+<div class="sourceCode" id="cb201"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb201-1"><a href="advanced-tests.html#cb201-1" aria-hidden="true" tabindex="-1"></a>hits30.<span class="bu">sum</span>() <span class="co"># Number that hit 30 or -30</span></span></code></pre></div>
+<pre><code>## 5000</code></pre>
+<div class="sourceCode" id="cb203"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb203-1"><a href="advanced-tests.html#cb203-1" aria-hidden="true" tabindex="-1"></a>crossing_times <span class="op">=</span> (np.<span class="bu">abs</span>(walks[hits30]) <span class="op">&gt;=</span> <span class="dv">30</span>).argmax(<span class="dv">1</span>)</span>
+<span id="cb203-2"><a href="advanced-tests.html#cb203-2" aria-hidden="true" tabindex="-1"></a>crossing_times.mean()</span></code></pre></div>
+<pre><code>## 892.4928</code></pre>
+</div>
+<div id="tasks" class="section level3 unlisted unnumbered">
+<h3>Tasks</h3>
+<ol style="list-style-type: decimal">
+<li>Compute the stdev for multiples of 100 iterations and find a pattern</li>
+<li>Repeat for “biased” random walks, where <span class="math inline">\(p \neq 0.5\)</span>. Try <span class="math inline">\(p = 0.1\)</span> and <span class="math inline">\(p = 0.9\)</span></li>
+<li>Learn
+<ul>
+<li>the analytic formular for variance/stdev of coin flips</li>
+<li>the actual distribution (chap 3.4 in <a href="https://www.openintro.org/stat/" class="uri">https://www.openintro.org/stat/</a>)</li>
+<li>its approximation</li>
+</ul></li>
+<li>Complete the labeling of the two axis (with the help of <a href="https://codeandstats.shinyapps.io/binomialtails/" class="uri">https://codeandstats.shinyapps.io/binomialtails/</a>)
+<img src="../figures/BinomialTails.png" alt="BinomialTails" /></li>
+</ol>
+</div>
+<div id="binomial-probability-distribution" class="section level3 unlisted unnumbered">
+<h3>Binomial Probability Distribution</h3>
+<ol style="list-style-type: decimal">
+<li><p>Explore the <em>binom</em> function from scipy.stats</p></li>
+<li><p>Size matters: insurance company A insures 100 cars, company B 400 cars. The probability of a car being stolen is 10%. Compute the probabilities that more than 15% of the respective fleets are stolen.</p></li>
+<li><p>Faced with a mutliple choice test containing 20 question with 4 choices each you decide in desparation to just guess all answers. What is the probability that you will pass, i.e. get at least 10 correct answers?</p></li>
+<li><p>Think about nonparametric versions of the above answers</p></li>
+</ol>
+<div class="sourceCode" id="cb205"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb205-1"><a href="advanced-tests.html#cb205-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.stats <span class="im">import</span> binom</span></code></pre></div>
+</div>
+<div id="ab-testing-1" class="section level3 unlisted unnumbered">
+<h3>A/B Testing</h3>
+<ol style="list-style-type: decimal">
+<li>Perform a permutation test on the DataCamp example:</li>
+</ol>
+<div>
+<p><img src="../figures/DC_ABtest.png" width="400"/></p>
+</div>
+<p><strong>What does A/B testing have to do with random walks?</strong></p>
+<div class="sourceCode" id="cb206"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb206-1"><a href="advanced-tests.html#cb206-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Construct arrays of data: campaigns A and B</span></span>
+<span id="cb206-2"><a href="advanced-tests.html#cb206-2" aria-hidden="true" tabindex="-1"></a>clickthroughA <span class="op">=</span> np.array([<span class="va">True</span>] <span class="op">*</span> <span class="dv">45</span> <span class="op">+</span> [<span class="va">False</span>] <span class="op">*</span> (<span class="dv">500</span><span class="op">-</span><span class="dv">45</span>))</span>
+<span id="cb206-3"><a href="advanced-tests.html#cb206-3" aria-hidden="true" tabindex="-1"></a>clickthroughB <span class="op">=</span> np.array([<span class="va">True</span>] <span class="op">*</span> <span class="dv">67</span> <span class="op">+</span> [<span class="va">False</span>] <span class="op">*</span> (<span class="dv">500</span><span class="op">-</span><span class="dv">67</span>))</span>
+<span id="cb206-4"><a href="advanced-tests.html#cb206-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb206-5"><a href="advanced-tests.html#cb206-5" aria-hidden="true" tabindex="-1"></a>obsDiff <span class="op">=</span> np.mean(clickthroughB)<span class="op">-</span>np.mean(clickthroughA)</span>
+<span id="cb206-6"><a href="advanced-tests.html#cb206-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb206-7"><a href="advanced-tests.html#cb206-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Acquire permutation samples: perm_replicates</span></span>
+<span id="cb206-8"><a href="advanced-tests.html#cb206-8" aria-hidden="true" tabindex="-1"></a>perm_replicates <span class="op">=</span> draw_perm_reps(clickthroughB, clickthroughA, diff_of_means, <span class="dv">10000</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb207"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb207-1"><a href="advanced-tests.html#cb207-1" aria-hidden="true" tabindex="-1"></a><span class="co">#p-value:</span></span>
+<span id="cb207-2"><a href="advanced-tests.html#cb207-2" aria-hidden="true" tabindex="-1"></a>np.mean(perm_replicates <span class="op">&gt;=</span> obsDiff)</span></code></pre></div>
+<pre><code>## 0.0185</code></pre>
+<div class="sourceCode" id="cb209"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb209-1"><a href="advanced-tests.html#cb209-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Construct arrays of data: campaigns A and B</span></span>
+<span id="cb209-2"><a href="advanced-tests.html#cb209-2" aria-hidden="true" tabindex="-1"></a>clickthroughA <span class="op">=</span> np.array([<span class="va">True</span>] <span class="op">*</span> <span class="dv">45</span> <span class="op">+</span> [<span class="va">False</span>] <span class="op">*</span> (<span class="dv">500</span><span class="op">-</span><span class="dv">45</span>))</span>
+<span id="cb209-3"><a href="advanced-tests.html#cb209-3" aria-hidden="true" tabindex="-1"></a>clickthroughB <span class="op">=</span> np.array([<span class="va">True</span>] <span class="op">*</span> <span class="dv">67</span> <span class="op">+</span> [<span class="va">False</span>] <span class="op">*</span> (<span class="dv">500</span><span class="op">-</span><span class="dv">67</span>))</span>
+<span id="cb209-4"><a href="advanced-tests.html#cb209-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb209-5"><a href="advanced-tests.html#cb209-5" aria-hidden="true" tabindex="-1"></a>obsDiff <span class="op">=</span> np.mean(clickthroughB)<span class="op">-</span>np.mean(clickthroughA)</span>
+<span id="cb209-6"><a href="advanced-tests.html#cb209-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb209-7"><a href="advanced-tests.html#cb209-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Acquire permutation samples: perm_replicates</span></span>
+<span id="cb209-8"><a href="advanced-tests.html#cb209-8" aria-hidden="true" tabindex="-1"></a>perm_replicates <span class="op">=</span> draw_perm_reps(clickthroughB, clickthroughA, diff_of_means, <span class="dv">10000</span>)</span>
+<span id="cb209-9"><a href="advanced-tests.html#cb209-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb209-10"><a href="advanced-tests.html#cb209-10" aria-hidden="true" tabindex="-1"></a>plt.hist(perm_replicates)</span></code></pre></div>
+<pre><code>## (array([  30.,  253.,  683., 1469., 3012., 2112., 1806.,  457.,  160.,
+##          18.]), array([-0.068, -0.054, -0.04 , -0.026, -0.012,  0.002,  0.016,  0.03 ,
+##         0.044,  0.058,  0.072]), &lt;BarContainer object of 10 artists&gt;)</code></pre>
+<div class="sourceCode" id="cb211"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb211-1"><a href="advanced-tests.html#cb211-1" aria-hidden="true" tabindex="-1"></a>plt.vlines(obsDiff,<span class="dv">0</span>,<span class="dv">3000</span>,colors<span class="op">=</span><span class="st">&quot;red&quot;</span>)</span></code></pre></div>
+<pre><code>## &lt;matplotlib.collections.LineCollection object at 0x7fb1bdf8a978&gt;</code></pre>
+<div class="sourceCode" id="cb213"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb213-1"><a href="advanced-tests.html#cb213-1" aria-hidden="true" tabindex="-1"></a>plt.vlines(<span class="op">-</span>obsDiff,<span class="dv">0</span>,<span class="dv">3000</span>, colors<span class="op">=</span><span class="st">&quot;red&quot;</span>)<span class="op">;</span></span></code></pre></div>
+
+</div>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="testing.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="simple-linear-regressio.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["BIPM_DS.pdf", "BIPM_DS.epub"],
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>
