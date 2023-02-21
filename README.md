@@ -3,6 +3,11 @@
 
 ![StuckInLocalMinimum](figures/StuckInLocalMinimum.png)
 
+#### Rihanna telling you how important ROC curves are
+
+<img src="figures/RihannaUnapologetic_ROC.webp" width="250">
+
+
 Welcome to most important course you’ll ever take: **Data Science** 🙄
 Here is my overview of the structure and contents of this unique blend
 of stats/coding/machine learning: The first few weeks will focus on
